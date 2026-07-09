@@ -81,7 +81,8 @@
       };
     });
     
-    var geometry = new Marzipano.CubeGeometry(data.levels);
+    // Updated geometry setup for a single-level 6-image setup
+    var geometry = new Marzipano.CubeGeometry([{ size: data.faceSize, tileSize: data.faceSize }]);
 
     var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
@@ -373,7 +374,6 @@
     }
   }
 
-  // Display the initial scene.
   function findSceneById(id) {
     for (var i = 0; i < scenes.length; i++) {
       if (scenes[i].data.id === id) {
