@@ -21,6 +21,10 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
+  // Track visited scenes to update the progress bar
+  var visitedScenes = new Set();
+  var progressBar = document.querySelector('#progress-bar');
+
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
   var sceneNameElement = document.querySelector('#titleBar .sceneName');
@@ -74,14 +78,14 @@
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
     
-    // Dynamically maps tile requests to your folder names (data.name) and flat face files ({f}.jpg)
+    // FIX 1: Direct link to face images inside your custom folder names
     var source = new Marzipano.ImageUrlSource(function(tile) {
       return {
         url: urlPrefix + "/" + data.name + "/" + tile.face + ".jpg"
       };
     });
     
-    // Updated geometry setup for a single-level 6-image setup
+    // FIX 2: Configures a single-resolution frame grid to prevent multi-level parsing crashes
     var geometry = new Marzipano.CubeGeometry([{ size: data.faceSize, tileSize: data.faceSize }]);
 
     var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
@@ -154,11 +158,32 @@
   // Set handler for scene switch.
   scenes.forEach(function(scene) {
     var el = document.querySelector('#sceneList .scene[data-id="' + scene.data.id + '"]');
-    el.addEventListener('click', function() {
-      switchScene(scene);
-      // On mobile, hide scene list after selecting a scene.
-      if (document.body.classList.contains('mobile')) {
-        hideSceneList();
+    if (el) {
+      el.addEventListener('click', function() {
+        switchScene(scene);
+        if (document.body.classList.contains('mobile')) {
+          hideSceneList();
+        }
+      });
+    }
+  });
+
+  // ==========================================================================
+  // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // ==========================================================================
+  const mapDots = document.querySelectorAll('.map-dot');
+  mapDots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      const targetSceneId = this.getAttribute('data-scene');
+      
+      const targetScene = scenes.find(function(s) {
+        return s.data.id === targetSceneId;
+      });
+      
+      if (targetScene) {
+        switchScene(targetScene);
+      } else {
+        console.warn("Scene ID tracking mismatch: " + targetSceneId);
       }
     });
   });
@@ -195,10 +220,13 @@
     startAutorotate();
     updateSceneName(scene);
     updateSceneList(scene);
+    updateProgressBar(scene);
   }
 
   function updateSceneName(scene) {
-    sceneNameElement.innerHTML = sanitize(scene.data.name);
+    if (sceneNameElement) {
+      sceneNameElement.innerHTML = sanitize(scene.data.name || "Transition Point");
+    }
   }
 
   function updateSceneList(scene) {
@@ -212,23 +240,37 @@
     }
   }
 
+  function updateProgressBar(scene) {
+    if (progressBar) {
+      visitedScenes.add(scene.data.id);
+      var percentage = (visitedScenes.size / scenes.length) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+  }
+
   function showSceneList() {
-    sceneListElement.classList.add('enabled');
-    sceneListToggleElement.classList.add('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.add('enabled');
+      sceneListToggleElement.classList.add('enabled');
+    }
   }
 
   function hideSceneList() {
-    sceneListElement.classList.remove('enabled');
-    sceneListToggleElement.classList.remove('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.remove('enabled');
+      sceneListToggleElement.classList.remove('enabled');
+    }
   }
 
   function toggleSceneList() {
-    sceneListElement.classList.toggle('enabled');
-    sceneListToggleElement.classList.toggle('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.toggle('enabled');
+      sceneListToggleElement.classList.toggle('enabled');
+    }
   }
 
   function startAutorotate() {
-    if (!autorotateToggleElement.classList.contains('enabled')) {
+    if (!autorotateToggleElement || !autorotateToggleElement.classList.contains('enabled')) {
       return;
     }
     viewer.startMovement(autorotate);
@@ -241,6 +283,7 @@
   }
 
   function toggleAutorotate() {
+    if (!autorotateToggleElement) return;
     if (autorotateToggleElement.classList.contains('enabled')) {
       autorotateToggleElement.classList.remove('enabled');
       stopAutorotate();
@@ -251,38 +294,30 @@
   }
 
   function createLinkHotspotElement(hotspot) {
-
-    // Create wrapper element to hold icon and tooltip.
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
     wrapper.classList.add('link-hotspot');
 
-    // Create image element.
     var icon = document.createElement('img');
     icon.src = 'img/link.png';
     icon.classList.add('link-hotspot-icon');
 
-    // Set rotation transform.
     var transformProperties = [ '-ms-transform', '-webkit-transform', 'transform' ];
     for (var i = 0; i < transformProperties.length; i++) {
       var property = transformProperties[i];
       icon.style[property] = 'rotate(' + hotspot.rotation + 'rad)';
     }
 
-    // Add click event handler.
     wrapper.addEventListener('click', function() {
       switchScene(findSceneById(hotspot.target));
     });
 
-    // Prevent touch and scroll events from reaching the parent element.
-    // This prevents the view control logic from interfering with the hotspot.
     stopTouchAndScrollEventPropagation(wrapper);
 
-    // Create tooltip element.
     var tooltip = document.createElement('div');
     tooltip.classList.add('hotspot-tooltip');
     tooltip.classList.add('link-hotspot-tooltip');
-    tooltip.innerHTML = findSceneDataById(hotspot.target).name;
+    tooltip.innerHTML = findSceneDataById(hotspot.target).name || "Transition Point";
 
     wrapper.appendChild(icon);
     wrapper.appendChild(tooltip);
@@ -291,82 +326,64 @@
   }
 
   function createInfoHotspotElement(hotspot) {
-
-    // Create wrapper element to hold icon and tooltip.
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
     wrapper.classList.add('info-hotspot');
 
-    // Create hotspot/tooltip header.
-    var header = document.createElement('div');
-    header.classList.add('info-hotspot-header');
-
-    // Create image element.
     var iconWrapper = document.createElement('div');
     iconWrapper.classList.add('info-hotspot-icon-wrapper');
+    
+    if (hotspot.title) {
+      iconWrapper.setAttribute('title', hotspot.title);
+    }
+
     var icon = document.createElement('img');
     icon.src = 'img/info.png';
     icon.classList.add('info-hotspot-icon');
     iconWrapper.appendChild(icon);
+    wrapper.appendChild(iconWrapper);
 
-    // Create title element.
-    var titleWrapper = document.createElement('div');
-    titleWrapper.classList.add('info-hotspot-title-wrapper');
-    var title = document.createElement('div');
-    title.classList.add('info-hotspot-title');
-    title.innerHTML = hotspot.title;
-    titleWrapper.appendChild(title);
+    iconWrapper.addEventListener('click', function() {
+      var modal = document.getElementById('video-modal');
+      var modalTitle = document.querySelector('#video-modal h2');
+      var modalText = document.querySelector('#video-modal p');
+      var modalIframe = document.getElementById('youtube-player');
+      var closeBtn = document.getElementById('close-modal');
 
-    // Create close element.
-    var closeWrapper = document.createElement('div');
-    closeWrapper.classList.add('info-hotspot-close-wrapper');
-    var closeIcon = document.createElement('img');
-    closeIcon.src = 'img/close.png';
-    closeIcon.classList.add('info-hotspot-close-icon');
-    closeWrapper.appendChild(closeIcon);
+      if (modal) {
+        if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
+        if (modalText) modalText.innerHTML = hotspot.text || "";
+        
+        if (modalIframe) {
+          var videoId = hotspot.video || "dQw4w9WgXcQ"; 
+          modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
+        }
+        
+        modal.style.display = 'flex';
 
-    // Construct header element.
-    header.appendChild(iconWrapper);
-    header.appendChild(titleWrapper);
-    header.appendChild(closeWrapper);
+        if (closeBtn) {
+          closeBtn.onclick = function() {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; 
+          };
+        }
 
-    // Create text element.
-    var text = document.createElement('div');
-    text.classList.add('info-hotspot-text');
-    text.innerHTML = hotspot.text;
+        modal.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; 
+          }
+        };
+      }
+    });
 
-    // Place header and text into wrapper element.
-    wrapper.appendChild(header);
-    wrapper.appendChild(text);
-
-    // Create a modal for the hotspot content to appear on mobile mode.
-    var modal = document.createElement('div');
-    modal.innerHTML = wrapper.innerHTML;
-    modal.classList.add('info-hotspot-modal');
-    document.body.appendChild(modal);
-
-    var toggle = function() {
-      wrapper.classList.toggle('visible');
-      modal.classList.toggle('visible');
-    };
-
-    // Show content when hotspot is clicked.
-    wrapper.querySelector('.info-hotspot-header').addEventListener('click', toggle);
-
-    // Hide content when close icon is clicked.
-    modal.querySelector('.info-hotspot-close-wrapper').addEventListener('click', toggle);
-
-    // Prevent touch and scroll events from reaching the parent element.
-    // This prevents the view control logic from interfering with the hotspot.
     stopTouchAndScrollEventPropagation(wrapper);
 
     return wrapper;
   }
 
-  // Prevent touch and scroll events from reaching the parent element.
-  function stopTouchAndScrollEventPropagation(element, eventList) {
-    var eventList = [ 'touchstart', 'touchmove', 'touchend', 'touchcancel',
-                      'wheel', 'mousewheel' ];
+  function stopTouchAndScrollEventPropagation(element) {
+    var eventList = [ 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'wheel', 'mousewheel' ];
     for (var i = 0; i < eventList.length; i++) {
       element.addEventListener(eventList[i], function(event) {
         event.stopPropagation();
@@ -389,7 +406,7 @@
         return data.scenes[i];
       }
     }
-    return null;
+    return {};
   }
 
   // Display the initial scene.
