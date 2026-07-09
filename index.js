@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -73,9 +73,14 @@
   // Create scenes.
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
-    var source = Marzipano.ImageUrlSource.fromString(
-      urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
-      { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" });
+    
+    // Dynamically maps tile requests to your folder names (data.name) and flat face files ({f}.jpg)
+    var source = new Marzipano.ImageUrlSource(function(tile) {
+      return {
+        url: urlPrefix + "/" + data.name + "/" + tile.face + ".jpg"
+      };
+    });
+    
     var geometry = new Marzipano.CubeGeometry(data.levels);
 
     var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
@@ -368,6 +373,7 @@
     }
   }
 
+  // Display the initial scene.
   function findSceneById(id) {
     for (var i = 0; i < scenes.length; i++) {
       if (scenes[i].data.id === id) {
