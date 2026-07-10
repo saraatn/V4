@@ -21,6 +21,10 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
+  // Track visited scenes to update the progress bar
+  var visitedScenes = new Set();
+  var progressBar = document.querySelector('#progress-bar');
+
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
   var sceneNameElement = document.querySelector('#titleBar .sceneName');
@@ -74,7 +78,7 @@
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
     
-    // AMENDED: Updated to parse multi-resolution directory grids perfectly
+    // AMENDED FIX: Upgraded to use multi-resolution image source logic matching your folder tilesets
     var source = Marzipano.ImageUrlSource.withMultiRes(
       urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
       data.levels,
@@ -156,12 +160,31 @@
     if (el) {
       el.addEventListener('click', function() {
         switchScene(scene);
-        // On mobile, hide scene list after selecting a scene.
         if (document.body.classList.contains('mobile')) {
           hideSceneList();
         }
       });
     }
+  });
+
+  // ==========================================================================
+  // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // ==========================================================================
+  const mapDots = document.querySelectorAll('.map-dot');
+  mapDots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      const targetSceneId = this.getAttribute('data-scene');
+      
+      const targetScene = scenes.find(function(s) {
+        return s.data.id === targetSceneId;
+      });
+      
+      if (targetScene) {
+        switchScene(targetScene);
+      } else {
+        console.warn("Scene ID tracking mismatch: " + targetSceneId);
+      }
+    });
   });
 
   // DOM elements for view controls.
@@ -178,12 +201,12 @@
 
   // Associate view controls with elements.
   var controls = viewer.controls();
-  if (viewUpElement) controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
-  if (viewDownElement) controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
-  if (viewLeftElement) controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
-  if (viewRightElement) controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
-  if (viewInElement) controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,    'zoom', -velocity, friction), true);
-  if (viewOutElement) controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement,   'zoom',  velocity, friction), true);
+  controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
+  controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
+  controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
+  controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
+  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,    'zoom', -velocity, friction), true);
+  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement,   'zoom',  velocity, friction), true);
 
   function sanitize(s) {
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
@@ -196,10 +219,13 @@
     startAutorotate();
     updateSceneName(scene);
     updateSceneList(scene);
+    updateProgressBar(scene);
   }
 
   function updateSceneName(scene) {
-    sceneNameElement.innerHTML = sanitize(scene.data.name);
+    if (sceneNameElement) {
+      sceneNameElement.innerHTML = sanitize(scene.data.name || "Transition Point");
+    }
   }
 
   function updateSceneList(scene) {
@@ -213,19 +239,33 @@
     }
   }
 
+  function updateProgressBar(scene) {
+    if (progressBar) {
+      visitedScenes.add(scene.data.id);
+      var percentage = (visitedScenes.size / scenes.length) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+  }
+
   function showSceneList() {
-    if (sceneListElement) sceneListElement.classList.add('enabled');
-    if (sceneListToggleElement) sceneListToggleElement.classList.add('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.add('enabled');
+      sceneListToggleElement.classList.add('enabled');
+    }
   }
 
   function hideSceneList() {
-    if (sceneListElement) sceneListElement.classList.remove('enabled');
-    if (sceneListToggleElement) sceneListToggleElement.classList.remove('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.remove('enabled');
+      sceneListToggleElement.classList.remove('enabled');
+    }
   }
 
   function toggleSceneList() {
-    if (sceneListElement) sceneListElement.classList.toggle('enabled');
-    if (sceneListToggleElement) sceneListToggleElement.classList.toggle('enabled');
+    if (sceneListElement && sceneListToggleElement) {
+      sceneListElement.classList.toggle('enabled');
+      sceneListToggleElement.classList.toggle('enabled');
+    }
   }
 
   function startAutorotate() {
@@ -276,9 +316,7 @@
     var tooltip = document.createElement('div');
     tooltip.classList.add('hotspot-tooltip');
     tooltip.classList.add('link-hotspot-tooltip');
-    
-    var sceneData = findSceneDataById(hotspot.target);
-    tooltip.innerHTML = sceneData ? sceneData.name : "";
+    tooltip.innerHTML = findSceneDataById(hotspot.target).name || "Transition Point";
 
     wrapper.appendChild(icon);
     wrapper.appendChild(tooltip);
@@ -291,54 +329,53 @@
     wrapper.classList.add('hotspot');
     wrapper.classList.add('info-hotspot');
 
-    var header = document.createElement('div');
-    header.classList.add('info-hotspot-header');
-
     var iconWrapper = document.createElement('div');
     iconWrapper.classList.add('info-hotspot-icon-wrapper');
+    
+    if (hotspot.title) {
+      iconWrapper.setAttribute('title', hotspot.title);
+    }
+
     var icon = document.createElement('img');
     icon.src = 'img/info.png';
     icon.classList.add('info-hotspot-icon');
     iconWrapper.appendChild(icon);
+    wrapper.appendChild(iconWrapper);
 
-    var titleWrapper = document.createElement('div');
-    titleWrapper.classList.add('info-hotspot-title-wrapper');
-    var title = document.createElement('div');
-    title.classList.add('info-hotspot-title');
-    title.innerHTML = hotspot.title;
-    titleWrapper.appendChild(title);
+    // DYNAMIC CLICK HANDLER: Injects data structures & opens overlay smooth interface configurations
+    iconWrapper.addEventListener('click', function() {
+      var modal = document.getElementById('video-modal');
+      var modalTitle = document.querySelector('#video-modal h2');
+      var modalText = document.querySelector('#video-modal p');
+      var modalIframe = document.getElementById('youtube-player');
+      var closeBtn = document.getElementById('close-modal');
 
-    var closeWrapper = document.createElement('div');
-    closeWrapper.classList.add('info-hotspot-close-wrapper');
-    var closeIcon = document.createElement('img');
-    closeIcon.src = 'img/close.png';
-    closeIcon.classList.add('info-hotspot-close-icon');
-    closeWrapper.appendChild(closeIcon);
+      if (modal) {
+        if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
+        if (modalText) modalText.innerHTML = hotspot.text || "";
+        
+        if (modalIframe) {
+          var videoId = hotspot.video || "dQw4w9WgXcQ"; 
+          modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
+        }
+        
+        modal.style.display = 'flex';
 
-    header.appendChild(iconWrapper);
-    header.appendChild(titleWrapper);
-    header.appendChild(closeWrapper);
+        if (closeBtn) {
+          closeBtn.onclick = function() {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; 
+          };
+        }
 
-    var text = document.createElement('div');
-    text.classList.add('info-hotspot-text');
-    text.innerHTML = hotspot.text;
-
-    wrapper.appendChild(header);
-    wrapper.appendChild(text);
-
-    var modal = document.createElement('div');
-    modal.innerHTML = wrapper.innerHTML;
-    modal.classList.add('info-hotspot-modal');
-    document.body.appendChild(modal);
-
-    var toggle = function() {
-      wrapper.classList.toggle('visible');
-      modal.classList.toggle('visible');
-    };
-
-    header.addEventListener('click', toggle);
-    var modalClose = modal.querySelector('.info-hotspot-close-wrapper');
-    if (modalClose) modalClose.addEventListener('click', toggle);
+        modal.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+            if (modalIframe) modalIframe.src = ''; 
+          }
+        };
+      }
+    });
 
     stopTouchAndScrollEventPropagation(wrapper);
 
@@ -369,11 +406,10 @@
         return data.scenes[i];
       }
     }
-    return null;
+    return {};
   }
 
-  if (scenes.length > 0) {
-    switchScene(scenes[0]);
-  }
+  // Display the initial scene.
+  switchScene(scenes[0]);
 
 })();
