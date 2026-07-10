@@ -120,6 +120,10 @@
     targetPitch: 0,
     targetFov: Math.PI/2
   });
+
+  // FORCE DISABLE IT HERE:
+  data.settings.autorotateEnabled = false;
+  
   if (data.settings.autorotateEnabled) {
     autorotateToggleElement.classList.add('enabled');
   }
