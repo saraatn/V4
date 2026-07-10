@@ -121,7 +121,7 @@
     targetFov: Math.PI/2
   });
 
-  // Force disable configurations out of settings
+  // FORCE DISABLE IT HERE:
   data.settings.autorotateEnabled = false;
   
   if (data.settings.autorotateEnabled) {
@@ -347,6 +347,7 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
+    // DYNAMIC CLICK HANDLER: Injects data structures & opens overlay smooth interface configurations
     iconWrapper.addEventListener('click', function() {
       var modal = document.getElementById('video-modal');
       var modalTitle = document.querySelector('#video-modal h2');
