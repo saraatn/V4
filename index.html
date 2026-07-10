@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Project Title</title>
+<title>LITES Simulator</title>
 <meta charset="utf-8">
 <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
 <style> @-ms-viewport { width: device-width; } </style>
@@ -22,8 +22,8 @@
   #progress-bar {
     width: 0%;
     height: 100%;
-    background: #28a745; /* Clean Corporate Green */
-    box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+    background: #12b25b; 
+    box-shadow: 0 0 8px rgba(18, 178, 91, 0.6);
     transition: width 0.4s ease;
   }
 
@@ -63,60 +63,92 @@
   }
 
   .map-dot:hover {
-    background-color: #28a745;
+    background-color: #12b25b;
     transform: translate(-50%, -50%) scale(1.3);
   }
 
-  /* Welcome Landing Page Overlay Layout Styling - Custom Asset Added */
+  /* Welcome Landing Page Overlay Layout Styling */
   #welcome-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: #0f172a url('img/rp coi background.jpg') no-repeat center center;
+    background: #0f172a url('img/rp coi background.png') no-repeat center center;
     background-size: cover;
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     transition: opacity 0.6s ease;
   }
+  
   #welcome-overlay::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.85); /* Smooth dark overlay tint */
+    background: rgba(15, 23, 42, 0.45); /* Balanced dark tint for legibility */
     z-index: 1;
   }
+
+  /* Translucent Form Card Frame (Matching Reference Image) */
   .form-card {
     position: relative;
     z-index: 2;
-    background: rgba(30, 41, 59, 0.7);
+    background: rgba(28, 30, 39, 0.8);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: 35px;
+    padding: 40px 35px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     width: 90%;
-    max-width: 400px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    max-width: 440px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     text-align: center;
   }
-  .form-card h2 { margin-bottom: 25px; font-size: 24px; font-weight: 600; color: #fff; }
+
+  /* Typewriter Text Header Target Container */
+  .form-card h2 { 
+    margin-bottom: 6px; 
+    font-size: 28px; 
+    font-weight: 700; 
+    color: #fff;
+    min-height: 36px; 
+    display: inline-block;
+    border-right: 2px solid rgba(255,255,255,0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: blink-caret 0.75s step-end infinite;
+  }
+
+  /* Subtitle Text */
+  .form-subtitle {
+    color: #12b25b;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+  }
+
   .form-group { margin-bottom: 20px; text-align: left; }
-  .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: 500; }
+  .form-group label { display: block; margin-bottom: 8px; font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
   .form-group input {
     width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155;
-    background: rgba(15, 23, 42, 0.6); color: #fff; box-sizing: border-box; font-size: 14px;
+    background: rgba(30, 41, 59, 0.3); color: #fff; box-sizing: border-box; font-size: 14px;
     transition: border-color 0.2s;
   }
-  .form-group input:focus { outline: none; border-color: #3b82f6; }
+  .form-group input:focus { outline: none; border-color: #12b25b; }
+  .form-group input::placeholder { color: #475569; }
+
+  /* Submit Button - Matched to Bright RP Green */
   .submit-btn {
-    width: 100%; padding: 12px; background: #2563eb; border: none;
-    border-radius: 6px; color: #fff; font-weight: 600; cursor: pointer;
-    font-size: 15px; margin-top: 10px; transition: background 0.2s;
+    width: 100%; padding: 14px; 
+    background: #12b25b; 
+    border: none;
+    border-radius: 6px; color: #fff; font-weight: bold; cursor: pointer;
+    font-size: 14px; margin-top: 10px; transition: background 0.2s;
   }
-  .submit-btn:hover { background: #1d4ed8; }
+  .submit-btn:hover { background: #0f984d; }
   #welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
 
   /* End of Tour Networking Modal Setup */
@@ -138,8 +170,8 @@
   }
   .modal-card h2 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
   #profile-recommendation-box {
-    background: rgba(59, 130, 246, 0.1); padding: 15px;
-    border-radius: 6px; margin: 20px 0; font-size: 14px; border-left: 4px solid #3b82f6; text-align: left; line-height: 1.5;
+    background: rgba(18, 178, 91, 0.1); padding: 15px;
+    border-radius: 6px; margin: 20px 0; font-size: 14px; border-left: 4px solid #12b25b; text-align: left; line-height: 1.5;
   }
   .booth-selection-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
   .booth-btn {
@@ -147,14 +179,20 @@
     border-radius: 6px; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 14px;
   }
   .booth-btn:hover { background: #1e293b; border-color: #475569; }
-  .recommended-booth-highlight { border-color: #3b82f6 !important; background: rgba(59, 130, 246, 0.15) !important; font-weight: bold; }
+  .recommended-booth-highlight { border-color: #12b25b !important; background: rgba(18, 178, 91, 0.15) !important; font-weight: bold; }
 
   /* Shortcut Quick Launch Action Button Bubble */
   #booth-shortcut-btn {
     position: absolute; bottom: 90px; right: 20px;
-    width: 50px; height: 50px; background: #3b82f6; border-radius: 50%;
+    width: 50px; height: 50px; background: #12b25b; border-radius: 50%;
     z-index: 8000; display: none; justify-content: center; align-items: center;
     cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s; font-size: 20px;
+  }
+
+  /* Keyframes for the typewriter cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(255,255,255,0.75); }
   }
 </style>
 </head>
@@ -162,21 +200,22 @@
 
 <div id="welcome-overlay">
   <div class="form-card">
-    <h2 id="dynamic-lites-title">Welcome to LITES</h2>
+    <h2 id="dynamic-lites-title"></h2>
+    <div class="form-subtitle">Virtual Supply Chain Lab Tour Registration</div>
     <form onsubmit="handleFormSubmit(event)">
       <div class="form-group">
-        <label for="guest-name">Full Name</label>
-        <input type="text" id="guest-name" required placeholder="John Doe">
+        <label for="guest-name">Participant Name</label>
+        <input type="text" id="guest-name" required placeholder="e.g., John Tan">
       </div>
       <div class="form-group">
-        <label for="guest-org">Organisation</label>
-        <input type="text" id="guest-org" required placeholder="Company Name">
+        <label for="guest-org">Organisation Name</label>
+        <input type="text" id="guest-org" required placeholder="e.g., XYZ PTE. LTD.">
       </div>
       <div class="form-group">
-        <label for="guest-designation">Designation / Job Title</label>
-        <input type="text" id="guest-designation" required placeholder="Operations Manager">
+        <label for="guest-designation">Designation</label>
+        <input type="text" id="guest-designation" required placeholder="e.g., Co-Founder">
       </div>
-      <button type="submit" class="submit-btn">Enter Virtual Tour</button>
+      <button type="submit" class="submit-btn">Submit & Enter Experience</button>
     </form>
   </div>
 </div>
@@ -190,28 +229,24 @@
 <div id="floorplan-container">
   <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
   
-  <button class="map-dot" data-scene="0-01nexus" style="top: 30%; left: 80%;" title="(01)nexus"></button>
-  <button class="map-dot" data-scene="1-02iot" style="top: 30%; left: 55%;" title="(02)IoT"></button>
-  <button class="map-dot" data-scene="2-03transition" style="top: 30%; left: 15%;" title="(03)Transition"></button>
-  <button class="map-dot" data-scene="3-04libiao" style="top: 80%; left: 15%;" title="(04)libiao"></button>
-  <button class="map-dot" data-scene="5-06linde" style="top: 80%; left: 30%;" title="(06)linde"></button>
-  <button class="map-dot" data-scene="8-09appsheet" style="top: 80%; left: 55%;" title="(09)appsheet"></button>
-  <button class="map-dot" data-scene="10-11seat" style="top: 80%; left: 70%;" title="(11)seat"></button>
+  <button class="map-dot" data-scene="0-go-to-station-1" style="top: 30%; left: 80%;" title="Station 1"></button>
+  <button class="map-dot" data-scene="2-go-to-station-2" style="top: 30%; left: 55%;" title="Station 2"></button>
+  <button class="map-dot" data-scene="4-go-to-station-3" style="top: 30%; left: 15%;" title="Station 3"></button>
+  <button class="map-dot" data-scene="5-go-to-station-4" style="top: 80%; left: 15%;" title="Station 4"></button>
+  <button class="map-dot" data-scene="6-go-to-station-5" style="top: 80%; left: 30%;" title="Station 5"></button>
+  <button class="map-dot" data-scene="8-go-to-station-6" style="top: 80%; left: 55%;" title="Station 6"></button>
+  <button class="map-dot" data-scene="11-nexus" style="top: 80%; left: 70%;" title="Nexus"></button>
 </div>
 
 <div id="sceneList">
   <ul class="scenes">
-    <a href="javascript:void(0)" class="scene" data-id="0-01nexus"><li class="text">(01)nexus</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="1-02iot"><li class="text">(02)IoT</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="2-03transition"><li class="text">(03)Transition</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="3-04libiao"><li class="text">(04)libiao</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="4-05transition-2-3"><li class="text">(05)transition (2-3)</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="5-06linde"><li class="text">(06)linde</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="6-074ws-and-lean"><li class="text">(07)4ws and lean</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="7-08transition-aft-lean"><li class="text">(08)transition (aft lean)</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="8-09appsheet"><li class="text">(09)appsheet</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="9-10behind-seats"><li class="text">(10)behind seats</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="10-11seat"><li class="text">(11)seat</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="0-go-to-station-1"><li class="text">Station 1</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="2-go-to-station-2"><li class="text">Station 2</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="4-go-to-station-3"><li class="text">Station 3</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="5-go-to-station-4"><li class="text">Station 4</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="6-go-to-station-5"><li class="text">Station 5</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="8-go-to-station-6"><li class="text">Station 6</li></a>
+    <a href="javascript:void(0)" class="scene" data-id="11-nexus"><li class="text">Nexus</li></a>
   </ul>
 </div>
 
@@ -234,12 +269,14 @@
   <img class="icon on" src="img/collapse.png">
 </a>
 
-<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1"><img class="icon" src="img/up.png"></a>
-<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2"><img class="icon" src="img/down.png"></a>
-<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3"><img class="icon" src="img/left.png"></a>
-<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4"><img class="icon" src="img/right.png"></a>
-<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
-<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
+<div style="display:none;">
+  <a href="javascript:void(0)" id="viewUp"></a>
+  <a href="javascript:void(0)" id="viewDown"></a>
+  <a href="javascript:void(0)" id="viewLeft"></a>
+  <a href="javascript:void(0)" id="viewRight"></a>
+  <a href="javascript:void(0)" id="viewIn"></a>
+  <a href="javascript:void(0)" id="viewOut"></a>
+</div>
 
 <div id="networking-overlay">
   <div class="modal-card">
@@ -247,19 +284,19 @@
     <div id="profile-recommendation-box"></div>
     <p style="font-size: 14px; color: #94a3b8; margin-top: 10px;">Select a location below to instantly leap to that booth zone:</p>
     <div class="booth-selection-list">
-      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('0-01nexus')">🏢 Executive Innovation Strategy (Nexus)</button>
-      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('3-04libiao')">📦 Intralogistics & Warehouse Automation (libiao)</button>
-      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('8-09appsheet')">💻 Digital Procurement & Sourcing (appsheet)</button>
-      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('1-02iot')">⚡ Operations & IoT Management Zone (IoT)</button>
+      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('11-nexus')">🏢 Executive Innovation Strategy (Nexus)</button>
+      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('5-go-to-station-4')">📦 Intralogistics & Warehouse Automation</button>
+      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('8-go-to-station-6')">💻 Digital Procurement & Sourcing</button>
+      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('2-go-to-station-2')">⚡ Operations & IoT Management Zone</button>
     </div>
   </div>
 </div>
 
 <div id="booth-shortcut-btn" onclick="openBoothsModal()" title="View Booth Recommendations">🗺️</div>
 
-<script src="vendor/screenfull.min.js" ></script>
-<script src="vendor/bowser.min.js" ></script>
-<script src="vendor/marzipano.js" ></script>
+<script src="vendor/screenfull.min.js"></script>
+<script src="vendor/bowser.min.js"></script>
+<script src="vendor/marzipano.js"></script>
 
 <script src="data.js"></script>
 <script src="index.js"></script>
@@ -269,8 +306,54 @@
 </script>
 
 <script>
+  const standardStations = [
+    '0-go-to-station-1', 
+    '2-go-to-station-2', 
+    '4-go-to-station-3', 
+    '5-go-to-station-4', 
+    '6-go-to-station-5', 
+    '8-go-to-station-6', 
+    '11-nexus'
+  ];
+  let visitedStations = new Set();
+  let tourCompletedTriggered = false;
+
+  document.addEventListener("DOMContentLoaded", function() {
+      const currentYear = new Date().getFullYear();
+      const footerYear = document.getElementById('footer-year');
+      if (footerYear) footerYear.innerText = currentYear;
+      
+      // Fire off Typewriter engine sequence
+      initiateTypewriter("Welcome to LITES " + currentYear);
+      
+      // Start tracking using structural DOM elements
+      initializeDOMTracker();
+  });
+
+  /* Typewriter Routine Setup */
+  function initiateTypewriter(txt) {
+      let i = 0;
+      const speed = 80; 
+      const targetElement = document.getElementById('dynamic-lites-title');
+      if (!targetElement) return;
+      
+      targetElement.innerHTML = ""; 
+      function type() {
+          if (i < txt.length) {
+              targetElement.innerHTML += txt.charAt(i);
+              i++;
+              setTimeout(type, speed);
+          } else {
+              targetElement.style.borderRight = "none";
+          }
+      }
+      type();
+  }
+
+  /* Form Submission Handler */
   function handleFormSubmit(event) {
       event.preventDefault(); 
+      
       const participantName = document.getElementById('guest-name').value;
       const organisationName = document.getElementById('guest-org').value;
       const designation = document.getElementById('guest-designation').value;
@@ -284,66 +367,19 @@
           overlay.classList.add('fade-out');
           setTimeout(() => { overlay.remove(); }, 600);
       }
+      
       if (window.chatbase) {
           window.chatbase("show");
       }
   }
 
-  function openBoothsModal() {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'flex';
-  }
-
-  function selectNetworkingBooth(sceneId) {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'none';
-      
-      const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
-      if (alternativeTrigger) alternativeTrigger.click();
-  }
-</script>
-
-<script>
-  const standardStations = [
-    '0-01nexus', 
-    '1-02iot', 
-    '2-03transition', 
-    '3-04libiao', 
-    '5-06linde', 
-    '8-09appsheet', 
-    '10-11seat'
-  ];
-  let visitedStations = new Set();
-  let tourCompletedTriggered = false;
-
-  document.addEventListener("DOMContentLoaded", function() {
-      const currentYear = new Date().getFullYear();
-      const titleElem = document.getElementById('dynamic-lites-title');
-      if (titleElem) titleElem.innerText = "Welcome to LITES " + currentYear;
-
-      const mapDots = document.querySelectorAll('.map-dot');
-      mapDots.forEach(dot => {
-          dot.addEventListener('click', function() {
-              const targetScene = this.getAttribute('data-scene');
-              const alternativeTrigger = document.querySelector(`.scene[data-id="${targetScene}"]`);
-              if (alternativeTrigger) alternativeTrigger.click();
-          });
-      });
-
-      const sceneLinks = document.querySelectorAll('#sceneList .scene');
-      sceneLinks.forEach(link => {
-          link.addEventListener('click', function() {
-              const sceneId = this.getAttribute('data-id');
-              if (standardStations.includes(sceneId)) {
-                  registerStation(sceneId);
-              }
-          });
-      });
-
+  /* DOM Mutation Scanner Loop */
+  function initializeDOMTracker() {
       setInterval(() => {
-          sceneLinks.forEach(elem => {
-              if (elem.classList.contains('active') || elem.classList.contains('current') || 
-                  elem.parentElement.classList.contains('active') || elem.parentElement.classList.contains('current')) {
+          const sceneElements = document.querySelectorAll('#sceneList .scene');
+          
+          sceneElements.forEach(elem => {
+              if (elem.classList.contains('active') || elem.parentElement.classList.contains('active')) {
                   const sceneId = elem.getAttribute('data-id');
                   if (standardStations.includes(sceneId)) {
                       registerStation(sceneId);
@@ -351,11 +387,12 @@
               }
           });
       }, 500);
-  });
+  }
 
   function registerStation(sceneId) {
       if (!visitedStations.has(sceneId)) {
           visitedStations.add(sceneId);
+          
           const progressPercentage = (visitedStations.size / standardStations.length) * 100;
           const pb = document.getElementById('progress-bar');
           if (pb) {
@@ -415,10 +452,26 @@
           }, 50);
       }
   }
+
+  function openBoothsModal() {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'flex';
+  }
+
+  function selectNetworkingBooth(sceneId) {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'none';
+      
+      if (typeof switchScene === "function") {
+          switchScene(sceneId);
+      } else {
+          const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
+          if (alternativeTrigger) alternativeTrigger.click();
+      }
+  }
 </script>
 
 <p style="position: absolute; bottom: 10px; right: 10px; color: rgba(255,255,255,0.4); font-family: sans-serif; font-size: 11px; z-index: 5000;">&copy; <span id="footer-year">2026</span> LITES Simulator</p>
-<script>document.getElementById('footer-year').innerText = new Date().getFullYear();</script>
 
 </body>
 </html>
