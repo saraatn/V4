@@ -79,11 +79,11 @@
     var urlPrefix = "tiles";
     
     // AMENDED FIX: Upgraded to use multi-resolution image source logic matching your folder tilesets
-    var source = Marzipano.ImageUrlSource.withMultiRes(
-      urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
-      data.levels,
-      { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
-    );
+var source = Marzipano.ImageUrlSource.withMultiRes(
+  urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
+  data.levels,
+  { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
+);
     
     var geometry = new Marzipano.CubeGeometry(data.levels);
 
