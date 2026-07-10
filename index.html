@@ -138,6 +138,10 @@
 <script src="index.js"></script>
 
 <script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+
+<script>
   const standardStations = [
     '0-01nexus', 
     '1-02iot', 
@@ -160,11 +164,23 @@
           });
       });
 
-      // Background runtime loops to watch active scene updates
+      // FALLBACK SIDE MENU CLICK TRACKER: Forces progress tracking immediately on click
+      const sceneLinks = document.querySelectorAll('#sceneList .scene');
+      sceneLinks.forEach(link => {
+          link.addEventListener('click', function() {
+              const sceneId = this.getAttribute('data-id');
+              if (standardStations.includes(sceneId)) {
+                  registerStation(sceneId);
+              }
+          });
+      });
+
+      // Background runtime loops to watch active scene updates (handles arrow-navigation)
       setInterval(() => {
-          const sceneElements = document.querySelectorAll('#sceneList .scene');
-          sceneElements.forEach(elem => {
-              if (elem.classList.contains('active') || elem.parentElement.classList.contains('active')) {
+          sceneLinks.forEach(elem => {
+              // Checks for .active, .current, or parent element variations across Marzipano boilerplate configurations
+              if (elem.classList.contains('active') || elem.classList.contains('current') || 
+                  elem.parentElement.classList.contains('active') || elem.parentElement.classList.contains('current')) {
                   const sceneId = elem.getAttribute('data-id');
                   if (standardStations.includes(sceneId)) {
                       registerStation(sceneId);
@@ -184,10 +200,6 @@
           }
       }
   }
-</script>
-
-<script>
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
 
 </body>
