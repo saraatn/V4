@@ -78,10 +78,8 @@
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
     
-    // AMENDED FIX: Upgraded to use multi-resolution image source logic matching your folder tilesets
-var source = Marzipano.ImageUrlSource.withMultiRes(
+    var source = Marzipano.ImageUrlSource.fromString(
   urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
-  data.levels,
   { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
 );
     
