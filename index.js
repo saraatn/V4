@@ -121,7 +121,7 @@
     targetFov: Math.PI/2
   });
 
-  // FORCE DISABLE IT HERE:
+  // Force disable configurations out of settings
   data.settings.autorotateEnabled = false;
   
   if (data.settings.autorotateEnabled) {
@@ -207,8 +207,8 @@
   controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
   controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
   controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
-  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,    'zoom', -velocity, friction), true);
-  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement,   'zoom',  velocity, friction), true);
+  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,     'zoom', -velocity, friction), true);
+  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement,    'zoom',  velocity, friction), true);
 
   function sanitize(s) {
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
@@ -271,6 +271,9 @@
   }
 
   function startAutorotate() {
+    // FORCE INTERCEPT: Prevents scene switcher loops from setting camera in motion
+    return;
+
     if (!autorotateToggleElement || !autorotateToggleElement.classList.contains('enabled')) {
       return;
     }
@@ -344,7 +347,6 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
-    // DYNAMIC CLICK HANDLER: Injects data structures & opens overlay smooth interface configurations
     iconWrapper.addEventListener('click', function() {
       var modal = document.getElementById('video-modal');
       var modalTitle = document.querySelector('#video-modal h2');
