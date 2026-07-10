@@ -347,7 +347,6 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
-    // DYNAMIC CLICK HANDLER: Injects data structures & opens overlay smooth interface configurations
     iconWrapper.addEventListener('click', function() {
       var modal = document.getElementById('video-modal');
       var modalTitle = document.querySelector('#video-modal h2');
