@@ -66,9 +66,107 @@
     background-color: #33ff33;
     transform: translate(-50%, -50%) scale(1.3);
   }
+
+  /* Welcome Landing Page Overlay Layout Styling */
+  #welcome-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 15, 30, 0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: sans-serif;
+    transition: opacity 0.6s ease;
+  }
+  #welcome-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .form-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .form-card h2 { margin-bottom: 20px; font-size: 24px; color: #33ff33; }
+  .form-group { margin-bottom: 15px; text-align: left; }
+  .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
+  .form-group input {
+    width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #555;
+    background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;
+  }
+  .submit-btn {
+    width: 100%; padding: 12px; background: #33ff33; border: none;
+    border-radius: 6px; color: #000; font-weight: bold; cursor: pointer;
+    font-size: 16px; margin-top: 10px; transition: background 0.2s;
+  }
+  .submit-btn:hover { background: #22cc22; }
+
+  /* End of Tour Networking Modal Setup */
+  #networking-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 9000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: sans-serif;
+  }
+  .modal-card {
+    background: #111c24; padding: 25px; border-radius: 10px;
+    max-width: 500px; width: 90%; text-align: center; border: 2px solid #33ff33;
+  }
+  #profile-recommendation-box {
+    background: rgba(51, 255, 51, 0.15); padding: 15px;
+    border-radius: 6px; margin: 15px 0; font-size: 15px; border-left: 4px solid #33ff33;
+  }
+  .booth-selection-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .booth-btn {
+    padding: 12px; background: #222; border: 1px solid #444; color: #fff;
+    border-radius: 6px; cursor: pointer; text-align: left; transition: all 0.2s;
+  }
+  .booth-btn:hover { background: #333; border-color: #888; }
+  .recommended-booth-highlight { border-color: #33ff33 !important; background: rgba(51, 255, 51, 0.1) !important; font-weight: bold; }
+
+  /* Shortcut Quick Launch Action Button Bubble */
+  #booth-shortcut-btn {
+    position: absolute; bottom: 90px; right: 20px;
+    width: 50px; height: 50px; background: #33ff33; border-radius: 50%;
+    z-index: 8000; display: none; justify-content: center; align-items: center;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s;
+  }
 </style>
 </head>
 <body class="multiple-scenes">
+
+<div id="welcome-overlay">
+  <div class="form-card">
+    <h2 id="dynamic-lites-title">Welcome to LITES</h2>
+    <form onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label for="guest-name">Full Name</label>
+        <input type="text" id="guest-name" required placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label for="guest-org">Organisation</label>
+        <input type="text" id="guest-org" required placeholder="Company Name">
+      </div>
+      <div class="form-group">
+        <label for="guest-designation">Designation / Job Title</label>
+        <input type="text" id="guest-designation" required placeholder="Operations Manager">
+      </div>
+      <button type="submit" class="submit-btn">Enter Virtual Tour</button>
+    </form>
+  </div>
+</div>
 
 <div id="progress-bar-container">
   <div id="progress-bar"></div>
@@ -130,6 +228,22 @@
 <a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
 <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
 
+<div id="networking-overlay">
+  <div class="modal-card">
+    <h2>Tour Completed!</h2>
+    <div id="profile-recommendation-box"></div>
+    <p style="font-size: 14px; color: #aaa; margin-top: 10px;">Select a location below to instantly leap to that booth zone:</p>
+    <div class="booth-selection-list">
+      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('0-01nexus')">🏢 Executive Innovation Strategy (Nexus)</button>
+      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('3-04libiao')">📦 Intralogistics & Warehouse Automation (libiao)</button>
+      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('8-09appsheet')">💻 Digital Procurement & Sourcing (appsheet)</button>
+      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('1-02iot')">⚡ Operations & IoT Management Zone (IoT)</button>
+    </div>
+  </div>
+</div>
+
+<div id="booth-shortcut-btn" onclick="openBoothsModal()" title="View Booth Recommendations">🗺️</div>
+
 <script src="vendor/screenfull.min.js" ></script>
 <script src="vendor/bowser.min.js" ></script>
 <script src="vendor/marzipano.js" ></script>
@@ -139,6 +253,41 @@
 
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+
+<script>
+  function handleFormSubmit(event) {
+      event.preventDefault(); 
+      const participantName = document.getElementById('guest-name').value;
+      const organisationName = document.getElementById('guest-org').value;
+      const designation = document.getElementById('guest-designation').value;
+
+      localStorage.setItem('lites_guest_name', participantName);
+      localStorage.setItem('lites_guest_org', organisationName);
+      localStorage.setItem('lites_guest_title', designation);
+
+      const overlay = document.getElementById('welcome-overlay');
+      if (overlay) {
+          overlay.classList.add('fade-out');
+          setTimeout(() => { overlay.remove(); }, 600);
+      }
+      if (window.chatbase) {
+          window.chatbase("show");
+      }
+  }
+
+  function openBoothsModal() {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'flex';
+  }
+
+  function selectNetworkingBooth(sceneId) {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'none';
+      
+      const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
+      if (alternativeTrigger) alternativeTrigger.click();
+  }
 </script>
 
 <script>
@@ -152,9 +301,13 @@
     '10-11seat'
   ];
   let visitedStations = new Set();
+  let tourCompletedTriggered = false;
 
   document.addEventListener("DOMContentLoaded", function() {
-      // Connect interactive floorplan layout dots to map switches
+      const currentYear = new Date().getFullYear();
+      const titleElem = document.getElementById('dynamic-lites-title');
+      if (titleElem) titleElem.innerText = "Welcome to LITES " + currentYear;
+
       const mapDots = document.querySelectorAll('.map-dot');
       mapDots.forEach(dot => {
           dot.addEventListener('click', function() {
@@ -164,7 +317,6 @@
           });
       });
 
-      // FALLBACK SIDE MENU CLICK TRACKER: Forces progress tracking immediately on click
       const sceneLinks = document.querySelectorAll('#sceneList .scene');
       sceneLinks.forEach(link => {
           link.addEventListener('click', function() {
@@ -175,10 +327,8 @@
           });
       });
 
-      // Background runtime loops to watch active scene updates (handles arrow-navigation)
       setInterval(() => {
           sceneLinks.forEach(elem => {
-              // Checks for .active, .current, or parent element variations across Marzipano boilerplate configurations
               if (elem.classList.contains('active') || elem.classList.contains('current') || 
                   elem.parentElement.classList.contains('active') || elem.parentElement.classList.contains('current')) {
                   const sceneId = elem.getAttribute('data-id');
@@ -199,8 +349,63 @@
               pb.style.width = progressPercentage + '%';
           }
       }
+
+      const progressBarElement = document.getElementById('progress-bar');
+      const visualWidth = progressBarElement ? progressBarElement.style.width : '';
+      
+      if ((visitedStations.size >= standardStations.length || visualWidth === '100%') && !tourCompletedTriggered) {
+          tourCompletedTriggered = true;
+          setTimeout(() => {
+              triggerNetworkingPhaseOverlay();
+          }, 500);
+      }
+  }
+
+  function triggerNetworkingPhaseOverlay() {
+      const name = localStorage.getItem('lites_guest_name') || 'Guest';
+      const title = (localStorage.getItem('lites_guest_title') || '').toLowerCase();
+      
+      const recTag = document.getElementById('profile-recommendation-box');
+      let targetedButtonId = 'booth-management'; 
+      let recommendationLabel = 'Operations & Risk Control';
+
+      if (title.includes('logistics') || title.includes('warehouse') || title.includes('operation')) {
+          targetedButtonId = 'booth-logistics';
+          recommendationLabel = 'Intralogistics & Warehouse Automation';
+      } else if (title.includes('procurement') || title.includes('buyer') || title.includes('sourcing') || title.includes('supply chain')) {
+          targetedButtonId = 'booth-procurement';
+          recommendationLabel = 'Digital Procurement & Sustainable Sourcing';
+      } else if (title.includes('manager') || title.includes('founder') || title.includes('director') || title.includes('executive') || title.includes('ceo')) {
+          targetedButtonId = 'booth-nexus';
+          recommendationLabel = 'Executive Innovation Strategy Nexus';
+      }
+
+      if (recTag) {
+          recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
+      }
+      
+      const targetBtn = document.getElementById(targetedButtonId);
+      if (targetBtn) {
+          targetBtn.classList.add('recommended-booth-highlight');
+      }
+
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) {
+          netOverlay.style.display = 'flex';
+      }
+
+      const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
+      if (dynamicBoothShortcut) {
+          dynamicBoothShortcut.style.display = 'flex';
+          setTimeout(() => {
+              dynamicBoothShortcut.style.opacity = '1';
+          }, 50);
+      }
   }
 </script>
+
+<p style="position: absolute; bottom: 10px; right: 10px; color: rgba(255,255,255,0.4); font-family: sans-serif; font-size: 11px; z-index: 5000;">&copy; <span id="footer-year">2026</span> LITES Simulator</p>
+<script>document.getElementById('footer-year').innerText = new Date().getFullYear();</script>
 
 </body>
 </html>
