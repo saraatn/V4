@@ -1,26 +1,13 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "0-01nexus",
+      "id": "(01)nexus",
       "name": "(01)nexus",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -33,32 +20,19 @@ var APP_DATA = {
           "yaw": 1.3055071598985801,
           "pitch": 0.26957758113598373,
           "rotation": 0,
-          "target": "1-02iot"
+          "target": "(02)IoT"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "1-02iot",
+      "id": "(02)IoT",
       "name": "(02)IoT",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -71,44 +45,31 @@ var APP_DATA = {
           "yaw": 1.057364848216599,
           "pitch": 0.24186397528697157,
           "rotation": 0,
-          "target": "0-01nexus"
+          "target": "(01)nexus"
         },
         {
           "yaw": -1.1024589330649306,
           "pitch": 0.259600956589809,
           "rotation": 0,
-          "target": "10-11seat"
+          "target": "(11)seat"
         },
         {
           "yaw": -1.4028954440114756,
           "pitch": 0.37843758030693664,
           "rotation": 0,
-          "target": "2-03transition"
+          "target": "(03)Transition"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "2-03transition",
+      "id": "(03)Transition",
       "name": "(03)Transition",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -121,44 +82,31 @@ var APP_DATA = {
           "yaw": 0.009822964641541532,
           "pitch": 0.28673151183983947,
           "rotation": 0,
-          "target": "3-04libiao"
+          "target": "(04)libiao"
         },
         {
           "yaw": 3.057193984367995,
           "pitch": 0.3420701635090069,
           "rotation": 0,
-          "target": "1-02iot"
+          "target": "(02)IoT"
         },
         {
           "yaw": 2.277641121429231,
           "pitch": 0.40180137760028245,
           "rotation": 0,
-          "target": "10-11seat"
+          "target": "(11)seat"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "3-04libiao",
+      "id": "(04)libiao",
       "name": "(04)libiao",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -171,32 +119,19 @@ var APP_DATA = {
           "yaw": 1.8046571918460268,
           "pitch": 0.2848931217476043,
           "rotation": 0,
-          "target": "4-05transition-2-3"
+          "target": "(05)transition (2-3)"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "4-05transition-2-3",
+      "id": "(05)transition (2-3)",
       "name": "(05)transition (2-3)",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -209,32 +144,19 @@ var APP_DATA = {
           "yaw": 1.3710722800095212,
           "pitch": 0.25920822058027504,
           "rotation": 0,
-          "target": "5-06linde"
+          "target": "(06)linde"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "5-06linde",
+      "id": "(06)linde",
       "name": "(06)linde",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -247,32 +169,19 @@ var APP_DATA = {
           "yaw": 1.7377239892072645,
           "pitch": 0.2545587401394833,
           "rotation": 0,
-          "target": "6-074ws-and-lean"
+          "target": "(07)4ws and lean"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "6-074ws-and-lean",
+      "id": "(07)4ws and lean",
       "name": "(07)4ws and lean",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -285,32 +194,19 @@ var APP_DATA = {
           "yaw": -0.5925982314055016,
           "pitch": 0.35109348318183997,
           "rotation": 0,
-          "target": "7-08transition-aft-lean"
+          "target": "(08)transition (aft lean)"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "7-08transition-aft-lean",
+      "id": "(08)transition (aft lean)",
       "name": "(08)transition (aft lean)",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -323,32 +219,19 @@ var APP_DATA = {
           "yaw": -1.6526267989944632,
           "pitch": 0.2455493149372785,
           "rotation": 0,
-          "target": "8-09appsheet"
+          "target": "(09)appsheet"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "8-09appsheet",
+      "id": "(09)appsheet",
       "name": "(09)appsheet",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -361,32 +244,19 @@ var APP_DATA = {
           "yaw": -1.3889535237972392,
           "pitch": 0.30860131149692727,
           "rotation": 0,
-          "target": "9-10behind-seats"
+          "target": "(10)behind seats"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "9-10behind-seats",
+      "id": "(10)behind seats",
       "name": "(10)behind seats",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -399,38 +269,25 @@ var APP_DATA = {
           "yaw": -1.165102579005353,
           "pitch": 0.29652463052920197,
           "rotation": 0,
-          "target": "10-11seat"
+          "target": "(11)seat"
         },
         {
           "yaw": 1.5072626728679754,
           "pitch": 0.46423176670189115,
           "rotation": 0,
-          "target": "2-03transition"
+          "target": "(03)Transition"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "10-11seat",
+      "id": "(11)seat",
       "name": "(11)seat",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -443,13 +300,13 @@ var APP_DATA = {
           "yaw": 3.1020901124042073,
           "pitch": 0.24191502708143453,
           "rotation": 0,
-          "target": "2-03transition"
+          "target": "(03)Transition"
         },
         {
           "yaw": -1.1329952193055508,
           "pitch": 0.30927228757802894,
           "rotation": 0,
-          "target": "9-10behind-seats"
+          "target": "(10)behind seats"
         }
       ],
       "infoHotspots": []
