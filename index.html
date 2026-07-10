@@ -67,30 +67,31 @@
     transform: translate(-50%, -50%) scale(1.3);
   }
 
-  /* Welcome Landing Page Overlay Layout Styling */
+  /* Welcome Landing Page Overlay Layout Styling - FORCED OLD IMAGE PATH AND OLD FONT */
   #welcome-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: #0f172a url("img/rp_coi_background.png") no-repeat center center;
+    background: #0f172a url('img/rp coi background.png') no-repeat center center;
     background-size: cover;
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: sans-serif; /* Restored font styling rules */
     transition: opacity 0.6s ease;
   }
   
+  /* Welcome Overlay Backdrop Mask Tint - FORCED OLD TINT VALUE */
   #welcome-overlay::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.45); /* Balanced dark tint for legibility */
+    background: rgba(15, 23, 42, 0.5); /* Ambient backdrop tint forced back to 0.5 */
     z-index: 1;
   }
 
-  /* Translucent Form Card Frame (Matching Reference Image) */
+  /* Translucent Form Card Frame (Updated Template Design Profile) */
   .form-card {
     position: relative;
     z-index: 2;
@@ -140,7 +141,7 @@
   .form-group input:focus { outline: none; border-color: #12b25b; }
   .form-group input::placeholder { color: #475569; }
 
-  /* Submit Button - Matched to Bright RP Green */
+  /* Submit Button - Color Matrix Theme Rules */
   .submit-btn {
     width: 100%; padding: 14px; 
     background: #12b25b; 
@@ -372,6 +373,7 @@
 
   /* DOM Mutation Scanner Loop */
   function initializeDOMTracker() {
+      // Loop scanner setup parameters
       setInterval(() => {
           const sceneElements = document.querySelectorAll('#sceneList .scene');
           
