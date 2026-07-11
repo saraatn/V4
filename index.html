@@ -27,7 +27,7 @@
     transition: width 0.4s ease;
   }
 
-  /* Floorplan Container Styling - Set to Hidden by default, toggled by Hamburger */
+  /* Floorplan Container Styling */
   #floorplan-container {
     position: absolute;
     bottom: 20px;
@@ -39,7 +39,7 @@
     padding: 5px;
     border-radius: 8px;
     border: 2px solid #fff;
-    display: none; /* Controlled by hamburger logic */
+    display: none;
   }
 
   #floorplan-container.active {
@@ -95,18 +95,16 @@
     z-index: 1;
   }
 
-  /* Centralized alignment block setup */
   .welcome-content {
     position: relative;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center aligns title and subtitle text components safely */
+    align-items: center; 
     width: 100%;
-    max-width: 620px;
+    max-width: 440px; /* Constrained compact scale matching Photo 2 configuration */
   }
 
-  /* Fixed layout sizing locks title block to stop expanding layout shifts */
   .title-wrapper {
     width: 100%;
     height: 60px;
@@ -136,10 +134,9 @@
     letter-spacing: 0.5px;
     margin-bottom: 20px;
     text-transform: uppercase;
-    text-align: center; /* Centralised formatting rule */
+    text-align: center;
   }
 
-  /* Static explicit dimension wrapper configuration */
   .form-card {
     background: rgba(28, 30, 39, 0.8);
     backdrop-filter: blur(8px);
@@ -173,6 +170,79 @@
   .submit-btn:hover { background: #0f984d; }
   #welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
 
+  /* Custom Video Display Modal Panel Stylesheet */
+  #video-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #video-modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .video-modal-card {
+    background: #1e293b;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .video-modal-header {
+    padding: 16px 20px;
+    background: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .video-modal-header h3 {
+    margin: 0; font-size: 18px; color: #fff; font-family: sans-serif; font-weight: bold;
+  }
+  .video-close-btn {
+    background: transparent; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; transition: color 0.2s;
+  }
+  .video-close-btn:hover { color: #fff; }
+  .video-frame-container {
+    position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000;
+  }
+  .video-frame-container iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+  }
+
+  /* Pulsing Animation Stylesheet Rules for Video Hotspots */
+  .pulsing-video-hotspot {
+    width: 32px; height: 32px;
+    background: rgba(57, 255, 20, 0.8);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(57, 255, 20, 0.4);
+    animation: hotspot-pulse-glow 2s infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .pulsing-video-hotspot::after {
+    content: '▶';
+    color: #000;
+    font-size: 12px;
+    margin-left: 2px;
+  }
+
+  @keyframes hotspot-pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(57, 255, 20, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0); }
+  }
+
   @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: rgba(255,255,255,0.75); }
@@ -203,6 +273,18 @@
         </div>
         <button type="submit" class="submit-btn">Start & Enter the experience</button>
       </form>
+    </div>
+  </div>
+</div>
+
+<div id="video-modal-overlay">
+  <div class="video-modal-card">
+    <div class="video-modal-header">
+      <h3 id="video-modal-title">Station Feature Video</h3>
+      <button class="video-close-btn" onclick="closeVideoModal()">&times;</button>
+    </div>
+    <div class="video-frame-container">
+      <iframe id="modal-video-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
   </div>
 </div>
@@ -293,11 +375,32 @@
   /* Form Registration Handler */
   function handleFormSubmit(event) {
     event.preventDefault();
-    
     const overlay = document.getElementById("welcome-overlay");
     if (overlay) {
         overlay.classList.add("fade-out");
         setTimeout(() => overlay.style.display = "none", 600);
+    }
+  }
+
+  /* Core Video Modal Actions Logic */
+  function openVideoModal(title, youtubeId) {
+    const modal = document.getElementById('video-modal-overlay');
+    const iframe = document.getElementById('modal-video-iframe');
+    const titleEl = document.getElementById('video-modal-title');
+    
+    if(modal && iframe) {
+      titleEl.innerText = title;
+      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      modal.classList.add('open');
+    }
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('video-modal-overlay');
+    const iframe = document.getElementById('modal-video-iframe');
+    if(modal && iframe) {
+      modal.classList.remove('open');
+      iframe.src = ''; // Kill video streams
     }
   }
 
@@ -308,7 +411,6 @@
 
   /* Custom Combined Interface Event Listeners Handler */
   function initializeCustomToggles() {
-      // Intercept standard scene updates 
       if (typeof window.switchScene === 'function') {
           const originalSwitchScene = window.switchScene;
           window.switchScene = function(sceneId) {
@@ -318,7 +420,6 @@
           };
       }
 
-      // Link Hamburger Icon line directly to toggle 2D Floorplan Map panel
       const hamburgerBtn = document.getElementById('sceneListToggle');
       const floorplanBox = document.getElementById('floorplan-container');
       
@@ -330,7 +431,6 @@
           });
       }
 
-      // Map Dot Click Handler
       floorplanBox?.addEventListener('click', function(e) {
           const dot = e.target.closest('.map-dot[data-scene]');
           if (dot) onSceneActivated(dot.getAttribute('data-scene'));
@@ -347,6 +447,38 @@
           if (progressBar) {
               progressBar.style.width = progressPercent + "%";
           }
+      }
+      
+      // Clear out and inject any pulsing hotspots if defined in data.js structure
+      renderVideoHotspotsForScene(sceneId);
+  }
+
+  function renderVideoHotspotsForScene(sceneId) {
+      // Clear previously rendered overlay elements if any exist
+      document.querySelectorAll('.pulsing-container-wrapper').forEach(e => e.remove());
+
+      if (typeof APP_DATA === 'undefined' || !APP_DATA.scenes) return;
+      const currentSceneData = APP_DATA.scenes.find(s => s.id === sceneId);
+      
+      if (currentSceneData && currentSceneData.videoHotspots) {
+          currentSceneData.videoHotspots.forEach(hotspot => {
+              const element = document.createElement('div');
+              element.className = 'pulsing-container-wrapper';
+              
+              const pulseBtn = document.createElement('div');
+              pulseBtn.className = 'pulsing-video-hotspot';
+              pulseBtn.title = hotspot.title;
+              pulseBtn.addEventListener('click', () => {
+                  openVideoModal(hotspot.title, hotspot.youtubeId);
+              });
+              
+              element.appendChild(pulseBtn);
+
+              // Dynamically hand the pulsing layer over to Marzipano viewer architecture via window references
+              if (window.viewer && window.viewer.scene()) {
+                  window.viewer.scene().hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
+              }
+          });
       }
   }
 </script>
