@@ -177,9 +177,9 @@ var APP_DATA = {
         { "tileSize": 512, "size": 512 }
       ],
       "faceSize": 400,
+      /* CHANGED VIEW ANGLES ONLY: Swapped default yaw & pitch 
+         to match your workbench perspective from Photo 1 */
       "initialViewParameters": {
-        /* FIX 1: Shifted yaw & pitch from 2.83 / 0.37 so that entering this room 
-           snaps camera directly to face the Photo 1 assembly workbench angle */
         "yaw": -0.4215, 
         "pitch": -0.0820,
         "fov": 1.3802197895323118
@@ -196,7 +196,8 @@ var APP_DATA = {
           "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
           "video": "s2HCrhNVfak"
         },
-        /* FIX 2: Populated new infoHotspot mapped directly to your yellow workbench circle */
+        /* ADDED MISSING HOTSPOT DATA: Coordinates set to place 
+           the new hotspot directly inside your yellow workbench circle */
         {
           "yaw": -0.4850,
           "pitch": -0.1250,
