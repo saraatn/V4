@@ -1,370 +1,58 @@
-var APP_DATA = {
-  "scenes": [
-    {
-      "id": "0-01nexus",
-      "name": "(01)nexus",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 3.1119080796529737,
-        "pitch": 0.00202215394311267,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.3055071598985801,
-          "pitch": 0.26957758113598373,
-          "rotation": 0,
-          "target": "1-02iot"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": 3.0,
-          "pitch": 0.0,
-          "title": "Station 8: Nexus Command Centre",
-          "text": "The Executive Innovation Strategy center monitoring supply chain workflows in real-time.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "1-02iot",
-      "name": "(02)IoT",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": -3.1126880146521216,
-        "pitch": 0.09605815712125931,
-        "fov": 1.2446250333351525
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.057364848216599,
-          "pitch": 0.24186397528697157,
-          "rotation": 0,
-          "target": "0-01nexus"
-        },
-        {
-          "yaw": -1.1024589330649306,
-          "pitch": 0.259600956589809,
-          "rotation": 0,
-          "target": "10-11seat"
-        },
-        {
-          "yaw": -1.4028954440114756,
-          "pitch": 0.37843758030693664,
-          "rotation": 0,
-          "target": "2-03transition"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": -2.8,
-          "pitch": 0.1,
-          "title": "Station 2: Internet of Things (IoT)",
-          "text": "Connects devices, sensors, and hardware systems together to collect and share live actionable operational metrics.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "2-03transition",
-      "name": "(03)Transition",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "pitch": 0,
-        "yaw": 0,
-        "fov": 1.5707963267948966
-      },
-      "linkHotspots": [
-        {
-          "yaw": 0.009822964641541532,
-          "pitch": 0.28673151183983947,
-          "rotation": 0,
-          "target": "3-04libiao"
-        },
-        {
-          "yaw": 3.057193984367995,
-          "pitch": 0.3420701635090069,
-          "rotation": 0,
-          "target": "1-02iot"
-        },
-        {
-          "yaw": 2.277641121429231,
-          "pitch": 0.40180137760028245,
-          "rotation": 0,
-          "target": "10-11seat"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "3-04libiao",
-      "name": "(04)libiao",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 0.17921665117960117,
-        "pitch": -0.005100922267761376,
-        "fov": 1.2446250333351525
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.8046571918460268,
-          "pitch": 0.2848931217476043,
-          "rotation": 0,
-          "target": "4-05transition-2-3"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": 0.1,
-          "pitch": -0.1,
-          "title": "Station 3: Sorting Robots",
-          "text": "Intelligent automated sorting machines handling sorting lines with extreme speed and precise distribution.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "4-05transition-2-3",
-      "name": "(05)transition (2-3)",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 1.3415108445594512,
-        "pitch": 0.09784584063676505,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.3710722800095212,
-          "pitch": 0.25920822058027504,
-          "rotation": 0,
-          "target": "5-06linde"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "5-06linde",
-      "name": "(06)linde",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 0.006565305927697551,
-        "pitch": -0.15731876381901166,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": 1.7377239892072645,
-          "pitch": 0.2545587401394833,
-          "rotation": 0,
-          "target": "6-074ws-and-lean"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": 0.0,
-          "pitch": -0.2,
-          "title": "Station 4: Automated Reach Truck",
-          "text": "Linde driverless heavy lifting trucks performing high-density warehouse storage tasks.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "6-074ws-and-lean",
-      "name": "(07)4ws and lean",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 2.0026076028901496,
-        "pitch": -0.10945381139996613,
-        "fov": 1.2446250333351525
-      },
-      "linkHotspots": [
-        {
-          "yaw": -0.5925982314055016,
-          "pitch": 0.35109348318183997,
-          "rotation": 0,
-          "target": "7-08transition-aft-lean"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": 2.1,
-          "pitch": -0.1,
-          "title": "Station 5 & 6: 4-Way Shuttle & LEAN",
-          "text": "High-density matrix racking combined with lean methodology practices to minimize processing waste.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "7-08transition-aft-lean",
-      "name": "(08)transition (aft lean)",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": -1.7665574750632125,
-        "pitch": 0.18569268327569866,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": -1.6526267989944632,
-          "pitch": 0.2455493149372785,
-          "rotation": 0,
-          "target": "8-09appsheet"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "8-09appsheet",
-      "name": "(09)appsheet",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": -2.7066905310356866,
-        "pitch": 0.016471583426062253,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": -1.3889535237972392,
-          "pitch": 0.30860131149692727,
-          "rotation": 0,
-          "target": "9-10behind-seats"
-        }
-      ],
-      "infoHotspots": [
-        {
-          "yaw": -2.7,
-          "pitch": 0.0,
-          "title": "Station 7: Appsheet Scanner Zone",
-          "text": "Cloud-based digital scanning tools ensuring seamless tracking and instant database synchronization.",
-          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-        }
-      ]
-    },
-    {
-      "id": "9-10behind-seats",
-      "name": "(10)behind seats",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": 1.294109252625809,
-        "pitch": 0.18985798088099237,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": -1.165102579005353,
-          "pitch": 0.29652463052920197,
-          "rotation": 0,
-          "target": "10-11seat"
-        },
-        {
-          "yaw": 1.5072626728679754,
-          "pitch": 0.46423176670189115,
-          "rotation": 0,
-          "target": "2-03transition"
-        }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "10-11seat",
-      "name": "(11)seat",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
-      "initialViewParameters": {
-        "yaw": -1.9853720365325245,
-        "pitch": 0.09990527283444806,
-        "fov": 1.4469324312346197
-      },
-      "linkHotspots": [
-        {
-          "yaw": 3.1020901124042073,
-          "pitch": 0.24191502708143453,
-          "rotation": 0,
-          "target": "2-03transition"
-        },
-        {
-          "yaw": -1.1329952193055508,
-          "pitch": 0.30927228757802894,
-          "rotation": 0,
-          "target": "9-10behind-seats"
-        }
-      ],
-      "infoHotspots": []
-    }
-  ],
-  "name": "Project Title",
-  "settings": {
-    "mouseViewMode": "drag",
-    "autorotateEnabled": true,
-    "fullscreenButton": false,
-    "viewControlButtons": false
+      let recommendationLabel = 'Operations & Risk Control';
+
+      if (title.includes('logistics') || title.includes('warehouse') || title.includes('operation')) {
+          targetedButtonId = 'booth-logistics';
+          recommendationLabel = 'Intralogistics & Warehouse Automation';
+      } else if (title.includes('procurement') || title.includes('buyer') || title.includes('sourcing') || title.includes('supply chain')) {
+          targetedButtonId = 'booth-procurement';
+          recommendationLabel = 'Digital Procurement & Sustainable Sourcing';
+      } else if (title.includes('manager') || title.includes('founder') || title.includes('director') || title.includes('executive') || title.includes('ceo')) {
+          targetedButtonId = 'booth-nexus';
+          recommendationLabel = 'Executive Innovation Strategy Nexus';
+      }
+
+      if (recTag) {
+          recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
+      }
+      
+      const targetBtn = document.getElementById(targetedButtonId);
+      if (targetBtn) {
+          targetBtn.classList.add('recommended-booth-highlight');
+      }
+
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) {
+          netOverlay.style.display = 'flex';
+      }
+
+      const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
+      if (dynamicBoothShortcut) {
+          dynamicBoothShortcut.style.display = 'flex';
+          setTimeout(() => {
+              dynamicBoothShortcut.style.opacity = '1';
+          }, 50);
+      }
   }
-};
+
+  function openBoothsModal() {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'flex';
+  }
+
+  function selectNetworkingBooth(sceneId) {
+      const netOverlay = document.getElementById('networking-overlay');
+      if (netOverlay) netOverlay.style.display = 'none';
+      
+      if (typeof switchScene === "function") {
+          switchScene(sceneId);
+      } else {
+          const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
+          if (alternativeTrigger) alternativeTrigger.click();
+      }
+  }
+</script>
+
+<p style="position: absolute; bottom: 10px; right: 10px; color: rgba(255,255,255,0.4); font-family: sans-serif; font-size: 11px; z-index: 5000;">&copy; <span id="footer-year">2026</span> LITES Simulator</p>
+
+</body>
+</html>
