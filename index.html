@@ -67,6 +67,53 @@
     transform: translate(-50%, -50%) scale(1.3);
   }
 
+  /* --- Pulsing Info Hotspot Styling --- */
+  .info-hotspot {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    transform: translate(-50%, -50%);
+  }
+
+  .info-hotspot::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: hotspot-pulse 1.8s infinite ease-out;
+    box-sizing: border-box;
+  }
+
+  .info-hotspot .info-icon {
+    color: #ffffff;
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: bold;
+    user-select: none;
+  }
+
+  @keyframes hotspot-pulse {
+    0% {
+      transform: scale(0.95);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
   /* Welcome Landing Page Overlay Layout Styling */
   #welcome-overlay {
     position: fixed;
@@ -100,7 +147,7 @@
     align-items: flex-start;
   }
 
-  /* Typewriter Text Header - now OUTSIDE the box */
+  /* Typewriter Text Header */
   .welcome-content h2 { 
     margin: 0 0 6px 0; 
     font-size: 34px; 
@@ -114,7 +161,7 @@
     animation: blink-caret 0.75s step-end infinite;
   }
 
-  /* Subtitle Text - now OUTSIDE the box */
+  /* Subtitle Text */
   .form-subtitle {
     color: #12b25b;
     font-size: 12px;
@@ -124,7 +171,7 @@
     text-transform: uppercase;
   }
 
-  /* Translucent Form Card Frame - widened to match reference */
+  /* Translucent Form Card Frame */
   .form-card {
     background: rgba(28, 30, 39, 0.8);
     backdrop-filter: blur(8px);
@@ -148,7 +195,7 @@
   .form-group input:focus { outline: none; border-color: #12b25b; }
   .form-group input::placeholder { color: #475569; }
 
-  /* Submit Button - Color Matrix Theme Rules */
+  /* Submit Button */
   .submit-btn {
     width: 100%; padding: 14px; 
     background: #12b25b; 
@@ -236,6 +283,10 @@
 
 <div id="pano"></div>
 
+<div class="info-hotspot" id="dynamic-info-hotspot" style="top: 45%; left: 48%; display: none;" onclick="openHotspotVideo('Station 2: Internet of Things (IoT)', 'Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+  <div class="info-icon">i</div>
+</div>
+
 <div id="floorplan-container">
   <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
   
@@ -288,6 +339,19 @@
   <a href="javascript:void(0)" id="viewOut"></a>
 </div>
 
+<div id="video-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 99999; justify-content: center; align-items: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+  <div style="position: relative; width: 90%; max-width: 900px; background-color: #000000; box-shadow: 0px 15px 40px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid #333;">
+    <span id="close-modal" style="position: absolute; top: 15px; right: 20px; color: #ffffff; font-size: 32px; cursor: pointer; font-weight: 300; z-index: 100000; opacity: 0.8; transition: opacity 0.2s;" onclick="closeHotspotVideo()">&times;</span>
+    <div style="padding: 25px 50px 20px 25px; color: #ffffff; background-color: #111111; border-bottom: 1px solid #222;">
+      <h2 id="modal-station-title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">Loading Station Title...</h2>
+      <p id="modal-station-desc" style="margin: 0; font-size: 14px; line-height: 1.5; color: #cccccc; font-weight: 300;">Loading Station Data...</p>
+    </div>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; background-color: #000000;">
+      <iframe id="youtube-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+  </div>
+</div>
+
 <div id="networking-overlay">
   <div class="modal-card">
     <h2>Tour Completed!</h2>
@@ -337,6 +401,19 @@
       initializeDOMTracker();
   });
 
+  /* Hotspot Modal Open / Close Controller Actions */
+  function openHotspotVideo(title, description, embedUrl) {
+      document.getElementById('modal-station-title').innerText = title;
+      document.getElementById('modal-station-desc').innerText = description;
+      document.getElementById('youtube-player').src = embedUrl;
+      document.getElementById('video-modal').style.display = 'flex';
+  }
+
+  function closeHotspotVideo() {
+      document.getElementById('video-modal').style.display = 'none';
+      document.getElementById('youtube-player').src = ''; // Drops active background connection stream
+  }
+
   /* Typewriter Routine Setup */
   function initiateTypewriter(txt) {
       let i = 0;
@@ -382,7 +459,6 @@
 
   /* DOM Mutation Scanner Loop */
   function initializeDOMTracker() {
-      // Loop scanner setup parameters
       setInterval(() => {
           const sceneElements = document.querySelectorAll('#sceneList .scene');
           
@@ -398,6 +474,12 @@
   }
 
   function registerStation(sceneId) {
+      // Toggle visibility of fallback mock HTML hotspot layer depending on current tour active room ID
+      const mockHotspot = document.getElementById('dynamic-info-hotspot');
+      if (mockHotspot) {
+          mockHotspot.style.display = (sceneId === '2-go-to-station-2') ? 'flex' : 'none';
+      }
+
       if (!visitedStations.has(sceneId)) {
           visitedStations.add(sceneId);
           
