@@ -217,10 +217,22 @@
   .video-frame-container iframe {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
   }
+  .video-modal-text {
+    padding: 16px 20px;
+    color: #cbd5e1;
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    background: #1e293b;
+  }
+  .video-modal-text:empty { display: none; }
 
-  /* Pulsing Overlay Animation Styles for Video Feature Integration Points */
+  /* Pulsing Overlay Animation Styles for Video Feature Integration Points.
+     This is now the ONLY info-hotspot element created (from index.js). */
   .pulsing-video-hotspot {
     width: 34px; height: 34px;
+    margin-left: -17px;
+    margin-top: -17px;
     background: rgba(57, 255, 20, 0.95);
     border-radius: 50%;
     cursor: pointer;
@@ -230,7 +242,7 @@
     justify-content: center;
     align-items: center;
     border: 2px solid white;
-    z-index: 9999;
+    z-index: 999;
   }
   .pulsing-video-hotspot::after {
     content: '▶';
@@ -294,6 +306,7 @@
     <div class="video-frame-container">
       <iframe id="modal-video-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+    <div class="video-modal-text" id="video-modal-text"></div>
   </div>
 </div>
 
@@ -354,16 +367,6 @@
 </script>
 
 <script>
-  const standardStations = [
-    '0-01nexus',
-    '1-02iot', 
-    '3-04libiao', 
-    '5-06linde', 
-    '6-074ws-and-lean', 
-    '8-09appsheet'
-  ];
-  let visitedStations = new Set();
-
   /* Typewriter Implementation */
   function initiateTypewriter(text) {
     const el = document.getElementById("dynamic-lites-title");
@@ -390,18 +393,22 @@
     }
   }
 
-  /* Video Feature Panel Visibility Engine Toggles */
-  function openVideoModal(title, videoId) {
+  /* Video Feature Panel Visibility Engine Toggles.
+     Called directly by the info hotspots created in index.js. */
+  function openVideoModal(title, videoId, text) {
     const modal = document.getElementById('video-modal-overlay');
     const iframe = document.getElementById('modal-video-iframe');
     const titleEl = document.getElementById('video-modal-title');
-    
+    const textEl = document.getElementById('video-modal-text');
+
     if(modal && iframe) {
-      titleEl.innerText = title;
+      titleEl.innerText = title || "Station Feature Video";
+      if (textEl) textEl.innerHTML = text || "";
       iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
       modal.classList.add('open');
     }
   }
+  window.openVideoModal = openVideoModal;
 
   function closeVideoModal() {
     const modal = document.getElementById('video-modal-overlay');
@@ -411,109 +418,25 @@
       iframe.src = ''; 
     }
   }
+  window.closeVideoModal = closeVideoModal;
 
   document.addEventListener("DOMContentLoaded", function() {
       initiateTypewriter("Welcome to LITES");
-      initializeCustomToggles();
+      initializeFloorplanToggle();
   });
 
-  /* Custom Combined Interface Event Listeners Handler */
-  function initializeCustomToggles() {
-      if (typeof window.switchScene === 'function') {
-          const originalSwitchScene = window.switchScene;
-          window.switchScene = function(sceneId) {
-              const result = originalSwitchScene.apply(this, arguments);
-              onSceneActivated(sceneId);
-              return result;
-          };
-      }
-
+  /* Just the hamburger -> floorplan panel toggle now.
+     Map-dot clicks and hotspot rendering are handled entirely in index.js
+     to avoid the duplicate-hotspot / duplicate-listener bugs. */
+  function initializeFloorplanToggle() {
       const hamburgerBtn = document.getElementById('sceneListToggle');
       const floorplanBox = document.getElementById('floorplan-container');
-      
+
       if (hamburgerBtn && floorplanBox) {
           hamburgerBtn.addEventListener('click', function(e) {
               e.preventDefault();
               floorplanBox.classList.toggle('active');
               hamburgerBtn.classList.toggle('active');
-          });
-      }
-
-      floorplanBox?.addEventListener('click', function(e) {
-          const dot = e.target.closest('.map-dot[data-scene]');
-          if (dot) {
-              const sceneTarget = dot.getAttribute('data-scene');
-              if (typeof window.switchScene === 'function') {
-                  window.switchScene(sceneTarget);
-              } else {
-                  onSceneActivated(sceneTarget);
-              }
-          }
-      });
-
-      // Continuous monitoring setup to handle initial bootstrap render safety check
-      let bootCheckCount = 0;
-      const initialBootInterval = setInterval(() => {
-          bootCheckCount++;
-          if (window.viewer && window.viewer.scene()) {
-              const currentId = window.viewer.scene().data().id;
-              if (currentId) {
-                  onSceneActivated(currentId);
-                  clearInterval(initialBootInterval);
-              }
-          }
-          if (bootCheckCount > 30) clearInterval(initialBootInterval); // Safeguard exit
-      }, 250);
-  }
-
-  function onSceneActivated(sceneId) {
-      if (!sceneId) return;
-      if (standardStations.includes(sceneId)) {
-          visitedStations.add(sceneId);
-          
-          const progressPercent = (visitedStations.size / standardStations.length) * 100;
-          const progressBar = document.getElementById("progress-bar");
-          if (progressBar) {
-              progressBar.style.width = progressPercent + "%";
-          }
-      }
-      
-      renderVideoHotspotsForScene(sceneId);
-  }
-
-  function renderVideoHotspotsForScene(sceneId) {
-      // Clear existing hotspots first
-      document.querySelectorAll('.pulsing-container-wrapper').forEach(e => e.remove());
-
-      if (typeof APP_DATA === 'undefined' || !APP_DATA.scenes) return;
-      const currentSceneData = APP_DATA.scenes.find(s => s.id === sceneId);
-      
-      // FIXED: Look for 'infoHotspots' (from data.js) instead of 'videoHotspots'
-      if (currentSceneData && currentSceneData.infoHotspots && window.viewer && window.viewer.scene()) {
-          const currentActiveMarzipanoScene = window.viewer.scene();
-          
-          if (currentActiveMarzipanoScene.data().id !== sceneId) return;
-
-          currentSceneData.infoHotspots.forEach(hotspot => {
-              // Only create a button if a video ID (from data.js) actually exists
-              if (!hotspot.video) return;
-
-              const element = document.createElement('div');
-              element.className = 'pulsing-container-wrapper';
-              
-              const pulseBtn = document.createElement('div');
-              pulseBtn.className = 'pulsing-video-hotspot';
-              pulseBtn.title = hotspot.title;
-              pulseBtn.style.pointerEvents = 'auto'; 
-              
-              pulseBtn.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  // FIXED: Pass 'hotspot.video' (from data.js) instead of 'hotspot.youtubeId'
-                  openVideoModal(hotspot.title, hotspot.video);
-              });
-              
-              element.appendChild(pulseBtn);
-              currentActiveMarzipanoScene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
           });
       }
   }
