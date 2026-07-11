@@ -341,20 +341,30 @@
     return wrapper;
   }
 
-  // Info hotspot = the pulsing green "play" button that opens the video
-  // modal defined in index.html (#video-modal-overlay). This is now the
-  // ONLY place info hotspots are created — no more duplicate hotspot
-  // system living in index.html.
+  // Info hotspot = the dark circular "i" button (styled in style.css via
+  // .info-hotspot / .info-hotspot-icon-wrapper) that opens the video modal
+  // defined in index.html (#video-modal-overlay). This is now the ONLY
+  // place info hotspots are created — no more duplicate hotspot system
+  // living in index.html.
   function createInfoHotspotElement(hotspot) {
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
-    wrapper.classList.add('pulsing-video-hotspot');
+    wrapper.classList.add('info-hotspot');
+
+    var iconWrapper = document.createElement('div');
+    iconWrapper.classList.add('info-hotspot-icon-wrapper');
 
     if (hotspot.title) {
-      wrapper.setAttribute('title', hotspot.title);
+      iconWrapper.setAttribute('title', hotspot.title);
     }
 
-    wrapper.addEventListener('click', function(event) {
+    var icon = document.createElement('img');
+    icon.src = 'img/info.png';
+    icon.classList.add('info-hotspot-icon');
+    iconWrapper.appendChild(icon);
+    wrapper.appendChild(iconWrapper);
+
+    iconWrapper.addEventListener('click', function(event) {
       event.stopPropagation();
       if (typeof window.openVideoModal === 'function' && hotspot.video) {
         window.openVideoModal(hotspot.title, hotspot.video, hotspot.text);
