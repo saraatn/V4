@@ -4,7 +4,7 @@
 <title>LITES Simulator</title>
 <meta charset="utf-8">
 <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<style> @@-ms-viewport { width: device-width; } </style>
+<style> @-ms-viewport { width: device-width; } </style>
 <link rel="stylesheet" href="vendor/reset.min.css">
 <link rel="stylesheet" href="style.css">
 
@@ -441,7 +441,14 @@
 
       floorplanBox?.addEventListener('click', function(e) {
           const dot = e.target.closest('.map-dot[data-scene]');
-          if (dot) onSceneActivated(dot.getAttribute('data-scene'));
+          if (dot) {
+              const sceneTarget = dot.getAttribute('data-scene');
+              if (typeof window.switchScene === 'function') {
+                  window.switchScene(sceneTarget);
+              } else {
+                  onSceneActivated(sceneTarget);
+              }
+          }
       });
 
       // Continuous monitoring setup to handle initial bootstrap render safety check
