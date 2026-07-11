@@ -102,7 +102,7 @@
     flex-direction: column;
     align-items: center; 
     width: 100%;
-    max-width: 440px; /* Constrained compact scale matching Photo 2 configuration */
+    max-width: 440px; /* Constrained compact width matching photo layout sizing */
   }
 
   .title-wrapper {
@@ -170,7 +170,7 @@
   .submit-btn:hover { background: #0f984d; }
   #welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
 
-  /* Custom Video Display Modal Panel Stylesheet */
+  /* Custom Overlay Layout Styles for Video Feature Modal Window */
   #video-modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -218,7 +218,7 @@
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
   }
 
-  /* Pulsing Animation Stylesheet Rules for Video Hotspots */
+  /* Pulsing Overlay Animation Styles for Video Feature Integration Points */
   .pulsing-video-hotspot {
     width: 32px; height: 32px;
     background: rgba(57, 255, 20, 0.8);
@@ -382,7 +382,7 @@
     }
   }
 
-  /* Core Video Modal Actions Logic */
+  /* Video Feature Panel Visibility Engine Toggles */
   function openVideoModal(title, youtubeId) {
     const modal = document.getElementById('video-modal-overlay');
     const iframe = document.getElementById('modal-video-iframe');
@@ -400,7 +400,7 @@
     const iframe = document.getElementById('modal-video-iframe');
     if(modal && iframe) {
       modal.classList.remove('open');
-      iframe.src = ''; // Kill video streams
+      iframe.src = ''; 
     }
   }
 
@@ -449,12 +449,11 @@
           }
       }
       
-      // Clear out and inject any pulsing hotspots if defined in data.js structure
+      // Inject the current hotspots dynamically 
       renderVideoHotspotsForScene(sceneId);
   }
 
   function renderVideoHotspotsForScene(sceneId) {
-      // Clear previously rendered overlay elements if any exist
       document.querySelectorAll('.pulsing-container-wrapper').forEach(e => e.remove());
 
       if (typeof APP_DATA === 'undefined' || !APP_DATA.scenes) return;
@@ -474,7 +473,6 @@
               
               element.appendChild(pulseBtn);
 
-              // Dynamically hand the pulsing layer over to Marzipano viewer architecture via window references
               if (window.viewer && window.viewer.scene()) {
                   window.viewer.scene().hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
               }
