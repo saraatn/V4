@@ -19,7 +19,14 @@ var APP_DATA = {
         { "yaw": 1.3055071598985801, "pitch": 0.26957758113598373, "rotation": 0, "target": "1-02iot" }
       ],
       "infoHotspots": [],
-      "videoHotspots": []
+      "videoHotspots": [
+        {
+          "title": "Station 1: Nexus Introduction",
+          "yaw": 3.11,
+          "pitch": 0.0,
+          "youtubeId": "YOUR_YOUTUBE_ID_HERE"
+        }
+      ]
     },
     {
       "id": "1-02iot",
@@ -89,7 +96,7 @@ var APP_DATA = {
       "infoHotspots": [],
       "videoHotspots": [
         {
-          "title": "Station 3: Sorting Robots",
+          "title": "Station 3: Libiao Sorting Robots",
           "yaw": 0.10,
           "pitch": -0.02,
           "youtubeId": "YOUR_YOUTUBE_ID_HERE"
@@ -134,7 +141,7 @@ var APP_DATA = {
       "infoHotspots": [],
       "videoHotspots": [
         {
-          "title": "Station 4: Automated Reach Truck",
+          "title": "Station 4: Linde Automated Reach Truck",
           "yaw": 0.45,
           "pitch": 0.0,
           "youtubeId": "YOUR_YOUTUBE_ID_HERE"
@@ -160,9 +167,15 @@ var APP_DATA = {
       "infoHotspots": [],
       "videoHotspots": [
         {
-          "title": "Station 5 & 6: 4-Way Shuttle & LEAN",
-          "yaw": -1.2,
-          "pitch": 0.1,
+          "title": "Station 5: 4-Way Shuttle System",
+          "yaw": 2.00,
+          "pitch": -0.10,
+          "youtubeId": "YOUR_YOUTUBE_ID_HERE"
+        },
+        {
+          "title": "Station 6: LEAN Manufacturing",
+          "yaw": -1.14,
+          "pitch": 0.05,
           "youtubeId": "YOUR_YOUTUBE_ID_HERE"
         }
       ]
@@ -205,7 +218,7 @@ var APP_DATA = {
       "infoHotspots": [],
       "videoHotspots": [
         {
-          "title": "Station 7: AppSheet System",
+          "title": "Station 7: AppSheet System Automation",
           "yaw": -2.5,
           "pitch": -0.05,
           "youtubeId": "YOUR_YOUTUBE_ID_HERE"
