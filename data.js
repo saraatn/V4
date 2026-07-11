@@ -22,7 +22,7 @@ var APP_DATA = {
         {
           "title": "Station 1: Nexus Introduction",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
+          "yaw": 3.1119, /* Adjusted: Spawns directly in front of the initial view */
           "pitch": 0,
           "video": "llHxFnLVuAM"
         }
@@ -52,7 +52,7 @@ var APP_DATA = {
         {
           "title": "Station 2: Internet of Things (IoT)",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
+          "yaw": -3.1126, /* Adjusted: Spawns directly in front of the initial view */
           "pitch": 0,
           "video": "llHxFnLVuAM"
         }
@@ -98,7 +98,7 @@ var APP_DATA = {
         {
           "title": "Station 3: Libiao Sorting Robots",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
+          "yaw": 0.1792, /* Adjusted: Spawns directly in front of the initial view */
           "pitch": 0,
           "video": "llHxFnLVuAM"
         }
@@ -144,8 +144,8 @@ var APP_DATA = {
         {
           "title": "Station 4: Linde Automated Reach Truck",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
-          "pitch": 0,
+          "yaw": 0.0065, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": -0.15,
           "video": "llHxFnLVuAM"
         }
       ]
@@ -172,15 +172,15 @@ var APP_DATA = {
         {
           "title": "Station 5: 4-Way Shuttle System",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
-          "pitch": 0,
+          "yaw": 1.8, /* Fine-tuned split layout positions */
+          "pitch": -0.1,
           "video": "llHxFnLVuAM"
         },
         {
           "title": "Station 6: LEAN Manufacturing",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0.5,
-          "pitch": 0,
+          "yaw": 2.2, /* Fine-tuned split layout positions */
+          "pitch": -0.1,
           "video": "llHxFnLVuAM"
         }
       ]
@@ -223,7 +223,7 @@ var APP_DATA = {
         {
           "title": "Station 7: AppSheet System Automation",
           "text": "Click to watch the video demonstration.",
-          "yaw": 0,
+          "yaw": -2.7066, /* Adjusted: Spawns directly in front of the initial view */
           "pitch": 0,
           "video": "llHxFnLVuAM"
         }
