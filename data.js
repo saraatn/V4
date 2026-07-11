@@ -18,13 +18,13 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": 1.3055071598985801, "pitch": 0.26957758113598373, "rotation": 0, "target": "1-02iot" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 1: Nexus Introduction",
-          "yaw": 3.1119,
-          "pitch": 0.0020,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -48,13 +48,13 @@ var APP_DATA = {
         { "yaw": -1.1024589330649306, "pitch": 0.259600956589809, "rotation": 0, "target": "10-11seat" },
         { "yaw": -1.4028954440114756, "pitch": 0.37843758030693664, "rotation": 0, "target": "2-03transition" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 2: Internet of Things (IoT)",
-          "yaw": -3.1126,
-          "pitch": 0.0960,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -74,8 +74,7 @@ var APP_DATA = {
         { "yaw": 3.057193984367995, "pitch": 0.3420701635090069, "rotation": 0, "target": "1-02iot" },
         { "yaw": 2.277641121429231, "pitch": 0.40180137760028245, "rotation": 0, "target": "10-11seat" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": []
+      "infoHotspots": []
     },
     {
       "id": "3-04libiao",
@@ -95,13 +94,13 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": 1.8046571918460268, "pitch": 0.2848931217476043, "rotation": 0, "target": "4-05transition-2-3" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 3: Libiao Sorting Robots",
-          "yaw": 0.1792,
-          "pitch": -0.0051,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -121,8 +120,7 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": 1.3710722800095212, "pitch": 0.25920822058027504, "rotation": 0, "target": "5-06linde" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": []
+      "infoHotspots": []
     },
     {
       "id": "5-06linde",
@@ -142,13 +140,13 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": 1.7377239892072645, "pitch": 0.2545587401394833, "rotation": 0, "target": "6-074ws-and-lean" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 4: Linde Automated Reach Truck",
-          "yaw": 0.0065,
-          "pitch": -0.1573,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -170,19 +168,20 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": -0.5925982314055016, "pitch": 0.35109348318183997, "rotation": 0, "target": "7-08transition-aft-lean" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 5: 4-Way Shuttle System",
-          "yaw": 2.0026,
-          "pitch": -0.1094,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         },
         {
           "title": "Station 6: LEAN Manufacturing",
-          "yaw": -1.1400,
-          "pitch": 0.0500,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0.5,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -202,8 +201,7 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": -1.6526267989944632, "pitch": 0.2455493149372785, "rotation": 0, "target": "8-09appsheet" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": []
+      "infoHotspots": []
     },
     {
       "id": "8-09appsheet",
@@ -221,13 +219,13 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": -1.3889535237972392, "pitch": 0.30860131149692727, "rotation": 0, "target": "9-10behind-seats" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": [
+      "infoHotspots": [
         {
           "title": "Station 7: AppSheet System Automation",
-          "yaw": -2.7066,
-          "pitch": 0.0164,
-          "youtubeId": "llHxFnLVuAM"
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0,
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -248,8 +246,7 @@ var APP_DATA = {
         { "yaw": -1.165102579005353, "pitch": 0.29652463052920197, "rotation": 0, "target": "10-11seat" },
         { "yaw": 1.5072626728679754, "pitch": 0.46423176670189115, "rotation": 0, "target": "2-03transition" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": []
+      "infoHotspots": []
     },
     {
       "id": "10-11seat",
@@ -268,8 +265,7 @@ var APP_DATA = {
         { "yaw": 3.1020901124042073, "pitch": 0.24191502708143453, "rotation": 0, "target": "2-03transition" },
         { "yaw": -1.1329952193055508, "pitch": 0.30927228757802894, "rotation": 0, "target": "9-10behind-seats" }
       ],
-      "infoHotspots": [],
-      "videoHotspots": []
+      "infoHotspots": []
     }
   ],
   "name": "Project Title",
