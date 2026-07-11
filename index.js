@@ -77,12 +77,12 @@
   // Create scenes.
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
-    
+
     var source = Marzipano.ImageUrlSource.fromString(
   urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
   { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
 );
-    
+
     var geometry = new Marzipano.CubeGeometry(data.levels);
 
     var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
@@ -101,7 +101,7 @@
       scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
     });
 
-    // Create info hotspots.
+    // Create info hotspots (the pulsing green video buttons).
     data.infoHotspots.forEach(function(hotspot) {
       var element = createInfoHotspotElement(hotspot);
       scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
@@ -114,6 +114,16 @@
     };
   });
 
+  // Expose scenes/viewer + a real global switchScene so other scripts
+  // (e.g. the welcome overlay / floorplan script in index.html) can hook in
+  // without re-implementing scene switching themselves.
+  window.viewer = viewer;
+  window.APP_SCENES = scenes;
+  window.switchScene = function(sceneOrId) {
+    var target = typeof sceneOrId === 'string' ? findSceneById(sceneOrId) : sceneOrId;
+    if (target) switchScene(target);
+  };
+
   // Set up autorotate, if enabled.
   var autorotate = Marzipano.autorotate({
     yawSpeed: 0.03,
@@ -123,7 +133,7 @@
 
   // FORCE DISABLE IT HERE:
   data.settings.autorotateEnabled = false;
-  
+
   if (data.settings.autorotateEnabled) {
     autorotateToggleElement.classList.add('enabled');
   }
@@ -171,16 +181,18 @@
 
   // ==========================================================================
   // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // (this is the ONLY floorplan-dot click handler now; the duplicate one
+  // that used to live in index.html has been removed)
   // ==========================================================================
   const mapDots = document.querySelectorAll('.map-dot');
   mapDots.forEach(function(dot) {
     dot.addEventListener('click', function() {
       const targetSceneId = this.getAttribute('data-scene');
-      
+
       const targetScene = scenes.find(function(s) {
         return s.data.id === targetSceneId;
       });
-      
+
       if (targetScene) {
         switchScene(targetScene);
       } else {
@@ -329,55 +341,23 @@
     return wrapper;
   }
 
+  // Info hotspot = the pulsing green "play" button that opens the video
+  // modal defined in index.html (#video-modal-overlay). This is now the
+  // ONLY place info hotspots are created — no more duplicate hotspot
+  // system living in index.html.
   function createInfoHotspotElement(hotspot) {
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
-    wrapper.classList.add('info-hotspot');
+    wrapper.classList.add('pulsing-video-hotspot');
 
-    var iconWrapper = document.createElement('div');
-    iconWrapper.classList.add('info-hotspot-icon-wrapper');
-    
     if (hotspot.title) {
-      iconWrapper.setAttribute('title', hotspot.title);
+      wrapper.setAttribute('title', hotspot.title);
     }
 
-    var icon = document.createElement('img');
-    icon.src = 'img/info.png';
-    icon.classList.add('info-hotspot-icon');
-    iconWrapper.appendChild(icon);
-    wrapper.appendChild(iconWrapper);
-
-    iconWrapper.addEventListener('click', function() {
-      var modal = document.getElementById('video-modal');
-      var modalTitle = document.querySelector('#video-modal h2');
-      var modalText = document.querySelector('#video-modal p');
-      var modalIframe = document.getElementById('youtube-player');
-      var closeBtn = document.getElementById('close-modal');
-
-      if (modal) {
-        if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
-        if (modalText) modalText.innerHTML = hotspot.text || "";
-        
-        if (modalIframe) {
-          var videoId = hotspot.video || "dQw4w9WgXcQ"; 
-          modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
-        }
-        
-        modal.style.display = 'flex';
-
-        if (closeBtn) {
-          closeBtn.onclick = function() {
-            modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; 
-          };
-        }
-
-        modal.onclick = function(event) {
-          if (event.target === modal) {
-            modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; 
-          }
-        };
+    wrapper.addEventListener('click', function(event) {
+      event.stopPropagation();
+      if (typeof window.openVideoModal === 'function' && hotspot.video) {
+        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text);
       }
     });
 
