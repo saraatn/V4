@@ -1,585 +1,370 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>LITES Simulator</title>
-<meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-<style> @-ms-viewport { width: device-width; } </style>
-<link rel="stylesheet" href="vendor/reset.min.css">
-<link rel="stylesheet" href="style.css">
-
-<style>
-  /* Top Progress Bar Styling */
-  #progress-bar-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    z-index: 2000;
-  }
-  #progress-bar {
-    width: 0%;
-    height: 100%;
-    background: #12b25b; 
-    box-shadow: 0 0 8px rgba(18, 178, 91, 0.6);
-    transition: width 0.4s ease;
-  }
-
-  /* Floorplan Container Styling */
-  #floorplan-container {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 360px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    background: rgba(0, 0, 0, 0.6);
-    padding: 5px;
-    border-radius: 8px;
-    border: 2px solid #fff;
-  }
-
-  #floorplan-img {
-    width: 100%;
-    display: block;
-    border-radius: 4px;
-  }
-
-  .map-dot {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background-color: #ff3333;
-    border: 2px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    transform: translate(-50%, -50%); 
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    z-index: 1010;
-  }
-
-  .map-dot:hover {
-    background-color: #12b25b;
-    transform: translate(-50%, -50%) scale(1.3);
-  }
-
-  /* Welcome Landing Page Overlay Layout Styling */
-  #welcome-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #0f172a url('img/RP_COI_background.png') no-repeat center center;
-    background-size: cover;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    transition: opacity 0.6s ease;
-  }
-  
-  /* Welcome Overlay Backdrop Mask Tint */
-  #welcome-overlay::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.5); /* Ambient backdrop tint */
-    z-index: 1;
-  }
-
-  /* Wrapper holding title + subtitle + box together */
-  .welcome-content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* Typewriter Text Header - now OUTSIDE the box */
-  .welcome-content h2 { 
-    margin: 0 0 6px 0; 
-    font-size: 34px; 
-    font-weight: 800; 
-    color: #fff;
-    min-height: 42px; 
-    display: inline-block;
-    border-right: 2px solid rgba(255,255,255,0.75);
-    white-space: nowrap;
-    overflow: hidden;
-    animation: blink-caret 0.75s step-end infinite;
-  }
-
-  /* Subtitle Text - now OUTSIDE the box */
-  .form-subtitle {
-    color: #12b25b;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-
-  /* Translucent Form Card Frame - widened to match reference */
-  .form-card {
-    background: rgba(28, 30, 39, 0.8);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 30px 35px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 620px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    text-align: left;
-  }
-
-  .form-group { margin-bottom: 20px; text-align: left; }
-  .form-group label { display: block; margin-bottom: 8px; font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-group input {
-    width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155;
-    background: rgba(30, 41, 59, 0.3); color: #fff; box-sizing: border-box; font-size: 14px;
-    transition: border-color 0.2s;
-  }
-  .form-group input:focus { outline: none; border-color: #12b25b; }
-  .form-group input::placeholder { color: #475569; }
-
-  /* Submit Button - Color Matrix Theme Rules */
-  .submit-btn {
-    width: 100%; padding: 14px; 
-    background: #12b25b; 
-    border: none;
-    border-radius: 6px; color: #fff; font-weight: bold; cursor: pointer;
-    font-size: 14px; margin-top: 10px; transition: background 0.2s;
-  }
-  .submit-btn:hover { background: #0f984d; }
-  #welcome-overlay.fade-out { opacity: 0; pointer-events: none; }
-
-  /* End of Tour Networking Modal Setup */
-  #networking-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    z-index: 9000;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-family: sans-serif;
-  }
-  .modal-card {
-    background: #1e293b; padding: 30px; border-radius: 12px;
-    max-width: 500px; width: 90%; text-align: center; border: 1px solid #334155;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  }
-  .modal-card h2 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
-  #profile-recommendation-box {
-    background: rgba(18, 178, 91, 0.1); padding: 15px;
-    border-radius: 6px; margin: 20px 0; font-size: 14px; border-left: 4px solid #12b25b; text-align: left; line-height: 1.5;
-  }
-  .booth-selection-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-  .booth-btn {
-    padding: 12px 16px; background: #0f172a; border: 1px solid #334155; color: #e2e8f0;
-    border-radius: 6px; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 14px;
-  }
-  .booth-btn:hover { background: #1e293b; border-color: #475569; }
-  .recommended-booth-highlight { border-color: #12b25b !important; background: rgba(18, 178, 91, 0.15) !important; font-weight: bold; }
-
-  /* Shortcut Quick Launch Action Button Bubble */
-  #booth-shortcut-btn {
-    position: absolute; bottom: 90px; right: 20px;
-    width: 50px; height: 50px; background: #12b25b; border-radius: 50%;
-    z-index: 8000; display: none; justify-content: center; align-items: center;
-    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s; font-size: 20px;
-  }
-
-  /* Keyframes for the typewriter cursor effect */
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: rgba(255,255,255,0.75); }
-  }
-
-  /* ====================== INFO HOTSPOT (pulsing "i" button) ====================== */
-  #info-hotspot {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    width: 44px;
-    height: 44px;
-    transform: translate(-50%, -50%);
-    z-index: 1500;
-    display: none; /* toggled to flex per-scene by JS */
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-  #info-hotspot .hotspot-core {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.55);
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-style: italic;
-    font-weight: bold;
-    font-size: 18px;
-    transition: transform 0.2s ease, background 0.2s ease;
-  }
-  #info-hotspot:hover .hotspot-core {
-    transform: scale(1.12);
-    background: rgba(18, 178, 91, 0.75);
-  }
-  #info-hotspot .hotspot-pulse {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.85);
-    animation: hotspot-pulse-anim 1.8s ease-out infinite;
-    pointer-events: none;
-  }
-  #info-hotspot .hotspot-pulse.delay {
-    animation-delay: 0.9s;
-  }
-  @keyframes hotspot-pulse-anim {
-    0%   { transform: scale(1);   opacity: 0.9; }
-    100% { transform: scale(2.2); opacity: 0; }
-  }
-
-  /* ====================== VIDEO INFO MODAL ====================== */
-  #video-modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-  #video-modal.open { display: flex; }
-  #video-modal .modal-inner {
-    position: relative;
-    width: 90%;
-    max-width: 900px;
-    background-color: #000000;
-    box-shadow: 0px 15px 40px rgba(0,0,0,0.8);
-    overflow: hidden;
-    border: 1px solid #333;
-  }
-  #video-modal .modal-header {
-    padding: 25px 50px 20px 25px;
-    color: #ffffff;
-    background-color: #111111;
-    border-bottom: 1px solid #222;
-  }
-  #video-modal .modal-header h2 {
-    margin: 0 0 10px 0;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    color: #ffffff;
-  }
-  #video-modal .modal-header p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #cccccc;
-    font-weight: 300;
-  }
-  #close-modal {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    color: #ffffff;
-    font-size: 32px;
-    cursor: pointer;
-    font-weight: 300;
-    z-index: 100000;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-  }
-  #close-modal:hover { opacity: 1; }
-  .video-frame-wrap {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    background-color: #000000;
-  }
-  .video-frame-wrap iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-  }
-</style>
-</head>
-<body class="multiple-scenes">
-
-<div id="welcome-overlay">
-  <div class="welcome-content">
-    <h2 id="dynamic-lites-title"></h2>
-    <div class="form-subtitle">Virtual Supply Chain Lab Tour Registration</div>
-    <div class="form-card">
-      <form onsubmit="handleFormSubmit(event)">
-        <div class="form-group">
-          <label for="guest-name">Participant Name</label>
-          <input type="text" id="guest-name" required placeholder="e.g., John Tan">
-        </div>
-        <div class="form-group">
-          <label for="guest-org">Organisation Name</label>
-          <input type="text" id="guest-org" required placeholder="e.g., XYZ PTE. LTD.">
-        </div>
-        <div class="form-group">
-          <label for="guest-designation">Designation</label>
-          <input type="text" id="guest-designation" required placeholder="e.g., Co-Founder">
-        </div>
-        <button type="submit" class="submit-btn">Start & Enter the experience</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div id="progress-bar-container">
-  <div id="progress-bar"></div>
-</div>
-
-<div id="pano"></div>
-
-<div id="info-hotspot" onclick="openStationInfoModal()" title="Station Info">
-  <div class="hotspot-pulse"></div>
-  <div class="hotspot-pulse delay"></div>
-  <div class="hotspot-core">i</div>
-</div>
-
-<div id="floorplan-container">
-  <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
-  
-  <button class="map-dot" data-scene="0-go-to-station-1" style="top: 30%; left: 80%;" title="Station 1"></button>
-  <button class="map-dot" data-scene="2-go-to-station-2" style="top: 30%; left: 55%;" title="Station 2"></button>
-  <button class="map-dot" data-scene="4-go-to-station-3" style="top: 30%; left: 15%;" title="Station 3"></button>
-  <button class="map-dot" data-scene="5-go-to-station-4" style="top: 80%; left: 15%;" title="Station 4"></button>
-  <button class="map-dot" data-scene="6-go-to-station-5" style="top: 80%; left: 30%;" title="Station 5"></button>
-  <button class="map-dot" data-scene="8-go-to-station-6" style="top: 80%; left: 55%;" title="Station 6"></button>
-  <button class="map-dot" data-scene="11-nexus" style="top: 80%; left: 70%;" title="Nexus"></button>
-</div>
-
-<div id="sceneList">
-  <ul class="scenes">
-    <a href="javascript:void(0)" class="scene" data-id="0-go-to-station-1"><li class="text">Station 1</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="2-go-to-station-2"><li class="text">Station 2</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="4-go-to-station-3"><li class="text">Station 3</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="5-go-to-station-4"><li class="text">Station 4</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="6-go-to-station-5"><li class="text">Station 5</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="8-go-to-station-6"><li class="text">Station 6</li></a>
-    <a href="javascript:void(0)" class="scene" data-id="11-nexus"><li class="text">Nexus</li></a>
-  </ul>
-</div>
-
-<div id="titleBar">
-  <h1 class="sceneName"></h1>
-</div>
-
-<a href="javascript:void(0)" id="autorotateToggle">
-  <img class="icon off" src="img/play.png">
-  <img class="icon on" src="img/pause.png">
-</a>
-
-<a href="javascript:void(0)" id="fullscreenToggle">
-  <img class="icon off" src="img/fullscreen.png">
-  <img class="icon on" src="img/windowed.png">
-</a>
-
-<a href="javascript:void(0)" id="sceneListToggle">
-  <img class="icon off" src="img/expand.png">
-  <img class="icon on" src="img/collapse.png">
-</a>
-
-<div style="display:none;">
-  <a href="javascript:void(0)" id="viewUp"></a>
-  <a href="javascript:void(0)" id="viewDown"></a>
-  <a href="javascript:void(0)" id="viewLeft"></a>
-  <a href="javascript:void(0)" id="viewRight"></a>
-  <a href="javascript:void(0)" id="viewIn"></a>
-  <a href="javascript:void(0)" id="viewOut"></a>
-</div>
-
-<div id="networking-overlay">
-  <div class="modal-card">
-    <h2>Tour Completed!</h2>
-    <div id="profile-recommendation-box"></div>
-    <p style="font-size: 14px; color: #94a3b8; margin-top: 10px;">Select a location below to instantly leap to that booth zone:</p>
-    <div class="booth-selection-list">
-      <button class="booth-btn" id="booth-nexus" onclick="selectNetworkingBooth('11-nexus')">🏢 Executive Innovation Strategy (Nexus)</button>
-      <button class="booth-btn" id="booth-logistics" onclick="selectNetworkingBooth('5-go-to-station-4')">📦 Intralogistics & Warehouse Automation</button>
-      <button class="booth-btn" id="booth-procurement" onclick="selectNetworkingBooth('8-go-to-station-6')">💻 Digital Procurement & Sourcing</button>
-      <button class="booth-btn" id="booth-management" onclick="selectNetworkingBooth('2-go-to-station-2')">⚡ Operations & IoT Management Zone</button>
-    </div>
-  </div>
-</div>
-
-<div id="booth-shortcut-btn" onclick="openBoothsModal()" title="View Booth Recommendations">🗺️</div>
-
-<div id="video-modal">
-  <div class="modal-inner">
-    <span id="close-modal" onclick="closeStationInfoModal()">&times;</span>
-    <div class="modal-header">
-      <h2 id="video-modal-title">Loading Station Title...</h2>
-      <p id="video-modal-desc">Loading Station Data...</p>
-    </div>
-    <div class="video-frame-wrap">
-      <iframe
-        id="youtube-player"
-        src=""
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-       iframe>
-    </div>
-  </div>
-</div>
-
-<script src="vendor/screenfull.min.js"></script>
-<script src="vendor/bowser.min.js"></script>
-<script src="vendor/marzipano.js"></script>
-
-<script src="data.js"></script>
-<script src="index.js"></script>
-
-<script>
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-</script>
-
-<script>
-  const standardStations = [
-    '0-go-to-station-1', 
-    '2-go-to-station-2', 
-    '4-go-to-station-3', 
-    '5-go-to-station-4', 
-    '6-go-to-station-5', 
-    '8-go-to-station-6', 
-    '11-nexus'
-  ];
-  let visitedStations = new Set();
-  let tourCompletedTriggered = false;
-
-  /* ====================== STATION INFO / HOTSPOT DATA ====================== */
-  const stationInfoData = {
-    '0-go-to-station-1': {
-      title: 'Station 1: Doc AI',
-      description: 'Automates the extraction and processing of information from documents using AI, reducing manual data entry.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+var APP_DATA = {
+  "scenes": [
+    {
+      "id": "0-01nexus",
+      "name": "(01)nexus",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 3.1119080796529737,
+        "pitch": 0.00202215394311267,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.3055071598985801,
+          "pitch": 0.26957758113598373,
+          "rotation": 0,
+          "target": "1-02iot"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": 3.0,
+          "pitch": 0.0,
+          "title": "Station 8: Nexus Command Centre",
+          "text": "The Executive Innovation Strategy center monitoring supply chain workflows in real-time.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
-    '2-go-to-station-2': {
-      title: 'Station 2: Internet of Things (IoT)',
-      description: 'Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "1-02iot",
+      "name": "(02)IoT",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": -3.1126880146521216,
+        "pitch": 0.09605815712125931,
+        "fov": 1.2446250333351525
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.057364848216599,
+          "pitch": 0.24186397528697157,
+          "rotation": 0,
+          "target": "0-01nexus"
+        },
+        {
+          "yaw": -1.1024589330649306,
+          "pitch": 0.259600956589809,
+          "rotation": 0,
+          "target": "10-11seat"
+        },
+        {
+          "yaw": -1.4028954440114756,
+          "pitch": 0.37843758030693664,
+          "rotation": 0,
+          "target": "2-03transition"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": -2.8,
+          "pitch": 0.1,
+          "title": "Station 2: Internet of Things (IoT)",
+          "text": "Connects devices, sensors, and hardware systems together to collect and share live actionable operational metrics.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
-    '4-go-to-station-3': {
-      title: 'Station 3: Sorting Robots',
-      description: 'Automated robotic systems that sort and route items efficiently, increasing throughput and accuracy in warehouse operations.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "2-03transition",
+      "name": "(03)Transition",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
+      },
+      "linkHotspots": [
+        {
+          "yaw": 0.009822964641541532,
+          "pitch": 0.28673151183983947,
+          "rotation": 0,
+          "target": "3-04libiao"
+        },
+        {
+          "yaw": 3.057193984367995,
+          "pitch": 0.3420701635090069,
+          "rotation": 0,
+          "target": "1-02iot"
+        },
+        {
+          "yaw": 2.277641121429231,
+          "pitch": 0.40180137760028245,
+          "rotation": 0,
+          "target": "10-11seat"
+        }
+      ],
+      "infoHotspots": []
     },
-    '5-go-to-station-4': {
-      title: 'Station 4: Automated Reach Truck',
-      description: 'Driverless reach trucks that navigate the warehouse autonomously to retrieve and store pallets safely and efficiently.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "3-04libiao",
+      "name": "(04)libiao",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 0.17921665117960117,
+        "pitch": -0.005100922267761376,
+        "fov": 1.2446250333351525
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.8046571918460268,
+          "pitch": 0.2848931217476043,
+          "rotation": 0,
+          "target": "4-05transition-2-3"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": 0.1,
+          "pitch": -0.1,
+          "title": "Station 3: Sorting Robots",
+          "text": "Intelligent automated sorting machines handling sorting lines with extreme speed and precise distribution.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
-    '6-go-to-station-5': {
-      title: 'Station 5: 4-Way Shuttle',
-      description: 'A high-density storage and retrieval shuttle system that moves in four directions to maximise warehouse space utilisation.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "4-05transition-2-3",
+      "name": "(05)transition (2-3)",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 1.3415108445594512,
+        "pitch": 0.09784584063676505,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.3710722800095212,
+          "pitch": 0.25920822058027504,
+          "rotation": 0,
+          "target": "5-06linde"
+        }
+      ],
+      "infoHotspots": []
     },
-    '8-go-to-station-6': {
-      title: 'Station 6: Appsheet Scanner',
-      description: 'A mobile scanning solution built on AppSheet that streamlines inventory checks and data capture on the warehouse floor.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "5-06linde",
+      "name": "(06)linde",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 0.006565305927697551,
+        "pitch": -0.15731876381901166,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": 1.7377239892072645,
+          "pitch": 0.2545587401394833,
+          "rotation": 0,
+          "target": "6-074ws-and-lean"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": 0.0,
+          "pitch": -0.2,
+          "title": "Station 4: Automated Reach Truck",
+          "text": "Linde driverless heavy lifting trucks performing high-density warehouse storage tasks.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
-    '11-nexus': {
-      title: 'Nexus',
-      description: 'The central hub bringing together every station\'s technology into one connected, end-to-end supply chain ecosystem.',
-      videoId: '',
-      position: { top: '45%', left: '50%' }
+    {
+      "id": "6-074ws-and-lean",
+      "name": "(07)4ws and lean",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 2.0026076028901496,
+        "pitch": -0.10945381139996613,
+        "fov": 1.2446250333351525
+      },
+      "linkHotspots": [
+        {
+          "yaw": -0.5925982314055016,
+          "pitch": 0.35109348318183997,
+          "rotation": 0,
+          "target": "7-08transition-aft-lean"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": 2.1,
+          "pitch": -0.1,
+          "title": "Station 5 & 6: 4-Way Shuttle & LEAN",
+          "text": "High-density matrix racking combined with lean methodology practices to minimize processing waste.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
+    },
+    {
+      "id": "7-08transition-aft-lean",
+      "name": "(08)transition (aft lean)",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": -1.7665574750632125,
+        "pitch": 0.18569268327569866,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": -1.6526267989944632,
+          "pitch": 0.2455493149372785,
+          "rotation": 0,
+          "target": "8-09appsheet"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "8-09appsheet",
+      "name": "(09)appsheet",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": -2.7066905310356866,
+        "pitch": 0.016471583426062253,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": -1.3889535237972392,
+          "pitch": 0.30860131149692727,
+          "rotation": 0,
+          "target": "9-10behind-seats"
+        }
+      ],
+      "infoHotspots": [
+        {
+          "yaw": -2.7,
+          "pitch": 0.0,
+          "title": "Station 7: Appsheet Scanner Zone",
+          "text": "Cloud-based digital scanning tools ensuring seamless tracking and instant database synchronization.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
+    },
+    {
+      "id": "9-10behind-seats",
+      "name": "(10)behind seats",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 1.294109252625809,
+        "pitch": 0.18985798088099237,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": -1.165102579005353,
+          "pitch": 0.29652463052920197,
+          "rotation": 0,
+          "target": "10-11seat"
+        },
+        {
+          "yaw": 1.5072626728679754,
+          "pitch": 0.46423176670189115,
+          "rotation": 0,
+          "target": "2-03transition"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "10-11seat",
+      "name": "(11)seat",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": -1.9853720365325245,
+        "pitch": 0.09990527283444806,
+        "fov": 1.4469324312346197
+      },
+      "linkHotspots": [
+        {
+          "yaw": 3.1020901124042073,
+          "pitch": 0.24191502708143453,
+          "rotation": 0,
+          "target": "2-03transition"
+        },
+        {
+          "yaw": -1.1329952193055508,
+          "pitch": 0.30927228757802894,
+          "rotation": 0,
+          "target": "9-10behind-seats"
+        }
+      ],
+      "infoHotspots": []
     }
-  };
-
-  let currentActiveSceneId = null;
-
-  document.addEventListener("DOMContentLoaded", function() {
-      const currentYear = new Date().getFullYear();
-      const footerYear = document.getElementById('footer-year');
-      if (footerYear) footerYear.innerText = currentYear;
-      
-      initiateTypewriter("Welcome to LITES");
-      if (typeof initializeDOMTracker === 'function') initializeDOMTracker();
-      initializeSceneDetection();
-  });
-
-  /* ====================== ROBUST SCENE DETECTION ====================== */
-  function initializeSceneDetection() {
-      if (typeof window.switchScene === 'function') {
-          const originalSwitchScene = window.switchScene;
-          window.switchScene = function(sceneId) {
-              const result = originalSwitchScene.apply(this, arguments);
-              onSceneActivated(sceneId);
-              return result;
-          };
-      }
-
-      const sceneListEl = document.getElementById('sceneList');
-      if (sceneListEl) {
-          sceneListEl.addEventListener('click', function(e) {
-              const link = e.target.closest('.scene[data-id]');
-              if (link) {
-                  onSceneActivated(link.getAttribute('data-id'));
-              }
-          });
-      }
-
-      const floorplanEl = document.getElementById('floorplan-container');
-      if (floorplanEl) {
-          floorplanEl.addEventListener('click', function(e) {
-              const dot = e.target.closest('.map-dot[data-scene]');
-              if (dot) {
-                  onSceneActivated(dot.getAttribute('data-scene'));
-              }
-          });
-      }
-
-      window.addEventListener('hashchange', function() {
-          const hashId = decodeURIComponent(location.hash.replace('#', ''));
-          if (hashId) onSceneActivated(hashId);
-      });
-      if (location.hash) {
-          onSceneActivated(decodeURIComponent(location.hash.replace('#', '')));
-      }
+  ],
+  "name": "Project Title",
+  "settings": {
+    "mouseViewMode": "drag",
+    "autorotateEnabled": true,
+    "fullscreenButton": false,
+    "viewControlButtons": false
   }
-
-  function onSceneActivated(sceneId) {
-      if (!sceneId || sceneId === currentActiveSceneId) return;
-      currentActiveSceneId = sceneId;
-      if (typeof updateInfoHotspotForScene === 'function') {
-          updateInfoHotspotForScene(sceneId);
-      }
-      if (standardStations.includes(sceneId)) {
-          visitedStations.add(sceneId);
-          if (typeof updateTourProgress === 'function') {
-              updateTourProgress();
-          }
-      }
-  }
-</script>
-</body>
-</html>
+};
