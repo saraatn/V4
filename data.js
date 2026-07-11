@@ -103,11 +103,11 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 3: Sorting Robots (Libiao Robotics)",
-          "text": "Uses autonomous sorting robots to move and sort parcels efficiently.<br><br>Increases throughput while reducing manual handling and labour requirements.",
+          "title": "Station 3: Libiao 3D-Sorting System",
+          "text": "An efficient e-commerce sorting solution that integrates high-density sorting walls with autonomous robots.<br><br>Maximizes flexibility with modular platforms, saves up to 83% in pick labor, and operates with 100% sorting accuracy to optimize delivery throughput.",
           "yaw": 2.807,
           "pitch": 0.1,
-          "video": "AKXPny0ubsc"
+          "video": "llHxFnLVuAM"
         }
       ]
     },
@@ -167,7 +167,6 @@ var APP_DATA = {
         { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
-      /* Fine-tuned view perspective to frame your target workbenches perfectly */
       "initialViewParameters": {
         "yaw": -0.4215,
         "pitch": -0.0820,
@@ -191,7 +190,6 @@ var APP_DATA = {
           "pitch": 0.2,
           "video": "s2HCrhNVfak"
         },
-        /* Placed explicitly within your yellow-ringed workstation workspace target */
         {
           "title": "Station 6: LEAN Workstation Overview",
           "text": "Detailed analysis area for identifying workflow optimizations and tracking assembly performance metrics.",
