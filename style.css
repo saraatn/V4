@@ -549,3 +549,8 @@ body.view-control-buttons .viewControlButton {
 .viewControlButton-4 { margin-left: 5px; }
 .viewControlButton-5 { margin-left: 55px; }
 .viewControlButton-6 { margin-left: 105px; }
+
+/* Ensure the modal is ALWAYS on top of everything else */
+#video-modal-overlay {
+    z-index: 999999 !important;
+}
