@@ -352,7 +352,6 @@
 
 <div id="pano"></div>
 
-<!-- Pulsing information hotspot: shown only on Station 1-6 + Nexus scenes -->
 <div id="info-hotspot" onclick="openStationInfoModal()" title="Station Info">
   <div class="hotspot-pulse"></div>
   <div class="hotspot-pulse delay"></div>
@@ -427,7 +426,6 @@
 
 <div id="booth-shortcut-btn" onclick="openBoothsModal()" title="View Booth Recommendations">🗺️</div>
 
-<!-- Video info modal, reused from the reference build and populated per-station -->
 <div id="video-modal">
   <div class="modal-inner">
     <span id="close-modal" onclick="closeStationInfoModal()">&times;</span>
@@ -442,7 +440,7 @@
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
-      </iframe>
+       iframe>
     </div>
   </div>
 </div>
@@ -471,12 +469,7 @@
   let visitedStations = new Set();
   let tourCompletedTriggered = false;
 
-  /* ====================== STATION INFO / HOTSPOT DATA ======================
-     Only scenes listed here get the pulsing "i" hotspot. Fill in each
-     videoId with the real YouTube video ID for that station, and adjust
-     "position" (top/left percentages) to match where you want the hotspot
-     to sit on screen for that scene. Leave a station out of this object
-     (or set videoId to "") and the hotspot will simply stay hidden there. */
+  /* ====================== STATION INFO / HOTSPOT DATA ====================== */
   const stationInfoData = {
     '0-go-to-station-1': {
       title: 'Station 1: Doc AI',
@@ -530,18 +523,12 @@
       if (footerYear) footerYear.innerText = currentYear;
       
       initiateTypewriter("Welcome to LITES");
-      initializeDOMTracker();
+      if (typeof initializeDOMTracker === 'function') initializeDOMTracker();
       initializeSceneDetection();
   });
 
-  /* ====================== ROBUST SCENE DETECTION ======================
-     The old build's internal scene-switching mechanism isn't known ahead
-     of time, so we hook into it three different ways at once. Whichever
-     one actually fires for this template will keep the hotspot in sync. */
+  /* ====================== ROBUST SCENE DETECTION ====================== */
   function initializeSceneDetection() {
-
-      // 1) Wrap the global switchScene() function if it exists (this file
-      //    already calls switchScene() itself in selectNetworkingBooth).
       if (typeof window.switchScene === 'function') {
           const originalSwitchScene = window.switchScene;
           window.switchScene = function(sceneId) {
@@ -551,7 +538,6 @@
           };
       }
 
-      // 2) Listen for clicks on the scene list links directly.
       const sceneListEl = document.getElementById('sceneList');
       if (sceneListEl) {
           sceneListEl.addEventListener('click', function(e) {
@@ -562,7 +548,6 @@
           });
       }
 
-      // 3) Listen for clicks on the floorplan dots directly.
       const floorplanEl = document.getElementById('floorplan-container');
       if (floorplanEl) {
           floorplanEl.addEventListener('click', function(e) {
@@ -573,8 +558,6 @@
           });
       }
 
-      // 4) Fallback: watch the URL hash, in case the tour engine stores
-      //    the current scene id there.
       window.addEventListener('hashchange', function() {
           const hashId = decodeURIComponent(location.hash.replace('#', ''));
           if (hashId) onSceneActivated(hashId);
@@ -587,203 +570,16 @@
   function onSceneActivated(sceneId) {
       if (!sceneId || sceneId === currentActiveSceneId) return;
       currentActiveSceneId = sceneId;
-      updateInfoHotspotForScene(sceneId);
+      if (typeof updateInfoHotspotForScene === 'function') {
+          updateInfoHotspotForScene(sceneId);
+      }
       if (standardStations.includes(sceneId)) {
-          registerStation(sceneId);
-      }
-  }
-
-  /* Typewriter Routine Setup */
-  function initiateTypewriter(txt) {
-      let i = 0;
-      const speed = 80; 
-      const targetElement = document.getElementById('dynamic-lites-title');
-      if (!targetElement) return;
-      
-      targetElement.innerHTML = ""; 
-      function type() {
-          if (i < txt.length) {
-              targetElement.innerHTML += txt.charAt(i);
-              i++;
-              setTimeout(type, speed);
-          } else {
-              targetElement.style.borderRight = "none";
-          }
-      }
-      type();
-  }
-
-  /* Form Submission Handler */
-  function handleFormSubmit(event) {
-      event.preventDefault(); 
-      
-      const participantName = document.getElementById('guest-name').value;
-      const organisationName = document.getElementById('guest-org').value;
-      const designation = document.getElementById('guest-designation').value;
-
-      localStorage.setItem('lites_guest_name', participantName);
-      localStorage.setItem('lites_guest_org', organisationName);
-      localStorage.setItem('lites_guest_title', designation);
-
-      const overlay = document.getElementById('welcome-overlay');
-      if (overlay) {
-          overlay.classList.add('fade-out');
-          setTimeout(() => { overlay.remove(); }, 600);
-      }
-      
-      if (window.chatbase) {
-          window.chatbase("show");
-      }
-  }
-
-  /* DOM Mutation Scanner Loop */
-  function initializeDOMTracker() {
-      // Loop scanner setup parameters
-      setInterval(() => {
-          const sceneElements = document.querySelectorAll('#sceneList .scene');
-          
-          sceneElements.forEach(elem => {
-              if (elem.classList.contains('active') || elem.parentElement.classList.contains('active')) {
-                  const sceneId = elem.getAttribute('data-id');
-
-                  if (sceneId !== currentActiveSceneId) {
-                      currentActiveSceneId = sceneId;
-                      updateInfoHotspotForScene(sceneId);
-                  }
-
-                  if (standardStations.includes(sceneId)) {
-                      registerStation(sceneId);
-                  }
-              }
-          });
-      }, 500);
-  }
-
-  /* Show/hide + position the pulsing info hotspot for the active scene */
-  function updateInfoHotspotForScene(sceneId) {
-      const hotspot = document.getElementById('info-hotspot');
-      if (!hotspot) return;
-
-      const data = stationInfoData[sceneId];
-      if (data) {
-          hotspot.style.display = 'flex';
-          hotspot.style.top = data.position.top;
-          hotspot.style.left = data.position.left;
-      } else {
-          hotspot.style.display = 'none';
-      }
-  }
-
-  /* Open the video modal populated with the current scene's station info */
-  function openStationInfoModal() {
-      if (!currentActiveSceneId) return;
-      const data = stationInfoData[currentActiveSceneId];
-      if (!data) return;
-
-      const modal = document.getElementById('video-modal');
-      const titleEl = document.getElementById('video-modal-title');
-      const descEl = document.getElementById('video-modal-desc');
-      const player = document.getElementById('youtube-player');
-
-      titleEl.textContent = data.title;
-      descEl.textContent = data.description;
-      player.src = data.videoId
-          ? `https://www.youtube.com/embed/${data.videoId}?autoplay=1&rel=0`
-          : '';
-
-      modal.classList.add('open');
-  }
-
-  function closeStationInfoModal() {
-      const modal = document.getElementById('video-modal');
-      const player = document.getElementById('youtube-player');
-      modal.classList.remove('open');
-      player.src = ''; // stop playback
-  }
-
-  function registerStation(sceneId) {
-      if (!visitedStations.has(sceneId)) {
           visitedStations.add(sceneId);
-          
-          const progressPercentage = (visitedStations.size / standardStations.length) * 100;
-          const pb = document.getElementById('progress-bar');
-          if (pb) {
-              pb.style.width = progressPercentage + '%';
+          if (typeof updateTourProgress === 'function') {
+              updateTourProgress();
           }
-      }
-
-      const progressBarElement = document.getElementById('progress-bar');
-      const visualWidth = progressBarElement ? progressBarElement.style.width : '';
-      
-      if ((visitedStations.size >= standardStations.length || visualWidth === '100%') && !tourCompletedTriggered) {
-          tourCompletedTriggered = true;
-          setTimeout(() => {
-              triggerNetworkingPhaseOverlay();
-          }, 500);
-      }
-  }
-
-  function triggerNetworkingPhaseOverlay() {
-      const name = localStorage.getItem('lites_guest_name') || 'Guest';
-      const title = (localStorage.getItem('lites_guest_title') || '').toLowerCase();
-      
-      const recTag = document.getElementById('profile-recommendation-box');
-      let targetedButtonId = 'booth-management'; 
-      let recommendationLabel = 'Operations & Risk Control';
-
-      if (title.includes('logistics') || title.includes('warehouse') || title.includes('operation')) {
-          targetedButtonId = 'booth-logistics';
-          recommendationLabel = 'Intralogistics & Warehouse Automation';
-      } else if (title.includes('procurement') || title.includes('buyer') || title.includes('sourcing') || title.includes('supply chain')) {
-          targetedButtonId = 'booth-procurement';
-          recommendationLabel = 'Digital Procurement & Sustainable Sourcing';
-      } else if (title.includes('manager') || title.includes('founder') || title.includes('director') || title.includes('executive') || title.includes('ceo')) {
-          targetedButtonId = 'booth-nexus';
-          recommendationLabel = 'Executive Innovation Strategy Nexus';
-      }
-
-      if (recTag) {
-          recTag.innerHTML = `👋 Hi <strong>${name}</strong>, based on your industry profile, we highly recommend starting at <strong>${recommendationLabel}</strong>!`;
-      }
-      
-      const targetBtn = document.getElementById(targetedButtonId);
-      if (targetBtn) {
-          targetBtn.classList.add('recommended-booth-highlight');
-      }
-
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) {
-          netOverlay.style.display = 'flex';
-      }
-
-      const dynamicBoothShortcut = document.getElementById('booth-shortcut-btn');
-      if (dynamicBoothShortcut) {
-          dynamicBoothShortcut.style.display = 'flex';
-          setTimeout(() => {
-              dynamicBoothShortcut.style.opacity = '1';
-          }, 50);
-      }
-  }
-
-  function openBoothsModal() {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'flex';
-  }
-
-  function selectNetworkingBooth(sceneId) {
-      const netOverlay = document.getElementById('networking-overlay');
-      if (netOverlay) netOverlay.style.display = 'none';
-      
-      if (typeof switchScene === "function") {
-          switchScene(sceneId);
-      } else {
-          const alternativeTrigger = document.querySelector(`.scene[data-id="${sceneId}"]`);
-          if (alternativeTrigger) alternativeTrigger.click();
       }
   }
 </script>
-
-<p style="position: absolute; bottom: 10px; right: 10px; color: rgba(255,255,255,0.4); font-family: sans-serif; font-size: 11px; z-index: 5000;">&copy; <span id="footer-year">2026</span> LITES Simulator</p>
-
 </body>
 </html>
