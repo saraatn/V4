@@ -22,8 +22,8 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 1: Nexus Introduction",
-          "yaw": 3.11,
-          "pitch": 0.0,
+          "yaw": 3.1119,
+          "pitch": 0.0020,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
@@ -52,8 +52,8 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 2: Internet of Things (IoT)",
-          "yaw": -0.25, 
-          "pitch": 0.05,
+          "yaw": -3.1126,
+          "pitch": 0.0960,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
@@ -88,7 +88,9 @@ var APP_DATA = {
       ],
       "faceSize": 1488,
       "initialViewParameters": {
-        "yaw": 0.17921665117960117, "pitch": -0.005100922267761376, "fov": 1.2446250333351525
+        "yaw": 0.17921665117960117,
+        "pitch": -0.005100922267761376,
+        "fov": 1.2446250333351525
       },
       "linkHotspots": [
         { "yaw": 1.8046571918460268, "pitch": 0.2848931217476043, "rotation": 0, "target": "4-05transition-2-3" }
@@ -97,8 +99,8 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 3: Libiao Sorting Robots",
-          "yaw": 0.10,
-          "pitch": -0.02,
+          "yaw": 0.1792,
+          "pitch": -0.0051,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
@@ -133,7 +135,9 @@ var APP_DATA = {
       ],
       "faceSize": 1488,
       "initialViewParameters": {
-        "yaw": 0.006565305927697551, "pitch": -0.15731876381901166, "fov": 1.4469324312346197
+        "yaw": 0.006565305927697551,
+        "pitch": -0.15731876381901166,
+        "fov": 1.4469324312346197
       },
       "linkHotspots": [
         { "yaw": 1.7377239892072645, "pitch": 0.2545587401394833, "rotation": 0, "target": "6-074ws-and-lean" }
@@ -142,8 +146,8 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 4: Linde Automated Reach Truck",
-          "yaw": 0.45,
-          "pitch": 0.0,
+          "yaw": 0.0065,
+          "pitch": -0.1573,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
@@ -159,7 +163,9 @@ var APP_DATA = {
       ],
       "faceSize": 1488,
       "initialViewParameters": {
-        "yaw": 2.0026076028901496, "pitch": -0.10945381139996613, "fov": 1.2446250333351525
+        "yaw": 2.0026076028901496,
+        "pitch": -0.10945381139996613,
+        "fov": 1.2446250333351525
       },
       "linkHotspots": [
         { "yaw": -0.5925982314055016, "pitch": 0.35109348318183997, "rotation": 0, "target": "7-08transition-aft-lean" }
@@ -168,14 +174,14 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 5: 4-Way Shuttle System",
-          "yaw": 2.00,
-          "pitch": -0.10,
+          "yaw": 2.0026,
+          "pitch": -0.1094,
           "youtubeId": "llHxFnLVuAM"
         },
         {
           "title": "Station 6: LEAN Manufacturing",
-          "yaw": -1.14,
-          "pitch": 0.05,
+          "yaw": -1.1400,
+          "pitch": 0.0500,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
@@ -219,8 +225,8 @@ var APP_DATA = {
       "videoHotspots": [
         {
           "title": "Station 7: AppSheet System Automation",
-          "yaw": -2.5,
-          "pitch": -0.05,
+          "yaw": -2.7066,
+          "pitch": 0.0164,
           "youtubeId": "llHxFnLVuAM"
         }
       ]
