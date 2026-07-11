@@ -531,7 +531,67 @@
       
       initiateTypewriter("Welcome to LITES");
       initializeDOMTracker();
+      initializeSceneDetection();
   });
+
+  /* ====================== ROBUST SCENE DETECTION ======================
+     The old build's internal scene-switching mechanism isn't known ahead
+     of time, so we hook into it three different ways at once. Whichever
+     one actually fires for this template will keep the hotspot in sync. */
+  function initializeSceneDetection() {
+
+      // 1) Wrap the global switchScene() function if it exists (this file
+      //    already calls switchScene() itself in selectNetworkingBooth).
+      if (typeof window.switchScene === 'function') {
+          const originalSwitchScene = window.switchScene;
+          window.switchScene = function(sceneId) {
+              const result = originalSwitchScene.apply(this, arguments);
+              onSceneActivated(sceneId);
+              return result;
+          };
+      }
+
+      // 2) Listen for clicks on the scene list links directly.
+      const sceneListEl = document.getElementById('sceneList');
+      if (sceneListEl) {
+          sceneListEl.addEventListener('click', function(e) {
+              const link = e.target.closest('.scene[data-id]');
+              if (link) {
+                  onSceneActivated(link.getAttribute('data-id'));
+              }
+          });
+      }
+
+      // 3) Listen for clicks on the floorplan dots directly.
+      const floorplanEl = document.getElementById('floorplan-container');
+      if (floorplanEl) {
+          floorplanEl.addEventListener('click', function(e) {
+              const dot = e.target.closest('.map-dot[data-scene]');
+              if (dot) {
+                  onSceneActivated(dot.getAttribute('data-scene'));
+              }
+          });
+      }
+
+      // 4) Fallback: watch the URL hash, in case the tour engine stores
+      //    the current scene id there.
+      window.addEventListener('hashchange', function() {
+          const hashId = decodeURIComponent(location.hash.replace('#', ''));
+          if (hashId) onSceneActivated(hashId);
+      });
+      if (location.hash) {
+          onSceneActivated(decodeURIComponent(location.hash.replace('#', '')));
+      }
+  }
+
+  function onSceneActivated(sceneId) {
+      if (!sceneId || sceneId === currentActiveSceneId) return;
+      currentActiveSceneId = sceneId;
+      updateInfoHotspotForScene(sceneId);
+      if (standardStations.includes(sceneId)) {
+          registerStation(sceneId);
+      }
+  }
 
   /* Typewriter Routine Setup */
   function initiateTypewriter(txt) {
