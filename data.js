@@ -1,640 +1,278 @@
 var APP_DATA = {
-
   "scenes": [
-
     {
-
-      "id": "0-go-to-station-1",
-
-      "name": "Go To Station 1",
-
-      "youtubeId": "2IVgKpI4xuU",
-
-      "videoYaw": 2.9692191558859236,
-
-      "videoPitch": 0.3344836674719627,
-
+      "id": "0-01nexus",
+      "name": "(01)nexus",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 2.9187878581729265,
-
-        "pitch": 0.3165437028720106,
-
-        "fov": 1.4637180967878773
-
+        "yaw": 3.1119080796529737,
+        "pitch": 0.00202215394311267,
+        "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": -1.3607726706367043, "pitch": 0.575271838059594, "rotation": 0, "target": "1-" },
-
-        { "yaw": 0.7882284568284366, "pitch": 0.35269947965878856, "rotation": 0, "target": "10-" }
-
+        { "yaw": 1.3055071598985801, "pitch": 0.26957758113598373, "rotation": 0, "target": "1-02iot" }
       ],
-
       "infoHotspots": [
-
         {
-
-          "yaw": -1.69,  // Flipped exactly 180 degrees left
-
-          "pitch": 0.05,
-
-          "title": "Station 1: Document AI (Doc AI)",
-
-          "text": "Uses AI to extract and process information from documents automatically.<br><br>It converts unstructured data into structured, usable formats with high accuracy. This reduces manual effort, improves efficiency, and speeds up workflows.",
-
-          "video": "fRA3FSCYE9M"
-
-        },
-
+          "title": "Station 1: Nexus Introduction",
+          "text": "Click to watch the video demonstration.",
+          "yaw": 3.1119, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
+        }
+      ]
+    },
+    {
+      "id": "1-02iot",
+      "name": "(02)IoT",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": -3.1126880146521216,
+        "pitch": 0.09605815712125931,
+        "fov": 1.2446250333351525
+      },
+      "linkHotspots": [
+        { "yaw": 1.057364848216599, "pitch": 0.24186397528697157, "rotation": 0, "target": "0-01nexus" },
+        { "yaw": -1.1024589330649306, "pitch": 0.259600956589809, "rotation": 0, "target": "10-11seat" },
+        { "yaw": -1.4028954440114756, "pitch": 0.37843758030693664, "rotation": 0, "target": "2-03transition" }
+      ],
+      "infoHotspots": [
         {
-
-          "yaw": 2.918,
-
-          "pitch": 0.1,
-
           "title": "Station 2: Internet of Things (IoT)",
-
-          "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
-
-          "video": "2IVgKpI4xuU"
-
+          "text": "Click to watch the video demonstration.",
+          "yaw": -3.1126, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
-
       ]
-
     },
-
     {
-
-      "id": "1-",
-
-      "name": "Transition 4",
-
+      "id": "2-03transition",
+      "name": "(03)Transition",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
-      "initialViewParameters": {
-
-        "yaw": -1.6062902727766524,
-
-        "pitch": 0.2621656497115641,
-
-        "fov": 1.4637180967878773
-
-      },
-
+      "faceSize": 1488,
+      "initialViewParameters": { "pitch": 0, "yaw": 0, "fov": 1.5707963267948966 },
       "linkHotspots": [
-
-        { "yaw": 1.9906044585238973, "pitch": 0.5367769718270488, "rotation": 0, "target": "0-go-to-station-1" },
-
-        { "yaw": -1.6219197642372443, "pitch": 0.49832085254709924, "rotation": 0, "target": "2-go-to-station-2" },
-
-        { "yaw": -0.16637412007596986, "pitch": 0.4070839792073855, "rotation": 0, "target": "9-6-7" }
-
+        { "yaw": 0.009822964641541532, "pitch": 0.28673151183983947, "rotation": 0, "target": "3-04libiao" },
+        { "yaw": 3.057193984367995, "pitch": 0.3420701635090069, "rotation": 0, "target": "1-02iot" },
+        { "yaw": 2.277641121429231, "pitch": 0.40180137760028245, "rotation": 0, "target": "10-11seat" }
       ],
-
       "infoHotspots": []
-
     },
-
     {
-
-      "id": "2-go-to-station-2",
-
-      "name": "Go To Station 2",
-
-      "youtubeId": "A1MJwjR3avk",
-
-      "videoYaw": 2.921632629797138,
-
-      "videoPitch": 0.19916000965580594,
-
+      "id": "3-04libiao",
+      "name": "(04)libiao",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 2.807215302509106,
-
-        "pitch": 0.2516224816023822,
-
-        "fov": 1.3802197895323118
-
+        "yaw": 0.17921665117960117,
+        "pitch": -0.005100922267761376,
+        "fov": 1.2446250333351525
       },
-
       "linkHotspots": [
-
-        { "yaw": -1.6737981906097996, "pitch": 0.5335121945777672, "rotation": 0, "target": "3-" },
-
-        { "yaw": 1.7543618371851375, "pitch": 0.49855897189223697, "rotation": 0, "target": "1-" }
-
+        { "yaw": 1.8046571918460268, "pitch": 0.2848931217476043, "rotation": 0, "target": "4-05transition-2-3" }
       ],
-
       "infoHotspots": [
-
         {
-
-          "yaw": 2.807,
-
-          "pitch": 0.1,
-
-          "title": "Station 3: Sorting Robots (Libiao Robotics)",
-
-          "text": "Uses autonomous sorting robots to move and sort parcels efficiently.<br><br>Increases throughput while reducing manual handling and labour requirements.",
-
-          "video": "AKXPny0ubsc"
-
+          "title": "Station 3: Libiao Sorting Robots",
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0.1792, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
-
       ]
-
     },
-
     {
-
-      "id": "3-",
-
-      "name": "",
-
+      "id": "4-05transition-2-3",
+      "name": "(05)transition (2-3)",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": -2.206741595562834,
-
-        "pitch": 0.029174715043513544,
-
-        "fov": 1.3802197895323118
-
+        "yaw": 1.3415108445594512, "pitch": 0.09784584063676505, "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": -1.9291814435725136, "pitch": 0.46735774740215064, "rotation": 0, "target": "4-go-to-station-3" },
-
-        { "yaw": 1.3889731746174476, "pitch": 0.6691985969421843, "rotation": 0, "target": "2-go-to-station-2" }
-
+        { "yaw": 1.3710722800095212, "pitch": 0.25920822058027504, "rotation": 0, "target": "5-06linde" }
       ],
-
       "infoHotspots": []
-
     },
-
     {
-
-      "id": "4-go-to-station-3",
-
-      "name": "Go To Station 3",
-
-      "youtubeId": "iFvlGe506KA",
-
-      "videoYaw": 2.6454256314907516,
-
-      "videoPitch": -0.14350918546853997,
-
+      "id": "5-06linde",
+      "name": "(06)linde",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 2.639963208840281,
-
-        "pitch": -0.24142556711188057,
-
-        "fov": 1.3802197895323118
-
+        "yaw": 0.006565305927697551,
+        "pitch": -0.15731876381901166,
+        "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": -1.792591510735397, "pitch": 0.6888885744645705, "rotation": 0, "target": "5-go-to-station-4" },
-
-        { "yaw": 0.8937882386317604, "pitch": 0.6239429988084098, "rotation": 0, "target": "3-" }
-
+        { "yaw": 1.7377239892072645, "pitch": 0.2545587401394833, "rotation": 0, "target": "6-074ws-and-lean" }
       ],
-
       "infoHotspots": [
-
         {
-
-          "yaw": 2.639,
-
+          "title": "Station 4: Linde Automated Reach Truck",
+          "text": "Click to watch the video demonstration.",
+          "yaw": 0.0065, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": -0.15,
+          "video": "llHxFnLVuAM"
+        }
+      ]
+    },
+    {
+      "id": "6-074ws-and-lean",
+      "name": "(07)4ws and lean",
+      "levels": [
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
+      ],
+      "faceSize": 1488,
+      "initialViewParameters": {
+        "yaw": 2.0026076028901496,
+        "pitch": -0.10945381139996613,
+        "fov": 1.2446250333351525
+      },
+      "linkHotspots": [
+        { "yaw": -0.5925982314055016, "pitch": 0.35109348318183997, "rotation": 0, "target": "7-08transition-aft-lean" }
+      ],
+      "infoHotspots": [
+        {
+          "title": "Station 5: 4-Way Shuttle System",
+          "text": "Click to watch the video demonstration.",
+          "yaw": 1.8, /* Fine-tuned split layout positions */
           "pitch": -0.1,
-
-          "title": "Station 4: Automated Reach Truck (Linde)",
-
-          "text": "Provides advanced material handling solutions, including forklifts and warehouse automation.<br><br>Enhances safety, productivity, and operational efficiency in logistics environments.",
-
-          "video": "6xEJnABdkBo"
-
-        }
-
-      ]
-
-    },
-
-    {
-
-      "id": "5-go-to-station-4",
-
-      "name": "Go To Station 4",
-
-      "youtubeId": "nC7-9PYJ1Tk",
-
-      "videoYaw": 2.7000766080547853,
-
-      "videoPitch": 0.06175135915825791,
-
-      "levels": [
-
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
-      ],
-
-      "faceSize": 400,
-
-      "initialViewParameters": {
-
-        "yaw": 2.8014676085302934,
-
-        "pitch": -0.09855288065853429,
-
-        "fov": 1.3802197895323118
-
-      },
-
-      "linkHotspots": [
-
-        { "yaw": -0.5723605425528717, "pitch": 0.7431369774993613, "rotation": 0, "target": "6-go-to-station-5" },
-
-        { "yaw": 1.1456690376655487, "pitch": 0.6704550038988266, "rotation": 0, "target": "4-go-to-station-3" }
-
-      ],
-
-      "infoHotspots": [
-
+          "video": "llHxFnLVuAM"
+        },
         {
-
-          "yaw": 2.801,
-
-          "pitch": 0.0,
-
-          "title": "Station 5: 4-Way Shuttle (ICAS Technology)",
-
-          "text": "An automated storage and retrieval system that moves inventory in multiple directions. Maximises storage density and enables fast, flexible warehouse operations.",
-
-          "video": "nC7-9PYJ1Tk"
-
+          "title": "Station 6: LEAN Manufacturing",
+          "text": "Click to watch the video demonstration.",
+          "yaw": 2.2, /* Fine-tuned split layout positions */
+          "pitch": -0.1,
+          "video": "llHxFnLVuAM"
         }
-
       ]
-
     },
-
     {
-
-      "id": "6-go-to-station-5",
-
-      "name": "Go To Station 5",
-
-      "youtubeId": "wjfRAZUnonI",
-
-      "videoYaw": 2.7620155776811437,
-
-      "videoPitch": 0.36283380198627313,
-
+      "id": "7-08transition-aft-lean",
+      "name": "(08)transition (aft lean)",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 2.8306948169325654,
-
-        "pitch": 0.3739042841725819,
-
-        "fov": 1.3802197895323118
-
+        "yaw": -1.7665574750632125, "pitch": 0.18569268327569866, "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": -2.006609759454715, "pitch": 0.44546275918288103, "rotation": 0, "target": "7-" },
-
-        { "yaw": -0.29651134259847645, "pitch": 0.5608486540108402, "rotation": 0, "target": "5-go-to-station-4" }
-
+        { "yaw": -1.6526267989944632, "pitch": 0.2455493149372785, "rotation": 0, "target": "8-09appsheet" }
       ],
-
-      "infoHotspots": [
-
-        {
-
-          "yaw": 2.830,
-
-          "pitch": 0.2,
-
-          "title": "Station 6: LEAN",
-
-          "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
-
-          "video": "s2HCrhNVfak"
-
-        }
-
-      ]
-
-    },
-
-    {
-
-      "id": "7-",
-
-      "name": "",
-
-      "levels": [
-
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
-      ],
-
-      "faceSize": 400,
-
-      "initialViewParameters": {
-
-        "yaw": 2.8974778182166725,
-
-        "pitch": 0.26123701584158887,
-
-        "fov": 1.3802197895323118
-
-      },
-
-      "linkHotspots": [
-
-        { "yaw": 2.7996641443419836, "pitch": 0.3469194164205618, "rotation": 0, "target": "8-go-to-station-6" },
-
-        { "yaw": -0.6420158943587353, "pitch": 0.5437426282384372, "rotation": 0, "target": "6-go-to-station-5" }
-
-      ],
-
       "infoHotspots": []
-
     },
-
     {
-
-      "id": "8-go-to-station-6",
-
-      "name": "Go To Station 6",
-
-      "youtubeId": "HOELR0LFNIM",
-
-      "videoYaw": 2.6287961359912195,
-
-      "videoPitch": 0.3371018128848373,
-
+      "id": "8-09appsheet",
+      "name": "(09)appsheet",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 3.0621642134747074,
-
-        "pitch": 0.3248432835465138,
-
-        "fov": 1.3802197895323118
-
+        "yaw": -2.7066905310356866, "pitch": 0.016471583426062253, "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": -2.040995929444369, "pitch": 0.5000174686690322, "rotation": 0, "target": "9-6-7" },
-
-        { "yaw": 1.0499407607976199, "pitch": 0.5941194075909575, "rotation": 0, "target": "7-" }
-
+        { "yaw": -1.3889535237972392, "pitch": 0.30860131149692727, "rotation": 0, "target": "9-10behind-seats" }
       ],
-
       "infoHotspots": [
-
         {
-
-          "yaw": 3.062,
-
-          "pitch": 0.2,
-
-          "title": "Station 7: AppSheet Scanner",
-
-          "text": "A mobile scanning solution built with AppSheet for digital inventory tracking. Enables real-time data capture, reducing manual paperwork and errors.",
-
-          "video": "HOELR0LFNIM"
-
+          "title": "Station 7: AppSheet System Automation",
+          "text": "Click to watch the video demonstration.",
+          "yaw": -2.7066, /* Adjusted: Spawns directly in front of the initial view */
+          "pitch": 0,
+          "video": "llHxFnLVuAM"
         }
-
       ]
-
     },
-
     {
-
-      "id": "9-6-7",
-
-      "name": "Transition 5",
-
+      "id": "9-10behind-seats",
+      "name": "(10)behind seats",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 1.311071869824529,
-
-        "pitch": 0.28818471771301724,
-
-        "fov": 1.3802197895323118
-
+        "yaw": 1.294109252625809, "pitch": 0.18985798088099237, "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": 1.4019168544532548, "pitch": 0.6610475162625669, "rotation": 0, "target": "0-go-to-station-1" },
-
-        { "yaw": -2.8521706596980465, "pitch": 0.6130045558991704, "rotation": 0, "target": "8-go-to-station-6" }
-
+        { "yaw": -1.165102579005353, "pitch": 0.29652463052920197, "rotation": 0, "target": "10-11seat" },
+        { "yaw": 1.5072626728679754, "pitch": 0.46423176670189115, "rotation": 0, "target": "2-03transition" }
       ],
-
       "infoHotspots": []
-
     },
-
     {
-
-      "id": "10-",
-
-      "name": "Transition 6",
-
+      "id": "10-11seat",
+      "name": "(11)seat",
       "levels": [
-
         { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
-
-      "faceSize": 400,
-
+      "faceSize": 1488,
       "initialViewParameters": {
-
-        "yaw": 2.9749559077015544,
-
-        "pitch": 0.16413012019780027,
-
-        "fov": 1.4637180967878773
-
+        "yaw": -1.9853720365325245, "pitch": 0.09990527283444806, "fov": 1.4469324312346197
       },
-
       "linkHotspots": [
-
-        { "yaw": 3.12230631454325, "pitch": 0.6750051780311974, "rotation": 0, "target": "11-nexus" },
-
-        { "yaw": 1.4091405367945526, "pitch": 0.5839008072236958, "rotation": 0, "target": "0-go-to-station-1" }
-
+        { "yaw": 3.1020901124042073, "pitch": 0.24191502708143453, "rotation": 0, "target": "2-03transition" },
+        { "yaw": -1.1329952193055508, "pitch": 0.30927228757802894, "rotation": 0, "target": "9-10behind-seats" }
       ],
-
       "infoHotspots": []
-
-    },
-
-    {
-
-      "id": "11-nexus",
-
-      "name": "Nexus",
-
-      "levels": [
-
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-
-        { "tileSize": 512, "size": 512 }
-
-      ],
-
-      "faceSize": 180,
-
-      "initialViewParameters": {
-
-        "pitch": 0,
-
-        "yaw": 0,
-
-        "fov": 1.5707963267948966
-
-      },
-
-      "linkHotspots": [
-
-        { "yaw": -1.582300291193608, "pitch": 0.4649935123151945, "rotation": 0, "target": "10-" }
-
-      ],
-
-      "infoHotspots": [
-
-        {
-
-          "yaw": 0.023278412192304643,
-
-          "pitch": 0.1354448748955086,
-
-          "title": "Station 8: Nexus",
-
-          "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
-
-          "video": "OYbPOhK0wPo" 
-
-        }
-
-      ]
-
     }
-
   ],
-
   "name": "Project Title",
-
   "settings": {
-
     "mouseViewMode": "drag",
-
-    "autorotateEnabled": false,
-
+    "autorotateEnabled": true,
     "fullscreenButton": false,
-
     "viewControlButtons": false
-
   }
-
-}; 
-
+};
