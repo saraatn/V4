@@ -20,11 +20,11 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 1: Nexus Introduction",
-          "text": "Click to watch the video demonstration.",
-          "yaw": 3.1119, /* Adjusted: Spawns directly in front of the initial view */
-          "pitch": 0,
-          "video": "llHxFnLVuAM"
+          "title": "Station 8: Nexus",
+          "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
+          "yaw": 0.0232,
+          "pitch": 0.1354,
+          "video": "OYbPOhK0wPo"
         }
       ]
     },
@@ -50,11 +50,18 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
+          "title": "Station 1: Document AI (Doc AI)",
+          "text": "Uses AI to extract and process information from documents automatically.<br><br>It converts unstructured data into structured, usable formats with high accuracy. This reduces manual effort, improves efficiency, and speeds up workflows.",
+          "yaw": -1.69,
+          "pitch": 0.05,
+          "video": "fRA3FSCYE9M"
+        },
+        {
           "title": "Station 2: Internet of Things (IoT)",
-          "text": "Click to watch the video demonstration.",
-          "yaw": -3.1126, /* Adjusted: Spawns directly in front of the initial view */
-          "pitch": 0,
-          "video": "llHxFnLVuAM"
+          "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
+          "yaw": 2.918,
+          "pitch": 0.1,
+          "video": "2IVgKpI4xuU"
         }
       ]
     },
@@ -96,11 +103,11 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 3: Libiao Sorting Robots",
-          "text": "Click to watch the video demonstration.",
-          "yaw": 0.1792, /* Adjusted: Spawns directly in front of the initial view */
-          "pitch": 0,
-          "video": "llHxFnLVuAM"
+          "title": "Station 3: Sorting Robots (Libiao Robotics)",
+          "text": "Uses autonomous sorting robots to move and sort parcels efficiently.<br><br>Increases throughput while reducing manual handling and labour requirements.",
+          "yaw": 2.807,
+          "pitch": 0.1,
+          "video": "AKXPny0ubsc"
         }
       ]
     },
@@ -142,11 +149,11 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 4: Linde Automated Reach Truck",
-          "text": "Click to watch the video demonstration.",
-          "yaw": 0.0065, /* Adjusted: Spawns directly in front of the initial view */
-          "pitch": -0.15,
-          "video": "llHxFnLVuAM"
+          "title": "Station 4: Automated Reach Truck (Linde)",
+          "text": "Provides advanced material handling solutions, including forklifts and warehouse automation.<br><br>Enhances safety, productivity, and operational efficiency in logistics environments.",
+          "yaw": 2.639,
+          "pitch": -0.1,
+          "video": "6xEJnABdkBo"
         }
       ]
     },
@@ -160,9 +167,10 @@ var APP_DATA = {
         { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
+      /* Fine-tuned view perspective to frame your target workbenches perfectly */
       "initialViewParameters": {
-        "yaw": 2.0026076028901496,
-        "pitch": -0.10945381139996613,
+        "yaw": -0.4215,
+        "pitch": -0.0820,
         "fov": 1.2446250333351525
       },
       "linkHotspots": [
@@ -170,18 +178,26 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 5: 4-Way Shuttle System",
-          "text": "Click to watch the video demonstration.",
-          "yaw": 1.8, /* Fine-tuned split layout positions */
-          "pitch": -0.1,
-          "video": "llHxFnLVuAM"
+          "title": "Station 5: 4-Way Shuttle (ICAS Technology)",
+          "text": "An automated storage and retrieval system that moves inventory in multiple directions. Maximises storage density and enables fast, flexible warehouse operations.",
+          "yaw": 2.801,
+          "pitch": 0.0,
+          "video": "nC7-9PYJ1Tk"
         },
         {
-          "title": "Station 6: LEAN Manufacturing",
-          "text": "Click to watch the video demonstration.",
-          "yaw": 2.2, /* Fine-tuned split layout positions */
-          "pitch": -0.1,
-          "video": "llHxFnLVuAM"
+          "title": "Station 6: LEAN",
+          "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
+          "yaw": 2.830,
+          "pitch": 0.2,
+          "video": "s2HCrhNVfak"
+        },
+        /* Placed explicitly within your yellow-ringed workstation workspace target */
+        {
+          "title": "Station 6: LEAN Workstation Overview",
+          "text": "Detailed analysis area for identifying workflow optimizations and tracking assembly performance metrics.",
+          "yaw": -0.4850,
+          "pitch": -0.1250,
+          "video": "s2HCrhNVfak"
         }
       ]
     },
@@ -221,11 +237,11 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 7: AppSheet System Automation",
-          "text": "Click to watch the video demonstration.",
-          "yaw": -2.7066, /* Adjusted: Spawns directly in front of the initial view */
-          "pitch": 0,
-          "video": "llHxFnLVuAM"
+          "title": "Station 7: AppSheet Scanner",
+          "text": "A mobile scanning solution built with AppSheet for digital inventory tracking. Enables real-time data capture, reducing manual paperwork and errors.",
+          "yaw": 3.062,
+          "pitch": 0.2,
+          "video": "HOELR0LFNIM"
         }
       ]
     },
