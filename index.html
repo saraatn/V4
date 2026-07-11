@@ -391,14 +391,14 @@
   }
 
   /* Video Feature Panel Visibility Engine Toggles */
-  function openVideoModal(title, youtubeId) {
+  function openVideoModal(title, videoId) {
     const modal = document.getElementById('video-modal-overlay');
     const iframe = document.getElementById('modal-video-iframe');
     const titleEl = document.getElementById('video-modal-title');
     
     if(modal && iframe) {
       titleEl.innerText = title;
-      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
       modal.classList.add('open');
     }
   }
@@ -482,29 +482,34 @@
   }
 
   function renderVideoHotspotsForScene(sceneId) {
+      // Clear existing hotspots first
       document.querySelectorAll('.pulsing-container-wrapper').forEach(e => e.remove());
 
       if (typeof APP_DATA === 'undefined' || !APP_DATA.scenes) return;
       const currentSceneData = APP_DATA.scenes.find(s => s.id === sceneId);
       
-      if (currentSceneData && currentSceneData.videoHotspots && window.viewer && window.viewer.scene()) {
+      // FIXED: Look for 'infoHotspots' (from data.js) instead of 'videoHotspots'
+      if (currentSceneData && currentSceneData.infoHotspots && window.viewer && window.viewer.scene()) {
           const currentActiveMarzipanoScene = window.viewer.scene();
           
-          // Double check to make sure DOM container actually matches the actively processing scene 
           if (currentActiveMarzipanoScene.data().id !== sceneId) return;
 
-          currentSceneData.videoHotspots.forEach(hotspot => {
+          currentSceneData.infoHotspots.forEach(hotspot => {
+              // Only create a button if a video ID (from data.js) actually exists
+              if (!hotspot.video) return;
+
               const element = document.createElement('div');
               element.className = 'pulsing-container-wrapper';
               
               const pulseBtn = document.createElement('div');
               pulseBtn.className = 'pulsing-video-hotspot';
               pulseBtn.title = hotspot.title;
-              pulseBtn.style.pointerEvents = 'auto'; // Ensure click event bubble access
+              pulseBtn.style.pointerEvents = 'auto'; 
               
               pulseBtn.addEventListener('click', function(e) {
                   e.stopPropagation();
-                  openVideoModal(hotspot.title, hotspot.youtubeId);
+                  // FIXED: Pass 'hotspot.video' (from data.js) instead of 'hotspot.youtubeId'
+                  openVideoModal(hotspot.title, hotspot.video);
               });
               
               element.appendChild(pulseBtn);
