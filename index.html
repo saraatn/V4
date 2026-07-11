@@ -391,17 +391,18 @@
   }
 
   /* Video Feature Panel Visibility Engine Toggles */
-  function openVideoModal(title, videoId) {
+ function openVideoModal(title, videoId) {
     const modal = document.getElementById('video-modal-overlay');
     const iframe = document.getElementById('modal-video-iframe');
     const titleEl = document.getElementById('video-modal-title');
     
     if(modal && iframe) {
-      titleEl.innerText = title;
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      modal.classList.add('open');
+        titleEl.innerText = title;
+        // Setting the src here will trigger the video to load
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        modal.classList.add('open'); // This now toggles display: flex
     }
-  }
+}
 
   function closeVideoModal() {
     const modal = document.getElementById('video-modal-overlay');
