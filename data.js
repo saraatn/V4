@@ -4,23 +4,10 @@ var APP_DATA = {
       "id": "0-01nexus",
       "name": "(01)nexus",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -36,29 +23,24 @@ var APP_DATA = {
           "target": "1-02iot"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": 3.0,
+          "pitch": 0.0,
+          "title": "Station 8: Nexus Command Centre",
+          "text": "The Executive Innovation Strategy center monitoring supply chain workflows in real-time.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "1-02iot",
       "name": "(02)IoT",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -86,29 +68,24 @@ var APP_DATA = {
           "target": "2-03transition"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": -2.8,
+          "pitch": 0.1,
+          "title": "Station 2: Internet of Things (IoT)",
+          "text": "Connects devices, sensors, and hardware systems together to collect and share live actionable operational metrics.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "2-03transition",
       "name": "(03)Transition",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -142,23 +119,10 @@ var APP_DATA = {
       "id": "3-04libiao",
       "name": "(04)libiao",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -174,29 +138,24 @@ var APP_DATA = {
           "target": "4-05transition-2-3"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": 0.1,
+          "pitch": -0.1,
+          "title": "Station 3: Sorting Robots",
+          "text": "Intelligent automated sorting machines handling sorting lines with extreme speed and precise distribution.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "4-05transition-2-3",
       "name": "(05)transition (2-3)",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -218,23 +177,10 @@ var APP_DATA = {
       "id": "5-06linde",
       "name": "(06)linde",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -250,29 +196,24 @@ var APP_DATA = {
           "target": "6-074ws-and-lean"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": 0.0,
+          "pitch": -0.2,
+          "title": "Station 4: Automated Reach Truck",
+          "text": "Linde driverless heavy lifting trucks performing high-density warehouse storage tasks.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "6-074ws-and-lean",
       "name": "(07)4ws and lean",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -288,29 +229,24 @@ var APP_DATA = {
           "target": "7-08transition-aft-lean"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": 2.1,
+          "pitch": -0.1,
+          "title": "Station 5 & 6: 4-Way Shuttle & LEAN",
+          "text": "High-density matrix racking combined with lean methodology practices to minimize processing waste.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "7-08transition-aft-lean",
       "name": "(08)transition (aft lean)",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -332,23 +268,10 @@ var APP_DATA = {
       "id": "8-09appsheet",
       "name": "(09)appsheet",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -364,29 +287,24 @@ var APP_DATA = {
           "target": "9-10behind-seats"
         }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "yaw": -2.7,
+          "pitch": 0.0,
+          "title": "Station 7: Appsheet Scanner Zone",
+          "text": "Cloud-based digital scanning tools ensuring seamless tracking and instant database synchronization.",
+          "video": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+      ]
     },
     {
       "id": "9-10behind-seats",
       "name": "(10)behind seats",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
@@ -414,23 +332,10 @@ var APP_DATA = {
       "id": "10-11seat",
       "name": "(11)seat",
       "levels": [
-        {
-          "tileSize": 256,
-          "size": 256,
-          "fallbackOnly": true
-        },
-        {
-          "tileSize": 512,
-          "size": 512
-        },
-        {
-          "tileSize": 512,
-          "size": 1024
-        },
-        {
-          "tileSize": 512,
-          "size": 2048
-        }
+        { "tileSize": 256, "size": 256, "fallbackOnly": true },
+        { "tileSize": 512, "size": 512 },
+        { "tileSize": 512, "size": 1024 },
+        { "tileSize": 512, "size": 2048 }
       ],
       "faceSize": 1488,
       "initialViewParameters": {
