@@ -107,6 +107,30 @@ body.multiple-scenes.mobile #titleBar {
   background-color: rgba(103,115,131,0.8);
 }
 
+/* Force the video info hotspot to be visible, circular, and sized properly */
+.info-hotspot {
+  width: 50px !important;
+  height: 50px !important;
+  background-color: #ff0000 !important; /* Bright red circle so we absolutely cannot miss it */
+  border-radius: 50% !important;
+  border: 3px solid #ffffff !important;
+  cursor: pointer !important;
+  display: block !important;
+  z-index: 9999 !important;
+}
+
+.info-hotspot-icon-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.info-hotspot-icon {
+  width: 60% !important;
+  height: 60% !important;
+}
 .mobile #fullscreenToggle {
   width: 50px;
   height: 50px;
