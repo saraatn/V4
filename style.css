@@ -568,3 +568,182 @@ body.view-control-buttons .viewControlButton {
 #video-modal-overlay.open {
     display: flex !important;
 }
+
+/* ==========================================================================
+   Networking Event (Features 1-3)
+   Matches the existing dark-charcoal / glass-card look used by .form-card
+   and the video modal above.
+   ========================================================================== */
+
+.networking-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 4000;
+  padding: 14px 22px;
+  background: rgba(28, 30, 39, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+  /* Hidden until index.js adds .visible at 100% completion */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s ease;
+}
+
+.networking-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.networking-btn:hover {
+  background: rgba(18, 178, 91, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.networking-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 8000;
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.networking-overlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease, visibility 0s linear 0s;
+}
+
+.networking-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.networking-overlay-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.networking-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(28, 30, 39, 0.8);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.networking-close-btn:hover {
+  background: rgba(24, 26, 31, 0.95);
+  transform: scale(1.06);
+}
+
+.networking-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.networking-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: 0.5px;
+}
+
+.networking-welcome {
+  max-width: 520px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin: 0 0 28px;
+}
+
+.recommendation-card {
+  background: rgba(28, 30, 39, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 28px 34px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+  animation: networking-card-fade-in 0.6s ease;
+}
+
+.recommendation-star {
+  color: #39ff14;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.recommendation-booth-name {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.recommendation-booth-reason {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+@keyframes networking-card-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+  .networking-btn { right: 16px; bottom: 16px; padding: 12px 18px; font-size: 13px; }
+  .networking-title { font-size: 26px; }
+  .recommendation-card { padding: 22px 24px; }
+}
