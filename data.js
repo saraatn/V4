@@ -22,8 +22,8 @@ var APP_DATA = {
         {
           "title": "Station 8: Nexus",
           "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
-          "yaw": 0.0232,
-          "pitch": 0.1354,
+          "yaw": -3.1320671776627336,
+          "pitch": -0.1443075117404149,
           "video": "OYbPOhK0wPo"
         }
       ]
@@ -59,8 +59,8 @@ var APP_DATA = {
         {
           "title": "Station 2: Internet of Things (IoT)",
           "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
-          "yaw": 2.918,
-          "pitch": 0.1,
+          "yaw": -3.077344877679586,
+          "pitch": 0.08122853964974475,
           "video": "2IVgKpI4xuU"
         }
       ]
@@ -105,8 +105,8 @@ var APP_DATA = {
         {
           "title": "Station 3: Libiao 3D-Sorting System",
           "text": "An efficient e-commerce sorting solution that integrates high-density sorting walls with autonomous robots.<br><br>Maximizes flexibility with modular platforms, saves up to 83% in pick labor, and operates with 100% sorting accuracy to optimize delivery throughput.",
-          "yaw": 2.807,
-          "pitch": 0.1,
+          "yaw": 0.1848993790054756,
+          "pitch": 0.06187690025872783,
           "video": "llHxFnLVuAM"
         }
       ]
@@ -151,8 +151,8 @@ var APP_DATA = {
         {
           "title": "Station 4: Automated Reach Truck (Linde)",
           "text": "Provides advanced material handling solutions, including forklifts and warehouse automation.<br><br>Enhances safety, productivity, and operational efficiency in logistics environments.",
-          "yaw": 2.639,
-          "pitch": -0.1,
+          "yaw": 0.15575780357974267,
+          "pitch": -0.3084486433412472,
           "video": "6xEJnABdkBo"
         }
       ]
@@ -179,15 +179,15 @@ var APP_DATA = {
         {
           "title": "Station 5: 4-Way Shuttle (ICAS Technology)",
           "text": "An automated storage and retrieval system that moves inventory in multiple directions. Maximises storage density and enables fast, flexible warehouse operations.",
-          "yaw": 2.801,
-          "pitch": 0.0,
+          "yaw": 1.814296509066514,
+          "pitch": -0.04301245209520843,
           "video": "nC7-9PYJ1Tk"
         },
         {
           "title": "Station 6: LEAN",
           "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
-          "yaw": 2.830,
-          "pitch": 0.2,
+          "yaw": -1.8849436428002058,
+          "pitch": 0.07121170070608329,
           "video": "s2HCrhNVfak"
         },
         {
@@ -237,8 +237,8 @@ var APP_DATA = {
         {
           "title": "Station 7: AppSheet Scanner",
           "text": "A mobile scanning solution built with AppSheet for digital inventory tracking. Enables real-time data capture, reducing manual paperwork and errors.",
-          "yaw": 3.062,
-          "pitch": 0.2,
+          "yaw": -2.743275775700603,
+          "pitch": 0.11753466103633059,
           "video": "HOELR0LFNIM"
         }
       ]
@@ -279,7 +279,15 @@ var APP_DATA = {
         { "yaw": 3.1020901124042073, "pitch": 0.24191502708143453, "rotation": 0, "target": "2-03transition" },
         { "yaw": -1.1329952193055508, "pitch": 0.30927228757802894, "rotation": 0, "target": "9-10behind-seats" }
       ],
-      "infoHotspots": []
+      "infoHotspots": [
+        {
+          "title": "AI OCR",
+          "text": "AI OCR (Artificial Intelligence Optical Character Recognition) is an advanced technology that uses machine learning and neural networks to automatically detect, extract, and convert text from images or scanned documents into editable and machine-readable data.",
+          "yaw": -1.9673868375327324,
+          "pitch": -0.0651348639273408,
+          "video": "ExJLvYz2_cs"
+        }
+      ]
     }
   ],
   "name": "Project Title",
