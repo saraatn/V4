@@ -258,6 +258,13 @@
       visitedScenes.add(scene.data.id);
       var percentage = (visitedScenes.size / scenes.length) * 100;
       progressBar.style.width = percentage + '%';
+
+      // Feature 1 hook: reveal the "Visit Our Networking Event" button once
+      // the tour is fully complete. Defined in js/networking.js; guarded so
+      // this file still works standalone if that script isn't loaded.
+      if (percentage === 100 && typeof window.showNetworkingButton === 'function') {
+        window.showNetworkingButton();
+      }
     }
   }
 
