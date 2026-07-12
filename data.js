@@ -50,13 +50,6 @@ var APP_DATA = {
       ],
       "infoHotspots": [
         {
-          "title": "Station 1: Document AI (Doc AI)",
-          "text": "Uses AI to extract and process information from documents automatically.<br><br>It converts unstructured data into structured, usable formats with high accuracy. This reduces manual effort, improves efficiency, and speeds up workflows.",
-          "yaw": -1.69,
-          "pitch": 0.05,
-          "video": "fRA3FSCYE9M"
-        },
-        {
           "title": "Station 2: Internet of Things (IoT)",
           "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
           "yaw": -3.077344877679586,
@@ -79,7 +72,9 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": 0.009822964641541532, "pitch": 0.28673151183983947, "rotation": 0, "target": "3-04libiao" },
         { "yaw": 3.057193984367995, "pitch": 0.3420701635090069, "rotation": 0, "target": "1-02iot" },
-        { "yaw": 2.277641121429231, "pitch": 0.40180137760028245, "rotation": 0, "target": "10-11seat" }
+        { "yaw": 2.277641121429231, "pitch": 0.40180137760028245, "rotation": 0, "target": "10-11seat" },
+        { "yaw": 1.2855282599344733, "pitch": 0.2590122763779803, "rotation": 0, "target": "9-10behind-seats" },
+        { "yaw": -1.7273861346429982, "pitch": 0.3182245449443428, "rotation": 0, "target": "1-02iot" }
       ],
       "infoHotspots": []
     },
@@ -99,7 +94,8 @@ var APP_DATA = {
         "fov": 1.2446250333351525
       },
       "linkHotspots": [
-        { "yaw": 1.8046571918460268, "pitch": 0.2848931217476043, "rotation": 0, "target": "4-05transition-2-3" }
+        { "yaw": 1.8046571918460268, "pitch": 0.2848931217476043, "rotation": 0, "target": "4-05transition-2-3" },
+        { "yaw": -2.3365298524459686, "pitch": 0.2595100462691331, "rotation": 0, "target": "9-10behind-seats" }
       ],
       "infoHotspots": [
         {
@@ -145,7 +141,8 @@ var APP_DATA = {
         "fov": 1.4469324312346197
       },
       "linkHotspots": [
-        { "yaw": 1.7377239892072645, "pitch": 0.2545587401394833, "rotation": 0, "target": "6-074ws-and-lean" }
+        { "yaw": 1.7377239892072645, "pitch": 0.2545587401394833, "rotation": 0, "target": "6-074ws-and-lean" },
+        { "yaw": -1.577889861835505, "pitch": 0.30851623925889093, "rotation": 0, "target": "2-03transition" }
       ],
       "infoHotspots": [
         {
@@ -173,7 +170,8 @@ var APP_DATA = {
         "fov": 1.2446250333351525
       },
       "linkHotspots": [
-        { "yaw": -0.5925982314055016, "pitch": 0.35109348318183997, "rotation": 0, "target": "7-08transition-aft-lean" }
+        { "yaw": -0.5925982314055016, "pitch": 0.35109348318183997, "rotation": 0, "target": "7-08transition-aft-lean" },
+        { "yaw": 0.23769302008249937, "pitch": 0.2733144293055094, "rotation": 0, "target": "5-06linde" }
       ],
       "infoHotspots": [
         {
@@ -188,13 +186,6 @@ var APP_DATA = {
           "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
           "yaw": -1.8849436428002058,
           "pitch": 0.07121170070608329,
-          "video": "s2HCrhNVfak"
-        },
-        {
-          "title": "Station 6: LEAN Workstation Overview",
-          "text": "Detailed analysis area for identifying workflow optimizations and tracking assembly performance metrics.",
-          "yaw": -0.4850,
-          "pitch": -0.1250,
           "video": "s2HCrhNVfak"
         }
       ]
@@ -213,7 +204,8 @@ var APP_DATA = {
         "yaw": -1.7665574750632125, "pitch": 0.18569268327569866, "fov": 1.4469324312346197
       },
       "linkHotspots": [
-        { "yaw": -1.6526267989944632, "pitch": 0.2455493149372785, "rotation": 0, "target": "8-09appsheet" }
+        { "yaw": -1.6526267989944632, "pitch": 0.2455493149372785, "rotation": 0, "target": "8-09appsheet" },
+        { "yaw": 1.5659139312758965, "pitch": 0.2929095629504026, "rotation": 0, "target": "6-074ws-and-lean" }
       ],
       "infoHotspots": []
     },
@@ -231,7 +223,8 @@ var APP_DATA = {
         "yaw": -2.7066905310356866, "pitch": 0.016471583426062253, "fov": 1.4469324312346197
       },
       "linkHotspots": [
-        { "yaw": -1.3889535237972392, "pitch": 0.30860131149692727, "rotation": 0, "target": "9-10behind-seats" }
+        { "yaw": -1.3889535237972392, "pitch": 0.30860131149692727, "rotation": 0, "target": "9-10behind-seats" },
+        { "yaw": 1.6162463950241044, "pitch": 0.258164828957824, "rotation": 0, "target": "7-08transition-aft-lean" }
       ],
       "infoHotspots": [
         {
@@ -258,7 +251,8 @@ var APP_DATA = {
       },
       "linkHotspots": [
         { "yaw": -1.165102579005353, "pitch": 0.29652463052920197, "rotation": 0, "target": "10-11seat" },
-        { "yaw": 1.5072626728679754, "pitch": 0.46423176670189115, "rotation": 0, "target": "2-03transition" }
+        { "yaw": 1.5072626728679754, "pitch": 0.46423176670189115, "rotation": 0, "target": "2-03transition" },
+        { "yaw": -2.4137495410175323, "pitch": 0.3114496995464613, "rotation": 0, "target": "8-09appsheet" }
       ],
       "infoHotspots": []
     },
