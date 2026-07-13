@@ -333,7 +333,7 @@
 </button>
 
 <div id="networking-overlay" class="networking-overlay">
-  <img class="networking-bg-img" src="tiles/0-01nexus/preview.jpg" alt="Networking Event">
+  <div id="networking-pano" class="networking-pano"></div>
   <div class="networking-overlay-scrim"></div>
   <button id="networking-close-btn" class="networking-close-btn" type="button" aria-label="Close">&times;</button>
   <div class="networking-content">
@@ -346,8 +346,11 @@
       <div class="recommendation-star">⭐ Recommended Booth</div>
       <h2 id="recommended-booth-name" class="recommendation-booth-name"></h2>
       <p id="recommended-booth-reason" class="recommendation-booth-reason"></p>
+      <button id="go-here-btn" class="go-here-btn" type="button">Go Here</button>
+      <div class="booth-counter">Booths visited: <span id="booth-visit-count">0</span></div>
     </div>
   </div>
+  <div id="booth-toast" class="booth-toast"></div>
 </div>
 
 <script src="vendor/screenfull.min.js"></script>
