@@ -55,6 +55,7 @@
   var boothVisitCountEl = document.getElementById('booth-visit-count');
   var boothToastEl = document.getElementById('booth-toast');
   var panoEl = document.getElementById('networking-pano');
+  var overlayScrimEl = document.querySelector('.networking-overlay-scrim');
 
   // ---------------------------------------------------------------------
   // Feature 1: show the right arrow once progress hits 100%.
@@ -214,16 +215,26 @@
     requestAnimationFrame(step);
   }
 
+  function clearBackgroundTint() {
+    if (overlayScrimEl) {
+      overlayScrimEl.classList.add('tint-off');
+    }
+  }
+
   // ---------------------------------------------------------------------
   // Feature 2: open/close the full-screen networking overlay
   // ---------------------------------------------------------------------
   function openNetworkingOverlay() {
     renderRecommendation();
 
-    // Reset the recommendation card back to visible each time the overlay
-    // is (re)opened, even if it was dismissed last visit.
+    // Reset the recommendation card and background tint back to their
+    // default (visible/dimmed) state each time the overlay is reopened,
+    // even if they were dismissed/cleared last visit.
     if (recommendationCardEl) {
       recommendationCardEl.classList.remove('dismissed');
+    }
+    if (overlayScrimEl) {
+      overlayScrimEl.classList.remove('tint-off');
     }
 
     if (networkingOverlay) {
@@ -271,12 +282,14 @@
     navArrowLeftNetworking.addEventListener('click', closeNetworkingOverlay);
   }
 
-  // Dismiss just the recommendation card (title/intro text above it stays).
+  // Dismiss just the recommendation card (title/intro text is inside it
+  // now, so it all disappears together) and clear the background tint.
   if (dismissRecommendationBtn) {
     dismissRecommendationBtn.addEventListener('click', function() {
       if (recommendationCardEl) {
         recommendationCardEl.classList.add('dismissed');
       }
+      clearBackgroundTint();
     });
   }
 
@@ -290,6 +303,7 @@
         panTo(networkingScene.view(), target.yaw, target.pitch, 900);
       }
       visitBooth(target);
+      clearBackgroundTint();
     });
   }
 
