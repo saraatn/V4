@@ -325,29 +325,33 @@
 
 <!-- ==========================================================================
      Networking Event (Features 1-3)
-     Button stays hidden (opacity:0, pointer-events:none) until index.js calls
-     window.showNetworkingButton() at 100% tour completion. See js/networking.js.
+     Right arrow stays hidden (opacity:0, pointer-events:none) until index.js
+     calls window.showNetworkingButton() at 100% tour completion.
+     See js/networking.js.
      ========================================================================== -->
-<button id="networking-btn" class="networking-btn" type="button">
-  🎉 Visit Our Networking Event
-</button>
+<button id="nav-arrow-left-tour" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to registration">&#8592;</button>
+<button id="nav-arrow-right-tour" class="nav-arrow nav-arrow-right" type="button" aria-label="Visit networking event">&#8594;</button>
 
 <div id="networking-overlay" class="networking-overlay">
   <div id="networking-pano" class="networking-pano"></div>
   <div class="networking-overlay-scrim"></div>
-  <button id="networking-close-btn" class="networking-close-btn" type="button" aria-label="Close">&times;</button>
-  <div class="networking-content">
+
+  <div class="booth-counter-standalone">Booths visited: <span id="booth-visit-count">0</span></div>
+
+  <button id="nav-arrow-left-networking" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to tour">&#8592;</button>
+
+  <div id="networking-content" class="networking-content">
     <h1 class="networking-title">Networking Event</h1>
     <p class="networking-welcome">
       Welcome to our Networking Event!<br>
       Based on your company and designation, we recommend visiting the following booth.
     </p>
-    <div class="recommendation-card">
+    <div id="recommendation-card" class="recommendation-card">
+      <button id="dismiss-recommendation-btn" class="dismiss-recommendation-btn" type="button" aria-label="Dismiss recommendation">&times;</button>
       <div class="recommendation-star">⭐ Recommended Booth</div>
       <h2 id="recommended-booth-name" class="recommendation-booth-name"></h2>
       <p id="recommended-booth-reason" class="recommendation-booth-reason"></p>
       <button id="go-here-btn" class="go-here-btn" type="button">Go Here</button>
-      <div class="booth-counter">Booths visited: <span id="booth-visit-count">0</span></div>
     </div>
   </div>
   <div id="booth-toast" class="booth-toast"></div>
