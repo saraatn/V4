@@ -575,40 +575,54 @@ body.view-control-buttons .viewControlButton {
    and the video modal above.
    ========================================================================== */
 
-.networking-btn {
+/* ---- Circular nav arrows ----
+   Same pair of controls used in two places:
+   - Main tour view: #nav-arrow-left-tour (-> registration) and
+     #nav-arrow-right-tour (-> networking event, gated behind 100% completion)
+   - Networking overlay: #nav-arrow-left-networking (-> back to tour) only,
+     there is no right arrow inside the networking view.
+   Positioned above the chat widget (bottom: 90px) and above the floorplan
+   panel (z-index higher than #floorplan-container) so neither overlaps it. */
+.nav-arrow {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 4000;
-  padding: 14px 22px;
-  background: rgba(28, 30, 39, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 30px;
+  bottom: 90px;
+  z-index: 1600;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: rgba(103, 115, 131, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.25);
   color: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.5s ease;
+}
 
-  /* Hidden until index.js adds .visible at 100% completion */
+.nav-arrow:hover {
+  background-color: rgba(57, 255, 20, 0.85);
+  color: #0f172a;
+  transform: scale(1.06);
+}
+
+.nav-arrow-left { left: 24px; }
+.nav-arrow-right { right: 24px; }
+
+/* Hidden until index.js adds .visible at 100% completion */
+#nav-arrow-right-tour {
   opacity: 0;
   pointer-events: none;
   transform: translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s ease;
 }
 
-.networking-btn.visible {
+#nav-arrow-right-tour.visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
-}
-
-.networking-btn:hover {
-  background: rgba(18, 178, 91, 0.9);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .networking-overlay {
@@ -715,28 +729,6 @@ body.view-control-buttons .viewControlButton {
   transform: translate(-50%, 0);
 }
 
-.networking-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 24px;
-  z-index: 2;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(28, 30, 39, 0.8);
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.networking-close-btn:hover {
-  background: rgba(24, 26, 31, 0.95);
-  transform: scale(1.06);
-}
-
 .networking-content {
   position: relative;
   z-index: 1;
@@ -774,6 +766,7 @@ body.view-control-buttons .viewControlButton {
 }
 
 .recommendation-card {
+  position: relative;
   background: rgba(28, 30, 39, 0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -784,6 +777,37 @@ body.view-control-buttons .viewControlButton {
   width: 100%;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
   animation: networking-card-fade-in 0.6s ease;
+  opacity: 1;
+  transition: opacity 0.35s ease, visibility 0s linear 0s;
+}
+
+/* Set by clicking the card's own × — hides just this card's text,
+   independent of the "Networking Event" title/intro above it. */
+.recommendation-card.dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.dismiss-recommendation-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dismiss-recommendation-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .recommendation-star {
@@ -825,14 +849,24 @@ body.view-control-buttons .viewControlButton {
   background: #0f984d;
 }
 
-.booth-counter {
-  margin-top: 14px;
+/* Standalone — stays visible even if the recommendation card is dismissed */
+.booth-counter-standalone {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 2;
+  background: rgba(28, 30, 39, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 8px 16px;
   font-size: 12px;
   font-weight: bold;
   color: #94a3b8;
   letter-spacing: 0.3px;
 }
-.booth-counter span {
+.booth-counter-standalone span {
   color: #39ff14;
 }
 
@@ -842,7 +876,7 @@ body.view-control-buttons .viewControlButton {
 }
 
 @media (max-width: 500px) {
-  .networking-btn { right: 16px; bottom: 16px; padding: 12px 18px; font-size: 13px; }
+  .nav-arrow { width: 44px; height: 44px; font-size: 18px; bottom: 80px; }
   .networking-title { font-size: 26px; }
   .recommendation-card { padding: 22px 24px; }
 }
