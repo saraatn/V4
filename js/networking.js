@@ -43,9 +43,12 @@
   // ---------------------------------------------------------------------
   // DOM refs
   // ---------------------------------------------------------------------
-  var networkingBtn = document.getElementById('networking-btn');
+  var navArrowLeftTour = document.getElementById('nav-arrow-left-tour');
+  var navArrowRightTour = document.getElementById('nav-arrow-right-tour');
+  var navArrowLeftNetworking = document.getElementById('nav-arrow-left-networking');
   var networkingOverlay = document.getElementById('networking-overlay');
-  var networkingCloseBtn = document.getElementById('networking-close-btn');
+  var recommendationCardEl = document.getElementById('recommendation-card');
+  var dismissRecommendationBtn = document.getElementById('dismiss-recommendation-btn');
   var boothNameEl = document.getElementById('recommended-booth-name');
   var boothReasonEl = document.getElementById('recommended-booth-reason');
   var goHereBtn = document.getElementById('go-here-btn');
@@ -54,12 +57,12 @@
   var panoEl = document.getElementById('networking-pano');
 
   // ---------------------------------------------------------------------
-  // Feature 1: show the button once progress hits 100%.
+  // Feature 1: show the right arrow once progress hits 100%.
   // Called from index.js's updateProgressBar().
   // ---------------------------------------------------------------------
   function showNetworkingButton() {
-    if (networkingBtn) {
-      networkingBtn.classList.add('visible');
+    if (navArrowRightTour) {
+      navArrowRightTour.classList.add('visible');
     }
   }
   window.showNetworkingButton = showNetworkingButton;
@@ -217,6 +220,12 @@
   function openNetworkingOverlay() {
     renderRecommendation();
 
+    // Reset the recommendation card back to visible each time the overlay
+    // is (re)opened, even if it was dismissed last visit.
+    if (recommendationCardEl) {
+      recommendationCardEl.classList.remove('dismissed');
+    }
+
     if (networkingOverlay) {
       networkingOverlay.classList.add('open');
     }
@@ -231,6 +240,7 @@
     // avoid loading a second set of tiles until it's actually needed.
     initNetworkingPano();
   }
+  window.openNetworkingOverlay = openNetworkingOverlay;
 
   function closeNetworkingOverlay() {
     if (networkingOverlay) {
@@ -239,11 +249,35 @@
   }
   window.closeNetworkingOverlay = closeNetworkingOverlay;
 
-  if (networkingBtn) {
-    networkingBtn.addEventListener('click', openNetworkingOverlay);
+  // Main tour view: left arrow -> back to registration, right arrow -> networking.
+  if (navArrowLeftTour) {
+    navArrowLeftTour.addEventListener('click', function() {
+      var welcomeOverlay = document.getElementById('welcome-overlay');
+      if (welcomeOverlay) {
+        welcomeOverlay.style.display = 'flex';
+        // Force a reflow so removing .fade-out re-triggers the CSS
+        // transition (it was set to display:none by handleFormSubmit).
+        void welcomeOverlay.offsetWidth;
+        welcomeOverlay.classList.remove('fade-out');
+      }
+    });
   }
-  if (networkingCloseBtn) {
-    networkingCloseBtn.addEventListener('click', closeNetworkingOverlay);
+  if (navArrowRightTour) {
+    navArrowRightTour.addEventListener('click', openNetworkingOverlay);
+  }
+
+  // Networking view: only a left arrow, back to the tour.
+  if (navArrowLeftNetworking) {
+    navArrowLeftNetworking.addEventListener('click', closeNetworkingOverlay);
+  }
+
+  // Dismiss just the recommendation card (title/intro text above it stays).
+  if (dismissRecommendationBtn) {
+    dismissRecommendationBtn.addEventListener('click', function() {
+      if (recommendationCardEl) {
+        recommendationCardEl.classList.add('dismissed');
+      }
+    });
   }
 
   // "Go Here" always targets Booth 1 for now, matching the (currently
