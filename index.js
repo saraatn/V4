@@ -413,4 +413,19 @@
   // Display the initial scene.
   switchScene(scenes[0]);
 
+  function switchScene(scene) {
+    stopAutorotate();
+    scene.view.setParameters(scene.data.initialViewParameters);
+    scene.scene.switchTo();
+    startAutorotate();
+    updateSceneName(scene);
+    updateSceneList(scene);
+    updateProgressBar(scene);
+
+    // NEW — notify the chatbot integration of the new scene
+    if (typeof window.onStationChanged === 'function') {
+      window.onStationChanged(scene);
+    }
+}
+  
 })();
