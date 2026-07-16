@@ -887,3 +887,8 @@ body.view-control-buttons .viewControlButton {
   .networking-title { font-size: 26px; }
   .recommendation-card { padding: 22px 24px; }
 }
+
+/* Force the Voiceflow chat widget to be visible */
+#voiceflow-chat { 
+    display: block !important; 
+}
