@@ -1,0 +1,18 @@
+backend:
+  name: github
+  repo: your-username/your-repo-name # Replace with your actual GitHub repo
+  branch: main # or master
+
+media_folder: "assets/uploads" # Where to save images
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "exhibits"
+    label: "Exhibits"
+    folder: "data/exhibits" # Where your exhibit data files will be saved
+    create: true
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Model URL", name: "model", widget: "string"}
+      - {label: "Position X", name: "x", widget: "number"}
+      - {label: "Position Y", name: "y", widget: "number"}
