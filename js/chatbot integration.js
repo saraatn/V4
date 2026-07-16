@@ -45,6 +45,9 @@
     }
 
     lastAnnouncedStation = station.id;
+
+    console.log('SENDING TO VOICEFLOW:', station.id, station.name);
+
     window.voiceflow.chat.interact({
       type: 'event',
       payload: {
