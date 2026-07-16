@@ -1,17 +1,29 @@
 backend:
   name: git-gateway
-  branch: main # or master, depending on your default branch name
+  branch: main
 
-media_folder: "assets/uploads" # Where to save images
-public_folder: "/assets/uploads"
+media_folder: "img/uploads"
+public_folder: "/img/uploads"
 
+# Editors work on a single file (content.json) that holds every station's
+# editable text. Hotspot positions / scene layout live in data.js and are
+# NOT exposed here on purpose, so an event volunteer can't accidentally
+# break the 3D tour navigation.
 collections:
-  - name: "exhibits"
-    label: "Exhibits"
-    folder: "data/exhibits" # Where your exhibit data files will be saved
-    create: true
-    fields:
-      - {label: "Name", name: "name", widget: "string"}
-      - {label: "Model URL", name: "model", widget: "string"}
-      - {label: "Position X", name: "x", widget: "number"}
-      - {label: "Position Y", name: "y", widget: "number"}
+  - name: "content"
+    label: "Station Content"
+    files:
+      - name: "stations"
+        label: "Exhibit Stations"
+        file: "content.json"
+        fields:
+          - label: "Stations"
+            name: "stations"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - {label: "Internal key (do not edit)", name: "key", widget: "string", read_only: true}
+              - {label: "Reference label (do not edit)", name: "name", widget: "string", read_only: true}
+              - {label: "Station Title", name: "title", widget: "string"}
+              - {label: "Description", name: "text", widget: "text"}
+              - {label: "YouTube Video ID", name: "video", widget: "string", required: false, hint: "The part after 'v=' in the YouTube URL, e.g. dQw4w9WgXcQ"}

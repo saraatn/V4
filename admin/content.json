@@ -1,0 +1,60 @@
+{
+  "stations": [
+    {
+      "key": "0-01nexus-0",
+      "name": "(01)nexus / Station 8: Nexus",
+      "title": "Station 8: Nexus",
+      "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
+      "video": "OYbPOhK0wPo"
+    },
+    {
+      "key": "1-02iot-0",
+      "name": "(02)IoT / Station 2: Internet of Things (IoT)",
+      "title": "Station 2: Internet of Things (IoT)",
+      "text": "Connects devices, sensors, and systems to collect and share real-time data. Improves visibility, automation, and decision-making across operations.",
+      "video": "2IVgKpI4xuU"
+    },
+    {
+      "key": "3-04libiao-0",
+      "name": "(04)libiao / Station 3: Libiao 3D-Sorting System",
+      "title": "Station 3: Libiao 3D-Sorting System",
+      "text": "An efficient e-commerce sorting solution that integrates high-density sorting walls with autonomous robots.<br><br>Maximizes flexibility with modular platforms, saves up to 83% in pick labor, and operates with 100% sorting accuracy to optimize delivery throughput.",
+      "video": "llHxFnLVuAM"
+    },
+    {
+      "key": "5-06linde-0",
+      "name": "(06)linde / Station 4: Automated Reach Truck (Linde)",
+      "title": "Station 4: Automated Reach Truck (Linde)",
+      "text": "Provides advanced material handling solutions, including forklifts and warehouse automation.<br><br>Enhances safety, productivity, and operational efficiency in logistics environments.",
+      "video": "6xEJnABdkBo"
+    },
+    {
+      "key": "6-074ws-and-lean-0",
+      "name": "(07)4ws and lean / Station 5: 4-Way Shuttle (ICAS Technology)",
+      "title": "Station 5: 4-Way Shuttle (ICAS Technology)",
+      "text": "An automated storage and retrieval system that moves inventory in multiple directions. Maximises storage density and enables fast, flexible warehouse operations.",
+      "video": "nC7-9PYJ1Tk"
+    },
+    {
+      "key": "6-074ws-and-lean-1",
+      "name": "(07)4ws and lean / Station 6: LEAN",
+      "title": "Station 6: LEAN",
+      "text": "A methodology focused on eliminating waste and continuously improving processes.<br><br>Helps organisations increase efficiency, quality, and customer value.",
+      "video": "s2HCrhNVfak"
+    },
+    {
+      "key": "8-09appsheet-0",
+      "name": "(09)appsheet / Station 7: AppSheet Scanner",
+      "title": "Station 7: AppSheet Scanner",
+      "text": "A mobile scanning solution built with AppSheet for digital inventory tracking. Enables real-time data capture, reducing manual paperwork and errors.",
+      "video": "HOELR0LFNIM"
+    },
+    {
+      "key": "10-11seat-0",
+      "name": "(11)seat / AI OCR",
+      "title": "AI OCR",
+      "text": "AI OCR (Artificial Intelligence Optical Character Recognition) is an advanced technology that uses machine learning and neural networks to automatically detect, extract, and convert text from images or scanned documents into editable and machine-readable data.",
+      "video": "ExJLvYz2_cs"
+    }
+  ]
+}
