@@ -373,7 +373,9 @@
         window.voiceflow.chat.load({
           verify: { projectID: '6a55aa9adedb6716a6a3845b' },
           url: 'https://general-runtime.voiceflow.com',
-          launch: true
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          }
         });
       }
       v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
