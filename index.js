@@ -264,11 +264,18 @@
       var percentage = (visitedScenes.size / scenes.length) * 100;
       progressBar.style.width = percentage + '%';
 
-      // Feature 1 hook: reveal the "Visit Our Networking Event" button once
-      // the tour is fully complete. Defined in js/networking.js; guarded so
-      // this file still works standalone if that script isn't loaded.
-      if (percentage === 100 && typeof window.showNetworkingButton === 'function') {
-        window.showNetworkingButton();
+      // Networking recommendation hook: fires the moment the visitor steps
+      // into either networking station (rather than waiting for 100% tour
+      // completion). Defined in js/networking.js; guarded so this file
+      // still works standalone if that script isn't loaded.
+      if (scene.data.id === '13-Networking1' || scene.data.id === '14-Networking2') {
+        if (typeof window.showNetworkingRecommendation === 'function') {
+          window.showNetworkingRecommendation(scene.data.id);
+        }
+      } else if (typeof window.closeNetworkingOverlay === 'function') {
+        // Leaving the networking stations closes the recommendation card
+        // so it doesn't linger over unrelated scenes.
+        window.closeNetworkingOverlay();
       }
     }
   }
