@@ -75,17 +75,25 @@
   var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
 
   // Create scenes.
+  //
+  // NOTE: scenes are now built from single flat equirectangular (2:1) JPGs
+  // living in tiles/<file>, NOT from cube-face tile pyramids. Each scene in
+  // data.js has a "file" property pointing at its equirect image. We use
+  // Marzipano's EquirectGeometry + a plain (non-templated) ImageUrlSource,
+  // which tells Marzipano to load the whole image as a single texture
+  // instead of requesting tiled cube faces.
+  var EQUIRECT_IMAGE_WIDTH = 5952; // matches the source photos (5952x2976)
+
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
 
     var source = Marzipano.ImageUrlSource.fromString(
-  urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
-  { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
-);
+      urlPrefix + "/" + data.file
+    );
 
-    var geometry = new Marzipano.CubeGeometry(data.levels);
+    var geometry = new Marzipano.EquirectGeometry([{ width: EQUIRECT_IMAGE_WIDTH }]);
 
-    var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
+    var limiter = Marzipano.RectilinearView.limit.traditional(EQUIRECT_IMAGE_WIDTH, 100*Math.PI/180, 120*Math.PI/180);
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
 
     var scene = viewer.createScene({
@@ -424,5 +432,5 @@
 
   // Display the initial scene.
   switchScene(scenes[0]);
-  
+
 })();
