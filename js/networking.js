@@ -1,218 +1,127 @@
 /*
- * Post-tour Networking Event feature.
+ * Networking Event recommendation feature.
  * Vanilla JS, no framework — matches the rest of this Marzipano tour's
- * structure. Depends on nothing from index.js except being loaded after it
- * (and needs window.Marzipano + window.APP_DATA to already exist).
+ * structure. Depends on window.APP_DATA (data.js) and window.switchScene /
+ * window.viewer (exposed by index.js).
  *
- * Feature 3: placeholder recommendation engine, deliberately isolated from
- * the UI so it can later be swapped for a real Eventbrite/Supabase lookup
- * without touching any of the DOM code below.
+ * 13-Networking1 and 14-Networking2 are now real scenes inside the main
+ * tour (see data.js), reached the same way as any other station. This
+ * script no longer mounts a second Marzipano viewer or a separate
+ * full-screen "networking event" page — instead it shows a recommendation
+ * card overlaid on top of whichever of the two networking scenes the
+ * visitor is currently standing in, based on the company/designation they
+ * entered on the registration form (see handleFormSubmit in index.html).
  *
- * The 360 background is a second, independent Marzipano viewer mounted in
- * #networking-pano, reusing the existing Nexus tile set as a placeholder.
- * It's kept completely separate from the main tour's `viewer`/`scene`
- * objects in index.js so nothing here can affect tour navigation.
+ * Called from index.js's updateProgressBar():
+ *   - window.showNetworkingRecommendation(sceneId) when entering 13/14
+ *   - window.closeNetworkingOverlay() when leaving them
  */
 'use strict';
 
 (function() {
 
   // ---------------------------------------------------------------------
-  // Recommendation engine (placeholder logic for now)
+  // Recommendation engine
   // ---------------------------------------------------------------------
+  // Maps a registrant's designation to whichever real tour station is
+  // most relevant to them. Matching is done on simple keyword lookup
+  // against the free-text "Designation" field from the registration form.
+  //
+  // This is intentionally a simple, editable rules table rather than a
+  // real backend lookup — no company/designation -> booth mapping was
+  // supplied, so extend RULES below (or swap getRecommendedBooth for a
+  // real API/Sheet call) once real mapping data exists. Company name is
+  // captured and available on `user.company` for that future use, but
+  // isn't currently factored into which station is recommended.
+  var RULES = [
+    {
+      keywords: ["it", "tech", "engineer", "developer", "software", "digital", "data"],
+      sceneId: "11-IoT",
+      booth: "IoT Station",
+      reason: "Based on your designation, our Internet of Things (IoT) setup shows how connected sensors and real-time data can plug directly into your workflows."
+    },
+    {
+      keywords: ["operation", "logistic", "warehouse", "supply chain", "fulfilment", "fulfillment"],
+      sceneId: "6-4-Way-Shuttle",
+      booth: "4-Way Shuttle & Automated Reach Truck",
+      reason: "Given your role in operations/logistics, the 4-Way Shuttle and Automated Reach Truck stations demonstrate storage density and material handling gains most relevant to you."
+    },
+    {
+      keywords: ["sales", "business development", "marketing", "account"],
+      sceneId: "9-LiBiao",
+      booth: "LiBiao 3D-Sorting System",
+      reason: "As someone in a client-facing role, the LiBiao 3D-Sorting System is a strong showcase piece — high accuracy and throughput that's easy to demonstrate to prospects."
+    },
+    {
+      keywords: ["founder", "ceo", "coo", "cto", "director", "manager", "owner", "president", "vp", "head"],
+      sceneId: "12-Nexus",
+      booth: "Nexus Platform",
+      reason: "As a decision-maker, Nexus gives you the clearest picture of how centralised data and workflow visibility can support your organisation end-to-end."
+    },
+    {
+      keywords: ["finance", "account", "procurement"],
+      sceneId: "3-AppSheet",
+      booth: "AppSheet Scanner",
+      reason: "For finance and procurement roles, AppSheet's digital inventory tracking cuts down manual paperwork and reconciliation errors."
+    }
+  ];
+
+  var DEFAULT_RECOMMENDATION = {
+    sceneId: "12-Nexus",
+    booth: "Nexus Platform",
+    reason: "Nexus is our central platform tying every station together — a great starting point no matter your role."
+  };
+
+  function getRegistrationData() {
+    if (window.registrationData) return window.registrationData;
+    try {
+      var stored = sessionStorage.getItem("lites_registration");
+      if (stored) return JSON.parse(stored);
+    } catch (e) { /* ignore */ }
+    return { name: "Guest", company: "", designation: "" };
+  }
+
   function getRecommendedBooth(user) {
-    return {
-      booth: "AI Innovation Hub",
-      reason: "Recommended because professionals with similar backgrounds usually find this booth most relevant."
-    };
+    var designation = (user.designation || "").toLowerCase();
+
+    for (var i = 0; i < RULES.length; i++) {
+      var rule = RULES[i];
+      for (var j = 0; j < rule.keywords.length; j++) {
+        if (designation.indexOf(rule.keywords[j]) !== -1) {
+          return { sceneId: rule.sceneId, booth: rule.booth, reason: rule.reason };
+        }
+      }
+    }
+    return DEFAULT_RECOMMENDATION;
   }
   window.getRecommendedBooth = getRecommendedBooth;
 
   // ---------------------------------------------------------------------
-  // Placeholder booth data for the 360 networking environment.
-  // Swap titles/text/positions once the real photo + booth list exist.
-  // ---------------------------------------------------------------------
-  var BOOTHS = [
-    { id: "booth-1", title: "Booth 1", yaw: -2.4, pitch: 0.15, text: "Placeholder booth — swap with real booth details later." },
-    { id: "booth-2", title: "Booth 2", yaw: -1.2, pitch: 0.05, text: "Placeholder booth — swap with real booth details later." },
-    { id: "booth-3", title: "Booth 3", yaw:  0.0, pitch: 0.10, text: "Placeholder booth — swap with real booth details later." },
-    { id: "booth-4", title: "Booth 4", yaw:  1.2, pitch: 0.05, text: "Placeholder booth — swap with real booth details later." },
-    { id: "booth-5", title: "Booth 5", yaw:  2.4, pitch: 0.15, text: "Placeholder booth — swap with real booth details later." }
-  ];
-
-  // ---------------------------------------------------------------------
   // DOM refs
   // ---------------------------------------------------------------------
-  var navArrowLeftTour = document.getElementById('nav-arrow-left-tour');
-  var navArrowRightTour = document.getElementById('nav-arrow-right-tour');
-  var navArrowLeftNetworking = document.getElementById('nav-arrow-left-networking');
   var networkingOverlay = document.getElementById('networking-overlay');
   var recommendationCardEl = document.getElementById('recommendation-card');
   var dismissRecommendationBtn = document.getElementById('dismiss-recommendation-btn');
   var boothNameEl = document.getElementById('recommended-booth-name');
   var boothReasonEl = document.getElementById('recommended-booth-reason');
   var goHereBtn = document.getElementById('go-here-btn');
-  var boothVisitCountEl = document.getElementById('booth-visit-count');
-  var boothToastEl = document.getElementById('booth-toast');
-  var panoEl = document.getElementById('networking-pano');
   var overlayScrimEl = document.querySelector('.networking-overlay-scrim');
 
-  // ---------------------------------------------------------------------
-  // Feature 1: show the right arrow once progress hits 100%.
-  // Called from index.js's updateProgressBar().
-  // ---------------------------------------------------------------------
-  function showNetworkingButton() {
-    if (navArrowRightTour) {
-      navArrowRightTour.classList.add('visible');
-    }
-  }
-  window.showNetworkingButton = showNetworkingButton;
+  var currentRecommendation = null;
 
   // ---------------------------------------------------------------------
-  // Feature 3: fill in the recommendation card from the (placeholder) engine
+  // Fill in the recommendation card from the registration data
   // ---------------------------------------------------------------------
   function renderRecommendation() {
-    // Placeholder registrant — swap this for real registration data later
-    // (see handleFormSubmit in index.html for where guest-name/org/designation
-    // are currently captured but not yet stored anywhere).
-    var user = {
-      name: "Guest",
-      company: "",
-      designation: ""
-    };
-
-    var recommendation = getRecommendedBooth(user);
+    var user = getRegistrationData();
+    currentRecommendation = getRecommendedBooth(user);
 
     if (boothNameEl) {
-      boothNameEl.textContent = recommendation.booth;
+      boothNameEl.textContent = currentRecommendation.booth;
     }
     if (boothReasonEl) {
-      boothReasonEl.textContent = recommendation.reason;
+      boothReasonEl.textContent = currentRecommendation.reason;
     }
-  }
-
-  // ---------------------------------------------------------------------
-  // Booth visit counter (mirrors the visitedScenes pattern in index.js)
-  // ---------------------------------------------------------------------
-  var visitedBooths = new Set();
-
-  function updateBoothCounter() {
-    if (boothVisitCountEl) {
-      boothVisitCountEl.textContent = visitedBooths.size;
-    }
-  }
-
-  var toastTimer = null;
-  function showBoothToast(booth) {
-    if (!boothToastEl) return;
-    boothToastEl.textContent = booth.title + " — " + booth.text;
-    boothToastEl.classList.add('visible');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function() {
-      boothToastEl.classList.remove('visible');
-    }, 3000);
-  }
-
-  function visitBooth(booth) {
-    visitedBooths.add(booth.id);
-    updateBoothCounter();
-    showBoothToast(booth);
-  }
-
-  // ---------------------------------------------------------------------
-  // 360 networking pano (separate Marzipano viewer instance)
-  // ---------------------------------------------------------------------
-  var networkingViewer = null;
-  var networkingScene = null;
-  var networkingPanoReady = false;
-
-  function createBoothHotspotElement(booth) {
-    var wrapper = document.createElement('div');
-    wrapper.classList.add('booth-hotspot');
-
-    var iconWrapper = document.createElement('div');
-    iconWrapper.classList.add('booth-hotspot-icon-wrapper');
-    iconWrapper.setAttribute('title', booth.title);
-    iconWrapper.textContent = booth.title.replace('Booth ', '');
-    wrapper.appendChild(iconWrapper);
-
-    wrapper.addEventListener('click', function(event) {
-      event.stopPropagation();
-      visitBooth(booth);
-    });
-
-    return wrapper;
-  }
-
-  function initNetworkingPano() {
-    if (networkingPanoReady) return;
-    if (!panoEl || !window.Marzipano || !window.APP_DATA) return;
-
-    // Reuse the Nexus scene's tile config as the placeholder 360 background.
-    var nexusData = null;
-    for (var i = 0; i < window.APP_DATA.scenes.length; i++) {
-      if (window.APP_DATA.scenes[i].id === '0-01nexus') {
-        nexusData = window.APP_DATA.scenes[i];
-        break;
-      }
-    }
-    if (!nexusData) return;
-
-    networkingViewer = new Marzipano.Viewer(panoEl, {
-      controls: { mouseViewMode: 'drag' }
-    });
-
-    var source = Marzipano.ImageUrlSource.fromString(
-      'tiles/' + nexusData.id + '/{z}/{f}/{y}/{x}.jpg',
-      { cubeMapPreviewUrl: 'tiles/' + nexusData.id + '/preview.jpg' }
-    );
-    var geometry = new Marzipano.CubeGeometry(nexusData.levels);
-    var limiter = Marzipano.RectilinearView.limit.traditional(
-      nexusData.faceSize, 100 * Math.PI / 180, 120 * Math.PI / 180
-    );
-    var view = new Marzipano.RectilinearView(nexusData.initialViewParameters, limiter);
-
-    networkingScene = networkingViewer.createScene({
-      source: source,
-      geometry: geometry,
-      view: view,
-      pinFirstLevel: true
-    });
-    networkingScene.switchTo();
-
-    BOOTHS.forEach(function(booth) {
-      var el = createBoothHotspotElement(booth);
-      networkingScene.hotspotContainer().createHotspot(el, { yaw: booth.yaw, pitch: booth.pitch });
-    });
-
-    networkingPanoReady = true;
-  }
-
-  // Simple ease-out pan, used by the "Go Here" button so the jump to a
-  // booth doesn't feel like a hard cut. Wraps yaw the short way around.
-  function panTo(view, targetYaw, targetPitch, duration) {
-    var start = view.parameters();
-    var startTime = null;
-
-    var yawDelta = targetYaw - start.yaw;
-    while (yawDelta > Math.PI) yawDelta -= 2 * Math.PI;
-    while (yawDelta < -Math.PI) yawDelta += 2 * Math.PI;
-    var pitchDelta = targetPitch - start.pitch;
-
-    function step(timestamp) {
-      if (!startTime) startTime = timestamp;
-      var progress = Math.min((timestamp - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      view.setParameters({
-        yaw: start.yaw + yawDelta * eased,
-        pitch: start.pitch + pitchDelta * eased,
-        fov: start.fov
-      });
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
-    }
-    requestAnimationFrame(step);
   }
 
   function clearBackgroundTint() {
@@ -222,36 +131,25 @@
   }
 
   // ---------------------------------------------------------------------
-  // Feature 2: open/close the full-screen networking overlay
+  // Show the recommendation card over whichever networking scene
+  // (13-Networking1 / 14-Networking2) the visitor just stepped into.
+  // Called from index.js's updateProgressBar() every time it happens,
+  // so the recommendation reappears each time either scene is entered.
   // ---------------------------------------------------------------------
-  function openNetworkingOverlay() {
+  function showNetworkingRecommendation(sceneId) {
     renderRecommendation();
 
-    // Reset the recommendation card and background tint back to their
-    // default (visible/dimmed) state each time the overlay is reopened,
-    // even if they were dismissed/cleared last visit.
     if (recommendationCardEl) {
       recommendationCardEl.classList.remove('dismissed');
     }
     if (overlayScrimEl) {
       overlayScrimEl.classList.remove('tint-off');
     }
-
     if (networkingOverlay) {
       networkingOverlay.classList.add('open');
     }
-
-    // Pause the main tour's pano while the overlay is open so drags/scroll
-    // don't leak through to the simulator underneath.
-    if (window.viewer && typeof window.viewer.stopMovement === 'function') {
-      window.viewer.stopMovement();
-    }
-
-    // Lazy-init the networking pano on first open (not at page load) to
-    // avoid loading a second set of tiles until it's actually needed.
-    initNetworkingPano();
   }
-  window.openNetworkingOverlay = openNetworkingOverlay;
+  window.showNetworkingRecommendation = showNetworkingRecommendation;
 
   function closeNetworkingOverlay() {
     if (networkingOverlay) {
@@ -260,30 +158,8 @@
   }
   window.closeNetworkingOverlay = closeNetworkingOverlay;
 
-  // Main tour view: left arrow -> back to registration, right arrow -> networking.
-  if (navArrowLeftTour) {
-    navArrowLeftTour.addEventListener('click', function() {
-      var welcomeOverlay = document.getElementById('welcome-overlay');
-      if (welcomeOverlay) {
-        welcomeOverlay.style.display = 'flex';
-        // Force a reflow so removing .fade-out re-triggers the CSS
-        // transition (it was set to display:none by handleFormSubmit).
-        void welcomeOverlay.offsetWidth;
-        welcomeOverlay.classList.remove('fade-out');
-      }
-    });
-  }
-  if (navArrowRightTour) {
-    navArrowRightTour.addEventListener('click', openNetworkingOverlay);
-  }
-
-  // Networking view: only a left arrow, back to the tour.
-  if (navArrowLeftNetworking) {
-    navArrowLeftNetworking.addEventListener('click', closeNetworkingOverlay);
-  }
-
-  // Dismiss just the recommendation card (title/intro text is inside it
-  // now, so it all disappears together) and clear the background tint.
+  // Dismiss just the recommendation card/text (× button), leaving the
+  // visitor free to look around the networking scene without the tint.
   if (dismissRecommendationBtn) {
     dismissRecommendationBtn.addEventListener('click', function() {
       if (recommendationCardEl) {
@@ -293,17 +169,14 @@
     });
   }
 
-  // "Go Here" always targets Booth 1 for now, matching the (currently
-  // hardcoded) recommendation. Once getRecommendedBooth() returns a real
-  // booth id, swap this lookup to match it instead of BOOTHS[0].
+  // "Take Me There" jumps the main tour straight to the recommended
+  // station using index.js's exposed window.switchScene().
   if (goHereBtn) {
     goHereBtn.addEventListener('click', function() {
-      var target = BOOTHS[0];
-      if (networkingScene) {
-        panTo(networkingScene.view(), target.yaw, target.pitch, 900);
+      if (currentRecommendation && typeof window.switchScene === 'function') {
+        window.switchScene(currentRecommendation.sceneId);
       }
-      visitBooth(target);
-      clearBackgroundTint();
+      closeNetworkingOverlay();
     });
   }
 
