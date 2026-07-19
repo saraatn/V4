@@ -286,13 +286,13 @@
 
 <div id="floorplan-container">
   <img src="img/floorplan.png" id="floorplan-img" alt="Lab Map">
-  <button class="map-dot" data-scene="1-02iot" style="top: 80%; left: 70%;" title="IoT"></button>
-  <button class="map-dot" data-scene="3-04libiao" style="top: 80%; left: 55%;" title="Sorting Robots"></button>
-  <button class="map-dot" data-scene="5-06linde" style="top: 80%; left: 30%;" title="Automated Reach Truck"></button>
-  <button class="map-dot" data-scene="6-074ws-and-lean" style="top: 80%; left: 15%;" title="4-Way Shuttle"></button>
-  <button class="map-dot" data-scene="6-074ws-and-lean" style="top: 30%; left: 15%;" title="LEAN"></button>
-  <button class="map-dot" data-scene="8-09appsheet" style="top: 30%; left: 55%;" title="AppSheet"></button>
-  <button class="map-dot" data-scene="0-01nexus" style="top: 30%; left: 80%;" title="Nexus"></button>
+  <button class="map-dot" data-scene="11-IoT" style="top: 80%; left: 70%;" title="IoT"></button>
+  <button class="map-dot" data-scene="9-LiBiao" style="top: 80%; left: 55%;" title="Sorting Robots"></button>
+  <button class="map-dot" data-scene="7-Linde" style="top: 80%; left: 30%;" title="Automated Reach Truck"></button>
+  <button class="map-dot" data-scene="6-4-Way-Shuttle" style="top: 80%; left: 15%;" title="4-Way Shuttle"></button>
+  <button class="map-dot" data-scene="5-LEAN" style="top: 30%; left: 15%;" title="LEAN"></button>
+  <button class="map-dot" data-scene="3-AppSheet" style="top: 30%; left: 55%;" title="AppSheet"></button>
+  <button class="map-dot" data-scene="12-Nexus" style="top: 30%; left: 80%;" title="Nexus"></button>
 </div>
 
 <div id="titleBar">
@@ -336,7 +336,7 @@
   <div id="networking-pano" class="networking-pano"></div>
   <div class="networking-overlay-scrim"></div>
 
-  <div class="booth-counter-standalone">Booths visited: <span id="booth-visit-count">0</span></div>
+  <div class="booth-counter-standalone" style="display:none;">Booths visited: <span id="booth-visit-count">0</span></div>
 
   <button id="nav-arrow-left-networking" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to tour">&#8592;</button>
 
@@ -351,7 +351,7 @@
       <div class="recommendation-star">⭐ Recommended Booth</div>
       <h2 id="recommended-booth-name" class="recommendation-booth-name"></h2>
       <p id="recommended-booth-reason" class="recommendation-booth-reason"></p>
-      <button id="go-here-btn" class="go-here-btn" type="button">Go Here</button>
+      <button id="go-here-btn" class="go-here-btn" type="button">Take Me There</button>
     </div>
   </div>
   <div id="booth-toast" class="booth-toast"></div>
@@ -402,6 +402,20 @@
   /* Form Registration Handler */
   function handleFormSubmit(event) {
     event.preventDefault();
+
+    // Capture registration data so js/networking.js can build a
+    // recommendation from it when the visitor reaches 13-Networking1 /
+    // 14-Networking2. Kept on window (simple, no framework here) and
+    // mirrored to sessionStorage so it survives an accidental page reload.
+    window.registrationData = {
+      name: document.getElementById("guest-name").value.trim(),
+      company: document.getElementById("guest-org").value.trim(),
+      designation: document.getElementById("guest-designation").value.trim()
+    };
+    try {
+      sessionStorage.setItem("lites_registration", JSON.stringify(window.registrationData));
+    } catch (e) { /* sessionStorage unavailable — non-fatal */ }
+
     const overlay = document.getElementById("welcome-overlay");
     if (overlay) {
         overlay.classList.add("fade-out");
