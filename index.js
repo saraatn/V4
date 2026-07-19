@@ -77,16 +77,13 @@
   // Create scenes.
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
-    
-    // FIX 1: Direct link to face images inside your custom folder names
-    var source = new Marzipano.ImageUrlSource(function(tile) {
-      return {
-        url: urlPrefix + "/" + data.name + "/" + tile.face + ".jpg"
-      };
-    });
-    
-    // FIX 2: Configures a single-resolution frame grid to prevent multi-level parsing crashes
-    var geometry = new Marzipano.CubeGeometry([{ size: data.faceSize, tileSize: data.faceSize }]);
+
+    var source = Marzipano.ImageUrlSource.fromString(
+  urlPrefix + "/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
+  { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" }
+);
+
+    var geometry = new Marzipano.CubeGeometry(data.levels);
 
     var limiter = Marzipano.RectilinearView.limit.traditional(data.faceSize, 100*Math.PI/180, 120*Math.PI/180);
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
@@ -104,7 +101,7 @@
       scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
     });
 
-    // Create info hotspots.
+    // Create info hotspots (the pulsing green video buttons).
     data.infoHotspots.forEach(function(hotspot) {
       var element = createInfoHotspotElement(hotspot);
       scene.hotspotContainer().createHotspot(element, { yaw: hotspot.yaw, pitch: hotspot.pitch });
@@ -117,12 +114,26 @@
     };
   });
 
+  // Expose scenes/viewer + a real global switchScene so other scripts
+  // (e.g. the welcome overlay / floorplan script in index.html) can hook in
+  // without re-implementing scene switching themselves.
+  window.viewer = viewer;
+  window.APP_SCENES = scenes;
+  window.switchScene = function(sceneOrId) {
+    var target = typeof sceneOrId === 'string' ? findSceneById(sceneOrId) : sceneOrId;
+    if (target) switchScene(target);
+  };
+
   // Set up autorotate, if enabled.
   var autorotate = Marzipano.autorotate({
     yawSpeed: 0.03,
     targetPitch: 0,
     targetFov: Math.PI/2
   });
+
+  // FORCE DISABLE IT HERE:
+  data.settings.autorotateEnabled = false;
+
   if (data.settings.autorotateEnabled) {
     autorotateToggleElement.classList.add('enabled');
   }
@@ -170,16 +181,18 @@
 
   // ==========================================================================
   // 2D FLOOR PLAN MAP INTERACTION LOOP
+  // (this is the ONLY floorplan-dot click handler now; the duplicate one
+  // that used to live in index.html has been removed)
   // ==========================================================================
   const mapDots = document.querySelectorAll('.map-dot');
   mapDots.forEach(function(dot) {
     dot.addEventListener('click', function() {
       const targetSceneId = this.getAttribute('data-scene');
-      
+
       const targetScene = scenes.find(function(s) {
         return s.data.id === targetSceneId;
       });
-      
+
       if (targetScene) {
         switchScene(targetScene);
       } else {
@@ -206,8 +219,8 @@
   controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
   controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
   controls.registerMethod('rightElement', new Marzipano.ElementPressControlMethod(viewRightElement,  'x',  velocity, friction), true);
-  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,  'zoom', -velocity, friction), true);
-  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement, 'zoom',  velocity, friction), true);
+  controls.registerMethod('inElement',    new Marzipano.ElementPressControlMethod(viewInElement,     'zoom', -velocity, friction), true);
+  controls.registerMethod('outElement',   new Marzipano.ElementPressControlMethod(viewOutElement,    'zoom',  velocity, friction), true);
 
   function sanitize(s) {
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
@@ -221,7 +234,12 @@
     updateSceneName(scene);
     updateSceneList(scene);
     updateProgressBar(scene);
-  }
+
+    // NEW — notify the chatbot integration of the new scene
+    if (typeof window.onStationChanged === 'function') {
+      window.onStationChanged(scene);
+    }
+}
 
   function updateSceneName(scene) {
     if (sceneNameElement) {
@@ -245,6 +263,20 @@
       visitedScenes.add(scene.data.id);
       var percentage = (visitedScenes.size / scenes.length) * 100;
       progressBar.style.width = percentage + '%';
+
+      // Networking recommendation hook: fires the moment the visitor steps
+      // into either networking station (rather than waiting for 100% tour
+      // completion). Defined in js/networking.js; guarded so this file
+      // still works standalone if that script isn't loaded.
+      if (scene.data.id === '13-Networking1' || scene.data.id === '14-Networking2') {
+        if (typeof window.showNetworkingRecommendation === 'function') {
+          window.showNetworkingRecommendation(scene.data.id);
+        }
+      } else if (typeof window.closeNetworkingOverlay === 'function') {
+        // Leaving the networking stations closes the recommendation card
+        // so it doesn't linger over unrelated scenes.
+        window.closeNetworkingOverlay();
+      }
     }
   }
 
@@ -270,6 +302,9 @@
   }
 
   function startAutorotate() {
+    // FORCE INTERCEPT: Prevents scene switcher loops from setting camera in motion
+    return;
+
     if (!autorotateToggleElement || !autorotateToggleElement.classList.contains('enabled')) {
       return;
     }
@@ -325,6 +360,11 @@
     return wrapper;
   }
 
+  // Info hotspot = the dark circular "i" button (styled in style.css via
+  // .info-hotspot / .info-hotspot-icon-wrapper) that opens the video modal
+  // defined in index.html (#video-modal-overlay). This is now the ONLY
+  // place info hotspots are created — no more duplicate hotspot system
+  // living in index.html.
   function createInfoHotspotElement(hotspot) {
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
@@ -332,7 +372,7 @@
 
     var iconWrapper = document.createElement('div');
     iconWrapper.classList.add('info-hotspot-icon-wrapper');
-    
+
     if (hotspot.title) {
       iconWrapper.setAttribute('title', hotspot.title);
     }
@@ -343,37 +383,10 @@
     iconWrapper.appendChild(icon);
     wrapper.appendChild(iconWrapper);
 
-    iconWrapper.addEventListener('click', function() {
-      var modal = document.getElementById('video-modal');
-      var modalTitle = document.querySelector('#video-modal h2');
-      var modalText = document.querySelector('#video-modal p');
-      var modalIframe = document.getElementById('youtube-player');
-      var closeBtn = document.getElementById('close-modal');
-
-      if (modal) {
-        if (modalTitle) modalTitle.innerHTML = hotspot.title || "Station Information";
-        if (modalText) modalText.innerHTML = hotspot.text || "";
-        
-        if (modalIframe) {
-          var videoId = hotspot.video || "dQw4w9WgXcQ"; 
-          modalIframe.src = "https://www.youtube.com/embed/" + videoId + "?enablejsapi=1&autoplay=1";
-        }
-        
-        modal.style.display = 'flex';
-
-        if (closeBtn) {
-          closeBtn.onclick = function() {
-            modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; 
-          };
-        }
-
-        modal.onclick = function(event) {
-          if (event.target === modal) {
-            modal.style.display = 'none';
-            if (modalIframe) modalIframe.src = ''; 
-          }
-        };
+    iconWrapper.addEventListener('click', function(event) {
+      event.stopPropagation();
+      if (typeof window.openVideoModal === 'function' && hotspot.video) {
+        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text);
       }
     });
 
@@ -411,5 +424,5 @@
 
   // Display the initial scene.
   switchScene(scenes[0]);
-
+  
 })();
