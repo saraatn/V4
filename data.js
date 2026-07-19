@@ -3,13 +3,7 @@ var APP_DATA = {
     {
       "id": "1-Seats",
       "name": "1. Seats",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "1-Seats.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "2-transition" }
@@ -27,13 +21,7 @@ var APP_DATA = {
     {
       "id": "2-transition",
       "name": "2. Transition",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "2-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.5707963267948966 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "3-AppSheet" },
@@ -44,13 +32,7 @@ var APP_DATA = {
     {
       "id": "3-AppSheet",
       "name": "3. AppSheet",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "3-AppSheet.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "4-transition" },
@@ -69,13 +51,7 @@ var APP_DATA = {
     {
       "id": "4-transition",
       "name": "4. Transition",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "4-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "5-LEAN" },
@@ -86,13 +62,7 @@ var APP_DATA = {
     {
       "id": "5-LEAN",
       "name": "5. LEAN",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "5-LEAN.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "6-4-Way-Shuttle" },
@@ -111,13 +81,7 @@ var APP_DATA = {
     {
       "id": "6-4-Way-Shuttle",
       "name": "6. 4-Way Shuttle",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "6-4-Way Shuttle.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "7-Linde" },
@@ -136,13 +100,7 @@ var APP_DATA = {
     {
       "id": "7-Linde",
       "name": "7. Linde",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "7-Linde.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "8-transition" },
@@ -161,13 +119,7 @@ var APP_DATA = {
     {
       "id": "8-transition",
       "name": "8. Transition",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "8-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "9-LiBiao" },
@@ -178,13 +130,7 @@ var APP_DATA = {
     {
       "id": "9-LiBiao",
       "name": "9. LiBiao",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "9-LiBiao.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "10-transition" },
@@ -203,13 +149,7 @@ var APP_DATA = {
     {
       "id": "10-transition",
       "name": "10. Transition",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "10-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "11-IoT" },
@@ -220,13 +160,7 @@ var APP_DATA = {
     {
       "id": "11-IoT",
       "name": "11. IoT",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "11-IoT.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "12-Nexus" },
@@ -245,13 +179,7 @@ var APP_DATA = {
     {
       "id": "12-Nexus",
       "name": "12. Nexus",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "12-Nexus.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "13-Networking1" },
@@ -270,13 +198,7 @@ var APP_DATA = {
     {
       "id": "13-Networking1",
       "name": "13. Networking Event",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "13-Networking1.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "14-Networking2" },
@@ -287,13 +209,7 @@ var APP_DATA = {
     {
       "id": "14-Networking2",
       "name": "14. Networking Event",
-      "levels": [
-        { "tileSize": 256, "size": 256, "fallbackOnly": true },
-        { "tileSize": 512, "size": 512 },
-        { "tileSize": 512, "size": 1024 },
-        { "tileSize": 512, "size": 2048 }
-      ],
-      "faceSize": 1488,
+      "file": "14-Networking.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
         { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "13-Networking1" }
