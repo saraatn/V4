@@ -27,8 +27,7 @@ var APP_DATA = {
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.5707963267948966 },
       "linkHotspots": [
         { "yaw": -2.4194224570906773, "pitch": 0.32546688057977846, "rotation": 0, "target": "3-AppSheet" },
-        // ⚠️ Still no measured data provided for ->1-Seats — left as original placeholder
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "1-Seats" },
+        { "yaw": -1.1531931819261239, "pitch": 0.35358984849095876, "rotation": 0, "target": "1-Seats" },
         // 🆕 New shortcut hotspot: Transition -> LiBiao
         { "yaw": 2.1301203916949287, "pitch": 0.2731964891548291, "rotation": 0, "target": "9-LiBiao" }
       ],
@@ -148,12 +147,11 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": -1.1621409369190552, "pitch": 0.2682372280575738, "rotation": 0, "target": "10-transition" },
         { "yaw": 1.7820412245340087, "pitch": 0.23236256403128763, "rotation": 0, "target": "8-transition" },
-        // ASSUMPTION: this fills in the previously-ambiguous "Go to 2-transitions" coordinate — confirm this is correct scene
-        { "yaw": 1.382663645723575, "pitch": 0.2375923693969284, "rotation": 0, "target": "2-transition" },
+        // Updated coordinates (confirms/replaces previous assumption)
+        { "yaw": -2.3155798177056575, "pitch": 0.24782660981990112, "rotation": 0, "target": "2-transition" },
         // ✅ Fixed: previously duplicated coordinates with the ->10-transition hotspot, now has its own correct value
-        { "yaw": -1.7263578704888634, "pitch": 0.24843561299397976, "rotation": 0, "target": "1-Seats" },
-        // 🆕 New shortcut hotspot: LiBiao -> IoT
-        { "yaw": -1.1157516046128357, "pitch": 0.25813894079501587, "rotation": 0, "target": "11-IoT" }
+        { "yaw": -1.7263578704888634, "pitch": 0.24843561299397976, "rotation": 0, "target": "1-Seats" }
+        // ✅ Removed: ->11-IoT hotspot (per request)
       ],
       "infoHotspots": [
         {
@@ -175,7 +173,8 @@ var APP_DATA = {
         { "yaw": 0.07105900265506726, "pitch": 0.2534284976145216, "rotation": 0, "target": "9-LiBiao" },
         // 🆕 New hotspots found in measured data
         { "yaw": 2.2501834291712566, "pitch": 0.3892645683704732, "rotation": 0, "target": "1-Seats" },
-        { "yaw": -1.3560647865333593, "pitch": 0.39128382898269365, "rotation": 0, "target": "2-transition" }
+        // Updated coordinates
+        { "yaw": 1.3502278194673032, "pitch": 0.1960297055399387, "rotation": 0, "target": "2-transition" }
       ],
       "infoHotspots": []
     },
@@ -187,9 +186,8 @@ var APP_DATA = {
       "initialViewParameters": { "yaw": -3.077344877679586, "pitch": 0.08122853964974475, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 1.0313917182115908, "pitch": 0.19204415516707485, "rotation": 0, "target": "12-Nexus" },
-        { "yaw": -1.414154678796013, "pitch": 0.34487233863543487, "rotation": 0, "target": "10-transition" },
-        // 🆕 New hotspot found in measured data — direct link to 13-Networking1 (skips 12-Nexus)
-        { "yaw": 1.297737791263561, "pitch": 0.22065303741619147, "rotation": 0, "target": "13-Networking1" }
+        { "yaw": -1.414154678796013, "pitch": 0.34487233863543487, "rotation": 0, "target": "10-transition" }
+        // ✅ Removed: ->13-Networking1 hotspot (scene removed for now)
       ],
       "infoHotspots": [
         {
@@ -219,29 +217,8 @@ var APP_DATA = {
           "video": "OYbPOhK0wPo"
         }
       ]
-    },
-    {
-      "id": "13-Networking1",
-      "name": "13. Networking Event",
-      "file": "13-Networking1.jpg",
-      "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
-      "linkHotspots": [
-        // ⚠️ No measured data provided for this scene — left as original placeholders
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "14-Networking2" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "12-Nexus" }
-      ],
-      "infoHotspots": []
-    },
-    {
-      "id": "14-Networking2",
-      "name": "14. Networking Event",
-      "file": "14-Networking.jpg",
-      "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
-      "linkHotspots": [
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "13-Networking1" }
-      ],
-      "infoHotspots": []
     }
+    // ✅ Removed: "13-Networking1" and "14-Networking2" scenes (per request, for now)
   ],
   "name": "Project Title",
   "settings": {
