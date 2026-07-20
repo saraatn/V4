@@ -6,7 +6,9 @@ var APP_DATA = {
       "file": "1-Seats.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0.6832859992630951, "pitch": 0.26776133307676986, "rotation": 0, "target": "2-transition" }
+        { "yaw": 0.6832859992630951, "pitch": 0.26776133307676986, "rotation": 0, "target": "2-transition" },
+        // 🆕 New shortcut hotspot: Seats -> IoT
+        { "yaw": -0.8365754076800247, "pitch": 0.2996353101657707, "rotation": 0, "target": "11-IoT" }
       ],
       "infoHotspots": [
         {
@@ -24,9 +26,11 @@ var APP_DATA = {
       "file": "2-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.5707963267948966 },
       "linkHotspots": [
-        // ⚠️ No measured data provided for this scene's outgoing hotspots — left as original placeholders
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "3-AppSheet" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "1-Seats" }
+        { "yaw": -2.4194224570906773, "pitch": 0.32546688057977846, "rotation": 0, "target": "3-AppSheet" },
+        // ⚠️ Still no measured data provided for ->1-Seats — left as original placeholder
+        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "1-Seats" },
+        // 🆕 New shortcut hotspot: Transition -> LiBiao
+        { "yaw": 2.1301203916949287, "pitch": 0.2731964891548291, "rotation": 0, "target": "9-LiBiao" }
       ],
       "infoHotspots": []
     },
@@ -68,9 +72,10 @@ var APP_DATA = {
       "file": "5-LEAN.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
-        // ⚠️ No measured data provided for this scene's outgoing hotspots — left as original placeholders
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "6-4-Way-Shuttle" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "4-transition" }
+        { "yaw": 1.8777978673811724, "pitch": 0.4518497793203977, "rotation": 0, "target": "6-4-Way-Shuttle" },
+        { "yaw": -0.5370042280088576, "pitch": 0.2758133326893759, "rotation": 0, "target": "4-transition" },
+        // 🆕 New shortcut hotspot: LEAN -> Linde
+        { "yaw": 0.31360790069007294, "pitch": 0.25437315908887115, "rotation": 0, "target": "7-Linde" }
       ],
       "infoHotspots": [
         {
@@ -143,11 +148,12 @@ var APP_DATA = {
       "linkHotspots": [
         { "yaw": -1.1621409369190552, "pitch": 0.2682372280575738, "rotation": 0, "target": "10-transition" },
         { "yaw": 1.7820412245340087, "pitch": 0.23236256403128763, "rotation": 0, "target": "8-transition" },
-        // 🆕 New hotspot found in measured data
-        { "yaw": -2.400882465821665, "pitch": 0.2376457457432828, "rotation": 0, "target": "2-transition" },
-        // 🆕 New hotspot AND ⚠️ shares identical yaw/pitch with the ->10-transition hotspot above.
-        // This is almost certainly a mis-recorded coordinate — re-measure this one in F12 before using.
-        { "yaw": -1.1621409369190552, "pitch": 0.2682372280575738, "rotation": 0, "target": "1-Seats" }
+        // ASSUMPTION: this fills in the previously-ambiguous "Go to 2-transitions" coordinate — confirm this is correct scene
+        { "yaw": 1.382663645723575, "pitch": 0.2375923693969284, "rotation": 0, "target": "2-transition" },
+        // ✅ Fixed: previously duplicated coordinates with the ->10-transition hotspot, now has its own correct value
+        { "yaw": -1.7263578704888634, "pitch": 0.24843561299397976, "rotation": 0, "target": "1-Seats" },
+        // 🆕 New shortcut hotspot: LiBiao -> IoT
+        { "yaw": -1.1157516046128357, "pitch": 0.25813894079501587, "rotation": 0, "target": "11-IoT" }
       ],
       "infoHotspots": [
         {
@@ -177,7 +183,8 @@ var APP_DATA = {
       "id": "11-IoT",
       "name": "11. IoT",
       "file": "11-IoT.jpg",
-      "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
+      // Initial view now faces the IoT infoHotspot directly (same yaw/pitch as that hotspot below)
+      "initialViewParameters": { "yaw": -3.077344877679586, "pitch": 0.08122853964974475, "fov": 1.2446250333351525 },
       "linkHotspots": [
         { "yaw": 1.0313917182115908, "pitch": 0.19204415516707485, "rotation": 0, "target": "12-Nexus" },
         { "yaw": -1.414154678796013, "pitch": 0.34487233863543487, "rotation": 0, "target": "10-transition" },
@@ -200,9 +207,8 @@ var APP_DATA = {
       "file": "12-Nexus.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        // ⚠️ No measured data provided for ->13-Networking1 — left as original placeholder
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "13-Networking1" },
         { "yaw": -1.7935945155371655, "pitch": 0.3085524271103104, "rotation": 0, "target": "11-IoT" }
+        // ✅ Removed: ->13-Networking1 hotspot (per request)
       ],
       "infoHotspots": [
         {
