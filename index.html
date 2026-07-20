@@ -329,8 +329,9 @@
      calls window.showNetworkingButton() at 100% tour completion.
      See js/networking.js.
      ========================================================================== -->
-<button id="nav-arrow-left-tour" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to registration">&#8592;</button>
-<button id="nav-arrow-right-tour" class="nav-arrow nav-arrow-right" type="button" aria-label="Visit networking event">&#8594;</button>
+<!-- Tour Navigation Arrows (Middle Height & Hover Tooltips) -->
+<button id="nav-arrow-left-tour" class="nav-arrow nav-arrow-left" type="button" aria-label="Go to Registration" data-tooltip="Go to Registration">&#8592;</button>
+<button id="nav-arrow-right-tour" class="nav-arrow nav-arrow-right" type="button" aria-label="Go to Networking" data-tooltip="Go to Networking">&#8594;</button>
 
 <div id="networking-overlay" class="networking-overlay">
   <div id="networking-pano" class="networking-pano"></div>
@@ -338,7 +339,8 @@
 
   <div class="booth-counter-standalone" style="display:none;">Booths visited: <span id="booth-visit-count">0</span></div>
 
-  <button id="nav-arrow-left-networking" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to tour">&#8592;</button>
+  <button id="nav-arrow-left-networking" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to tour" data-tooltip="Back to tour">&#8592;</button>
+</div>
 
   <div id="networking-content" class="networking-content">
     <div id="recommendation-card" class="recommendation-card">
