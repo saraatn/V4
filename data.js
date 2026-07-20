@@ -6,14 +6,14 @@ var APP_DATA = {
       "file": "1-Seats.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "2-transition" }
+        { "yaw": 0.6832859992630951, "pitch": 0.26776133307676986, "rotation": 0, "target": "2-transition" }
       ],
       "infoHotspots": [
         {
           "title": "AI OCR",
           "text": "AI OCR (Artificial Intelligence Optical Character Recognition) is an advanced technology that uses machine learning and neural networks to automatically detect, extract, and convert text from images or scanned documents into editable and machine-readable data.",
-          "yaw": -1.9673868375327324,
-          "pitch": -0.0651348639273408,
+          "yaw": 0.03319037544346415,
+          "pitch": 0.03193024507100617,
           "video": "ExJLvYz2_cs"
         }
       ]
@@ -24,6 +24,7 @@ var APP_DATA = {
       "file": "2-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.5707963267948966 },
       "linkHotspots": [
+        // ⚠️ No measured data provided for this scene's outgoing hotspots — left as original placeholders
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "3-AppSheet" },
         { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "1-Seats" }
       ],
@@ -35,8 +36,10 @@ var APP_DATA = {
       "file": "3-AppSheet.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "4-transition" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "2-transition" }
+        { "yaw": 1.591638488331622, "pitch": 0.23769689381780168, "rotation": 0, "target": "4-transition" },
+        { "yaw": -1.1332526039894368, "pitch": 0.22871764377123682, "rotation": 0, "target": "2-transition" },
+        // 🆕 New hotspot found in measured data — not in original file
+        { "yaw": -1.3942682670711086, "pitch": 0.1923439148453827, "rotation": 0, "target": "1-Seats" }
       ],
       "infoHotspots": [
         {
@@ -54,8 +57,8 @@ var APP_DATA = {
       "file": "4-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "5-LEAN" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "3-AppSheet" }
+        { "yaw": 1.5543242962609174, "pitch": 0.18153642652895208, "rotation": 0, "target": "5-LEAN" },
+        { "yaw": -1.6298564443730825, "pitch": 0.20569200265416043, "rotation": 0, "target": "3-AppSheet" }
       ],
       "infoHotspots": []
     },
@@ -65,6 +68,7 @@ var APP_DATA = {
       "file": "5-LEAN.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
+        // ⚠️ No measured data provided for this scene's outgoing hotspots — left as original placeholders
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "6-4-Way-Shuttle" },
         { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "4-transition" }
       ],
@@ -84,8 +88,10 @@ var APP_DATA = {
       "file": "6-4-Way Shuttle.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "7-Linde" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "5-LEAN" }
+        { "yaw": 0.27085536393577847, "pitch": 0.2526253179487128, "rotation": 0, "target": "7-Linde" },
+        { "yaw": -2.0484289870897676, "pitch": 0.510812803355174, "rotation": 0, "target": "5-LEAN" },
+        // 🆕 New hotspot found in measured data — not in original file
+        { "yaw": -0.587509458460346, "pitch": 0.2682826286276061, "rotation": 0, "target": "4-transition" }
       ],
       "infoHotspots": [
         {
@@ -103,8 +109,10 @@ var APP_DATA = {
       "file": "7-Linde.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "8-transition" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "6-4-Way-Shuttle" }
+        { "yaw": -1.5200409217393904, "pitch": 0.3511546368635585, "rotation": 0, "target": "8-transition" },
+        { "yaw": 1.4922515179113063, "pitch": 0.19590363948482903, "rotation": 0, "target": "6-4-Way-Shuttle" },
+        // 🆕 New hotspot found in measured data — direct link to 5-LEAN (skips 6-4-Way-Shuttle)
+        { "yaw": 2.0097130232166913, "pitch": 0.16335544035836946, "rotation": 0, "target": "5-LEAN" }
       ],
       "infoHotspots": [
         {
@@ -122,8 +130,8 @@ var APP_DATA = {
       "file": "8-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "9-LiBiao" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "7-Linde" }
+        { "yaw": -1.6935374078117427, "pitch": 0.4102135504849098, "rotation": 0, "target": "9-LiBiao" },
+        { "yaw": 1.3904360968516087, "pitch": 0.24765774945649, "rotation": 0, "target": "7-Linde" }
       ],
       "infoHotspots": []
     },
@@ -133,8 +141,13 @@ var APP_DATA = {
       "file": "9-LiBiao.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "10-transition" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "8-transition" }
+        { "yaw": -1.1621409369190552, "pitch": 0.2682372280575738, "rotation": 0, "target": "10-transition" },
+        { "yaw": 1.7820412245340087, "pitch": 0.23236256403128763, "rotation": 0, "target": "8-transition" },
+        // 🆕 New hotspot found in measured data
+        { "yaw": -2.400882465821665, "pitch": 0.2376457457432828, "rotation": 0, "target": "2-transition" },
+        // 🆕 New hotspot AND ⚠️ shares identical yaw/pitch with the ->10-transition hotspot above.
+        // This is almost certainly a mis-recorded coordinate — re-measure this one in F12 before using.
+        { "yaw": -1.1621409369190552, "pitch": 0.2682372280575738, "rotation": 0, "target": "1-Seats" }
       ],
       "infoHotspots": [
         {
@@ -152,8 +165,11 @@ var APP_DATA = {
       "file": "10-transition.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "11-IoT" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "9-LiBiao" }
+        { "yaw": 3.0440594039132822, "pitch": 0.25947674617576055, "rotation": 0, "target": "11-IoT" },
+        { "yaw": 0.07105900265506726, "pitch": 0.2534284976145216, "rotation": 0, "target": "9-LiBiao" },
+        // 🆕 New hotspots found in measured data
+        { "yaw": 2.2501834291712566, "pitch": 0.3892645683704732, "rotation": 0, "target": "1-Seats" },
+        { "yaw": -1.3560647865333593, "pitch": 0.39128382898269365, "rotation": 0, "target": "2-transition" }
       ],
       "infoHotspots": []
     },
@@ -163,8 +179,10 @@ var APP_DATA = {
       "file": "11-IoT.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
       "linkHotspots": [
-        { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "12-Nexus" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "10-transition" }
+        { "yaw": 1.0313917182115908, "pitch": 0.19204415516707485, "rotation": 0, "target": "12-Nexus" },
+        { "yaw": -1.414154678796013, "pitch": 0.34487233863543487, "rotation": 0, "target": "10-transition" },
+        // 🆕 New hotspot found in measured data — direct link to 13-Networking1 (skips 12-Nexus)
+        { "yaw": 1.297737791263561, "pitch": 0.22065303741619147, "rotation": 0, "target": "13-Networking1" }
       ],
       "infoHotspots": [
         {
@@ -182,15 +200,16 @@ var APP_DATA = {
       "file": "12-Nexus.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
+        // ⚠️ No measured data provided for ->13-Networking1 — left as original placeholder
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "13-Networking1" },
-        { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "11-IoT" }
+        { "yaw": -1.7935945155371655, "pitch": 0.3085524271103104, "rotation": 0, "target": "11-IoT" }
       ],
       "infoHotspots": [
         {
           "title": "Station 8: Nexus",
           "text": "A digital platform that centralises operational data and workflows. Provides better visibility, collaboration, and control across business processes.",
-          "yaw": -3.1320671776627336,
-          "pitch": -0.1443075117404149,
+          "yaw": 0.08659418147503395,
+          "pitch": 0.01856556925197239,
           "video": "OYbPOhK0wPo"
         }
       ]
@@ -201,6 +220,7 @@ var APP_DATA = {
       "file": "13-Networking1.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
+        // ⚠️ No measured data provided for this scene — left as original placeholders
         { "yaw": 0, "pitch": 0.25, "rotation": 0, "target": "14-Networking2" },
         { "yaw": Math.PI, "pitch": 0.25, "rotation": 0, "target": "12-Nexus" }
       ],
