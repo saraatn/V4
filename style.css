@@ -585,7 +585,7 @@ body.view-control-buttons .viewControlButton {
    panel (z-index higher than #floorplan-container) so neither overlaps it. */
 .nav-arrow {
   position: fixed;
-  bottom: 90px;
+  bottom: 50px;
   z-index: 1600;
   width: 52px;
   height: 52px;
