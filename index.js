@@ -33,7 +33,11 @@
   var navArrowLeftTour = document.querySelector('#nav-arrow-left-tour');
   var navArrowRightTour = document.querySelector('#nav-arrow-right-tour');
   var navArrowLeftNetworking = document.querySelector('#nav-arrow-left-networking');
-  var lastTourSceneId = null; // most recent non-networking scene, for the "Go to LITES tour" arrow
+  var lastTourSceneId = null; // most recent non-networking scene, used by the "Go to LITES tour" arrow
+
+  // Every link (location) hotspot created so far, so we can toggle the
+  // "not-visited" pulsing ring on/off as scenes get visited.
+  var linkHotspotRegistry = [];
 
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
@@ -249,7 +253,7 @@
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
   }
 
-function switchScene(scene, viewParams) {
+  function switchScene(scene, viewParams) {
     stopAutorotate();
     scene.view.setParameters(viewParams || scene.data.initialViewParameters);
     scene.scene.switchTo();
@@ -305,9 +309,24 @@ function switchScene(scene, viewParams) {
     }
   }
 
+  // Toggles the pulsing "not-visited" ring on every location hotspot whose
+  // target scene the visitor hasn't stepped into yet. Runs after every
+  // scene visit so hotspots on OTHER scenes pointing at a now-visited
+  // target also update, not just the ones on the current scene.
+  function refreshLinkHotspotVisitedStates() {
+    linkHotspotRegistry.forEach(function(entry) {
+      if (visitedScenes.has(entry.targetId)) {
+        entry.element.classList.remove('not-visited');
+      } else {
+        entry.element.classList.add('not-visited');
+      }
+    });
+  }
+
   function updateProgressBar(scene) {
     if (progressBar) {
       visitedScenes.add(scene.data.id);
+      refreshLinkHotspotVisitedStates();
 
       // Only count visits to non-networking scenes towards the bar.
       var visitedCountable = 0;
@@ -323,7 +342,7 @@ function switchScene(scene, viewParams) {
       // one-time completion message. Guarded by tourCompleted so this only
       // ever fires once per session, however many times 100% is re-touched
       // (e.g. bouncing back into the tour from networking later).
-      var isNetworkingScene = (scene.data.id === '13-Networking1' || scene.data.id === '14-Networking2');
+      var isNetworkingScene = isNetworkingSceneId(scene.data.id);
 
       if (percentage >= 100 && !tourCompleted) {
         tourCompleted = true;
@@ -349,15 +368,15 @@ function switchScene(scene, viewParams) {
         }
       }
 
-      // Networking recommendation hook: fires every time the visitor steps
-      // into either networking station. Defined in js/networking.js;
-      // guarded so this file still works standalone if that script isn't
-      // loaded.
+      // Networking recommendation hook: fires when the visitor steps into
+      // either networking station, but ONLY once the main tour is fully
+      // complete — this is what stops the recommendation card from ever
+      // appearing early / at the start of the tour.
       if (isNetworkingScene) {
         if (pendingCompletionAnnouncement && typeof window.onTourCompleted === 'function') {
           pendingCompletionAnnouncement = false;
           window.onTourCompleted(scene.data.id);
-        } else if (typeof window.showNetworkingRecommendation === 'function') {
+        } else if (tourCompleted && typeof window.showNetworkingRecommendation === 'function') {
           window.showNetworkingRecommendation(scene.data.id);
         }
       } else if (typeof window.closeNetworkingOverlay === 'function') {
@@ -420,6 +439,9 @@ function switchScene(scene, viewParams) {
     var wrapper = document.createElement('div');
     wrapper.classList.add('hotspot');
     wrapper.classList.add('link-hotspot');
+    // Assume unvisited until refreshLinkHotspotVisitedStates() proves
+    // otherwise (it runs right after this scene graph finishes building).
+    wrapper.classList.add('not-visited');
 
     var icon = document.createElement('img');
     icon.src = 'img/link.png';
@@ -444,6 +466,10 @@ function switchScene(scene, viewParams) {
 
     wrapper.appendChild(icon);
     wrapper.appendChild(tooltip);
+
+    // Register so its pulsing ring gets toggled off once its target scene
+    // is visited (from any scene's copy of this hotspot, not just this one).
+    linkHotspotRegistry.push({ element: wrapper, targetId: hotspot.target });
 
     return wrapper;
   }
@@ -523,11 +549,14 @@ function switchScene(scene, viewParams) {
       }
     });
   }
-if (navArrowRightTour) {
+  if (navArrowRightTour) {
     navArrowRightTour.addEventListener('click', function() {
       window.switchScene('13-Networking1');
     });
   }
+  // Networking view's left arrow ("Go to LITES tour") — takes the visitor
+  // back to whichever tour scene they were last standing on (falls back to
+  // the very first scene if, somehow, none was recorded yet).
   if (navArrowLeftNetworking) {
     navArrowLeftNetworking.addEventListener('click', function() {
       var targetId = lastTourSceneId || (scenes[0] && scenes[0].data.id);
