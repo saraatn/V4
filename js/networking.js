@@ -14,6 +14,7 @@
  *
  * Called from index.js's updateProgressBar():
  *   - window.showNetworkingRecommendation(sceneId) when entering 13/14
+ *   - window.onTourCompleted(sceneId) exactly once, at 100% tour completion
  *   - window.closeNetworkingOverlay() when leaving them
  */
 'use strict';
@@ -33,44 +34,55 @@
   // real API/Sheet call) once real mapping data exists. Company name is
   // captured and available on `user.company` for that future use, but
   // isn't currently factored into which station is recommended.
+  // The 5 real booths inside the networking segment (13-Networking1 /
+  // 14-Networking2 — see the infoHotspots in data.js, matched here by
+  // boothId). yaw/pitch mirror those hotspots so "Take Me There" can look
+  // straight at the recommended booth after switching scenes.
+  var BOOTHS = [
+    { boothId: "sustainability",      name: "Sustainability",       sceneId: "13-Networking1", yaw: -1.8, pitch: 0.05 },
+    { boothId: "optimisation",        name: "Optimisation",         sceneId: "13-Networking1", yaw: -0.3, pitch: 0.05 },
+    { boothId: "workplace-learning",  name: "Workplace Learning",   sceneId: "13-Networking1", yaw: 1.35, pitch: 0.05 },
+    { boothId: "supply-chain-ai",     name: "Supply Chain AI",      sceneId: "14-Networking2", yaw: -1.0, pitch: 0.05 },
+    { boothId: "digitalisation",      name: "Digitalisation",       sceneId: "14-Networking2", yaw: 0.8,  pitch: 0.05 }
+  ];
+  window.NETWORKING_BOOTHS = BOOTHS;
+
   var RULES = [
     {
       keywords: ["it", "tech", "engineer", "developer", "software", "digital", "data"],
-      sceneId: "11-IoT",
-      booth: "IoT Station",
-      reason: "Based on your designation, our Internet of Things (IoT) setup shows how connected sensors and real-time data can plug directly into your workflows."
+      boothId: "digitalisation",
+      reason: "Based on your designation, the Digitalisation booth shows how connected, paperless workflows can plug directly into your systems."
     },
     {
       keywords: ["operation", "logistic", "warehouse", "supply chain", "fulfilment", "fulfillment"],
-      sceneId: "6-4-Way-Shuttle",
-      booth: "4-Way Shuttle & Automated Reach Truck",
-      reason: "Given your role in operations/logistics, the 4-Way Shuttle and Automated Reach Truck stations demonstrate storage density and material handling gains most relevant to you."
+      boothId: "supply-chain-ai",
+      reason: "Given your role in operations/logistics, the Supply Chain AI booth demonstrates forecasting and anomaly detection most relevant to you."
     },
     {
       keywords: ["sales", "business development", "marketing", "account"],
-      sceneId: "9-LiBiao",
-      booth: "LiBiao 3D-Sorting System",
-      reason: "As someone in a client-facing role, the LiBiao 3D-Sorting System is a strong showcase piece — high accuracy and throughput that's easy to demonstrate to prospects."
+      boothId: "optimisation",
+      reason: "As someone in a client-facing role, the Optimisation booth is a strong showcase piece — measurable routing and scheduling gains that are easy to demonstrate to prospects."
     },
     {
       keywords: ["founder", "ceo", "coo", "cto", "director", "manager", "owner", "president", "vp", "head"],
-      sceneId: "12-Nexus",
-      booth: "Nexus Platform",
-      reason: "As a decision-maker, Nexus gives you the clearest picture of how centralised data and workflow visibility can support your organisation end-to-end."
+      boothId: "workplace-learning",
+      reason: "As a decision-maker, Workplace Learning gives you a clear picture of how upskilling your teams supports adoption of new systems end-to-end."
     },
     {
-      keywords: ["finance", "account", "procurement"],
-      sceneId: "3-AppSheet",
-      booth: "AppSheet Scanner",
-      reason: "For finance and procurement roles, AppSheet's digital inventory tracking cuts down manual paperwork and reconciliation errors."
+      keywords: ["finance", "account", "procurement", "sustainability", "esg", "environment"],
+      boothId: "sustainability",
+      reason: "For finance, procurement, and ESG-minded roles, the Sustainability booth ties operational efficiency directly to cost and environmental impact."
     }
   ];
 
-  var DEFAULT_RECOMMENDATION = {
-    sceneId: "12-Nexus",
-    booth: "Nexus Platform",
-    reason: "Nexus is our central platform tying every station together — a great starting point no matter your role."
-  };
+  var DEFAULT_RECOMMENDATION_BOOTH_ID = "sustainability";
+
+  function findBooth(boothId) {
+    for (var i = 0; i < BOOTHS.length; i++) {
+      if (BOOTHS[i].boothId === boothId) return BOOTHS[i];
+    }
+    return BOOTHS[0];
+  }
 
   function getRegistrationData() {
     if (window.registrationData) return window.registrationData;
@@ -88,11 +100,27 @@
       var rule = RULES[i];
       for (var j = 0; j < rule.keywords.length; j++) {
         if (designation.indexOf(rule.keywords[j]) !== -1) {
-          return { sceneId: rule.sceneId, booth: rule.booth, reason: rule.reason };
+          var matched = findBooth(rule.boothId);
+          return {
+            boothId: matched.boothId,
+            sceneId: matched.sceneId,
+            booth: matched.name,
+            yaw: matched.yaw,
+            pitch: matched.pitch,
+            reason: rule.reason
+          };
         }
       }
     }
-    return DEFAULT_RECOMMENDATION;
+    var fallback = findBooth(DEFAULT_RECOMMENDATION_BOOTH_ID);
+    return {
+      boothId: fallback.boothId,
+      sceneId: fallback.sceneId,
+      booth: fallback.name,
+      yaw: fallback.yaw,
+      pitch: fallback.pitch,
+      reason: "Sustainability is a great starting point no matter your role — a look at how efficiency and environmental impact tie together."
+    };
   }
   window.getRecommendedBooth = getRecommendedBooth;
 
@@ -102,19 +130,61 @@
   var networkingOverlay = document.getElementById('networking-overlay');
   var recommendationCardEl = document.getElementById('recommendation-card');
   var dismissRecommendationBtn = document.getElementById('dismiss-recommendation-btn');
+  var cardTitleEl = document.getElementById('networking-card-title');
+  var cardWelcomeEl = document.getElementById('networking-card-welcome');
+  var boothListEl = document.getElementById('networking-booth-list');
   var boothNameEl = document.getElementById('recommended-booth-name');
   var boothReasonEl = document.getElementById('recommended-booth-reason');
   var goHereBtn = document.getElementById('go-here-btn');
   var overlayScrimEl = document.querySelector('.networking-overlay-scrim');
 
   var currentRecommendation = null;
+  var completionMessageShown = false;
 
   // ---------------------------------------------------------------------
-  // Fill in the recommendation card from the registration data
+  // Fill in the recommendation card from the registration data, and list
+  // out all 5 booths (highlighting the recommended one) the first time
+  // this shows right after finishing the tour.
   // ---------------------------------------------------------------------
-  function renderRecommendation() {
+  function renderRecommendation(showCompletionCopy) {
     var user = getRegistrationData();
     currentRecommendation = getRecommendedBooth(user);
+
+    if (showCompletionCopy) {
+      if (cardTitleEl) {
+        cardTitleEl.textContent = "You've finished the LITES tour! \uD83C\uDF89";
+      }
+      if (cardWelcomeEl) {
+        cardWelcomeEl.innerHTML =
+          "Explore the networking session below. Based on your company and designation, " +
+          "we suggest you go to this booth:";
+      }
+      if (boothListEl) {
+        boothListEl.innerHTML = '';
+        BOOTHS.forEach(function(b) {
+          var li = document.createElement('li');
+          li.textContent = b.name;
+          if (b.boothId === currentRecommendation.boothId) {
+            li.classList.add('is-recommended');
+            li.textContent = b.name + ' \u2b50';
+          }
+          boothListEl.appendChild(li);
+        });
+        boothListEl.style.display = '';
+      }
+    } else {
+      if (cardTitleEl) {
+        cardTitleEl.textContent = "Networking Event";
+      }
+      if (cardWelcomeEl) {
+        cardWelcomeEl.innerHTML =
+          "Welcome to our Networking Event!<br>" +
+          "Based on your company and designation, we recommend visiting the following booth.";
+      }
+      if (boothListEl) {
+        boothListEl.style.display = 'none';
+      }
+    }
 
     if (boothNameEl) {
       boothNameEl.textContent = currentRecommendation.booth;
@@ -136,8 +206,8 @@
   // Called from index.js's updateProgressBar() every time it happens,
   // so the recommendation reappears each time either scene is entered.
   // ---------------------------------------------------------------------
-  function showNetworkingRecommendation(sceneId) {
-    renderRecommendation();
+  function showNetworkingRecommendation(sceneId, showCompletionCopy) {
+    renderRecommendation(!!showCompletionCopy);
 
     if (recommendationCardEl) {
       recommendationCardEl.classList.remove('dismissed');
@@ -150,6 +220,19 @@
     }
   }
   window.showNetworkingRecommendation = showNetworkingRecommendation;
+
+  // ---------------------------------------------------------------------
+  // Called exactly once by index.js's updateProgressBar() the moment the
+  // main LITES tour progress bar hits 100%. Shows the completion copy +
+  // full 5-booth list (with the recommended one highlighted) instead of
+  // the regular recurring recommendation card.
+  // ---------------------------------------------------------------------
+  function onTourCompleted(sceneId) {
+    if (completionMessageShown) return;
+    completionMessageShown = true;
+    showNetworkingRecommendation(sceneId, true);
+  }
+  window.onTourCompleted = onTourCompleted;
 
   function closeNetworkingOverlay() {
     if (networkingOverlay) {
@@ -174,7 +257,10 @@
   if (goHereBtn) {
     goHereBtn.addEventListener('click', function() {
       if (currentRecommendation && typeof window.switchScene === 'function') {
-        window.switchScene(currentRecommendation.sceneId);
+        var viewParams = (typeof currentRecommendation.yaw === 'number')
+          ? { yaw: currentRecommendation.yaw, pitch: currentRecommendation.pitch, fov: 1.4469324312346197 }
+          : undefined;
+        window.switchScene(currentRecommendation.sceneId, viewParams);
       }
       closeNetworkingOverlay();
     });
