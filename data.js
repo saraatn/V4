@@ -267,7 +267,7 @@ var APP_DATA = {
           "boothId": "digitalisation",
           "title": "Digitalisation",
           "text": "See how paper-based processes are being replaced with connected digital workflows, giving teams real-time visibility from floor to office.",
-          "yaw": 1.6,
+          "yaw": 1.67,
           "pitch": 0.07
         },
         {
