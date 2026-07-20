@@ -233,8 +233,7 @@ var APP_DATA = {
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "excludeFromProgress": true,
       "linkHotspots": [
-        { "yaw": -2.5, "pitch": 0.2, "rotation": 0, "target": "12-Nexus" },
-        { "yaw": 1.15, "pitch": 0.15, "rotation": 0, "target": "14-Networking2" }
+        { "yaw": 1.74, "pitch": 0.31, "rotation": 0, "target": "14-Networking2" }
       ],
       "infoHotspots": [
         {
@@ -254,7 +253,7 @@ var APP_DATA = {
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "excludeFromProgress": true,
       "linkHotspots": [
-        { "yaw": -1.9, "pitch": 0.15, "rotation": 0, "target": "13-Networking1" }
+        { "yaw": -2.17, "pitch": 0.15, "rotation": 0.26, "target": "13-Networking1" }
       ],
       "infoHotspots": [
         {
