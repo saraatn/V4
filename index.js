@@ -32,6 +32,8 @@
   var pendingCompletionAnnouncement = false;
   var navArrowLeftTour = document.querySelector('#nav-arrow-left-tour');
   var navArrowRightTour = document.querySelector('#nav-arrow-right-tour');
+  var navArrowLeftNetworking = document.querySelector('#nav-arrow-left-networking');
+  var lastTourSceneId = null; // most recent non-networking scene, for the "Go to LITES tour" arrow
 
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
@@ -247,7 +249,7 @@
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
   }
 
-  function switchScene(scene, viewParams) {
+function switchScene(scene, viewParams) {
     stopAutorotate();
     scene.view.setParameters(viewParams || scene.data.initialViewParameters);
     scene.scene.switchTo();
@@ -255,12 +257,36 @@
     updateSceneName(scene);
     updateSceneList(scene);
     updateProgressBar(scene);
+    updateTourNavArrows(scene);
 
     // NEW — notify the chatbot integration of the new scene
     if (typeof window.onStationChanged === 'function') {
       window.onStationChanged(scene);
     }
 }
+
+  // Which of the two arrow sets should be showing:
+  //   - Tour scenes:        nav-arrow-left-tour ("Go to Registration") +
+  //                          nav-arrow-right-tour ("Go to Networking", once unlocked)
+  //   - Networking scenes:  nav-arrow-left-networking ("Go to LITES tour") only
+  function isNetworkingSceneId(id) {
+    return id === '13-Networking1' || id === '14-Networking2';
+  }
+
+  function updateTourNavArrows(scene) {
+    var onNetworkingScene = isNetworkingSceneId(scene.data.id);
+
+    if (!onNetworkingScene) {
+      lastTourSceneId = scene.data.id;
+    }
+
+    if (navArrowLeftTour) {
+      navArrowLeftTour.classList.toggle('nav-arrow-hidden', onNetworkingScene);
+    }
+    if (navArrowRightTour) {
+      navArrowRightTour.classList.toggle('nav-arrow-hidden', onNetworkingScene);
+    }
+  }
 
   function updateSceneName(scene) {
     if (sceneNameElement) {
@@ -497,9 +523,15 @@
       }
     });
   }
-  if (navArrowRightTour) {
+if (navArrowRightTour) {
     navArrowRightTour.addEventListener('click', function() {
       window.switchScene('13-Networking1');
+    });
+  }
+  if (navArrowLeftNetworking) {
+    navArrowLeftNetworking.addEventListener('click', function() {
+      var targetId = lastTourSceneId || (scenes[0] && scenes[0].data.id);
+      if (targetId) window.switchScene(targetId);
     });
   }
 
