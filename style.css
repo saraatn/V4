@@ -618,6 +618,7 @@ body.view-control-buttons .viewControlButton {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  pointer-events: auto; /* opt back in — needed inside .networking-overlay, which is now pointer-events:none */
   transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.5s ease;
 }
 
@@ -668,7 +669,11 @@ body.view-control-buttons .viewControlButton {
 .networking-overlay.open {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
+  /* Stays "none" here on purpose — the overlay itself must never swallow
+     drags meant for the 360 pano underneath. Only .nav-arrow and
+     .recommendation-card (below) opt back in to pointer-events, so the
+     user can still spin/pan 13-Networking1 and 14-Networking2 freely. */
+  pointer-events: none;
   transition: opacity 0.5s ease, visibility 0s linear 0s;
 }
 
