@@ -241,22 +241,8 @@ var APP_DATA = {
           "boothId": "sustainability",
           "title": "Sustainability",
           "text": "Explore how sustainable practices — energy efficiency, waste reduction, and greener material flows — are being built into modern supply chains.",
-          "yaw": -1.8,
-          "pitch": 0.05
-        },
-        {
-          "boothId": "optimisation",
-          "title": "Optimisation",
-          "text": "See how data-driven optimisation improves routing, scheduling, and resource allocation across warehouse and logistics operations.",
-          "yaw": -0.3,
-          "pitch": 0.05
-        },
-        {
-          "boothId": "workplace-learning",
-          "title": "Workplace Learning",
-          "text": "Discover tools and programmes that upskill teams on the floor, from digital onboarding to hands-on training with new automation systems.",
-          "yaw": 1.35,
-          "pitch": 0.05
+          "yaw": -2.5,
+          "pitch": 0.26
         }
       ]
     },
@@ -275,15 +261,29 @@ var APP_DATA = {
           "boothId": "supply-chain-ai",
           "title": "Supply Chain AI",
           "text": "Learn how AI-driven forecasting and anomaly detection help teams anticipate disruptions and make faster, more confident supply chain decisions.",
-          "yaw": -1.0,
-          "pitch": 0.05
+          "yaw": 0.68,
+          "pitch": 0.13
         },
         {
           "boothId": "digitalisation",
           "title": "Digitalisation",
           "text": "See how paper-based processes are being replaced with connected digital workflows, giving teams real-time visibility from floor to office.",
-          "yaw": 0.8,
-          "pitch": 0.05
+          "yaw": 1.6,
+          "pitch": 0.07
+        },
+        {
+          "boothId": "optimisation",
+          "title": "Optimisation",
+          "text": "See how data-driven optimisation improves routing, scheduling, and resource allocation across warehouse and logistics operations.",
+          "yaw": -0.04,
+          "pitch": 0.09
+        },
+        {
+          "boothId": "workplace-learning",
+          "title": "Workplace Learning",
+          "text": "Discover tools and programmes that upskill teams on the floor, from digital onboarding to hands-on training with new automation systems.",
+          "yaw": -3.02,
+          "pitch": 0.15
         }
       ]
     }
