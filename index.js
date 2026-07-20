@@ -21,9 +21,17 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
-  // Track visited scenes to update the progress bar
+  // Track visited scenes to update the progress bar.
+  // Scenes flagged excludeFromProgress (the two networking scenes) don't
+  // count towards the denominator or numerator — finishing the main LITES
+  // tour itself is what should drive the bar to 100%, not visiting the
+  // networking segment it unlocks.
   var visitedScenes = new Set();
   var progressBar = document.querySelector('#progress-bar');
+  var tourCompleted = false;
+  var pendingCompletionAnnouncement = false;
+  var navArrowLeftTour = document.querySelector('#nav-arrow-left-tour');
+  var navArrowRightTour = document.querySelector('#nav-arrow-right-tour');
 
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
@@ -122,14 +130,19 @@
     };
   });
 
+  // Scenes that count towards main-tour completion (i.e. everything except
+  // the networking segment, which is unlocked BY completion rather than
+  // being part of it).
+  var countableScenes = scenes.filter(function(s) { return !s.data.excludeFromProgress; });
+
   // Expose scenes/viewer + a real global switchScene so other scripts
   // (e.g. the welcome overlay / floorplan script in index.html) can hook in
   // without re-implementing scene switching themselves.
   window.viewer = viewer;
   window.APP_SCENES = scenes;
-  window.switchScene = function(sceneOrId) {
+  window.switchScene = function(sceneOrId, viewParams) {
     var target = typeof sceneOrId === 'string' ? findSceneById(sceneOrId) : sceneOrId;
-    if (target) switchScene(target);
+    if (target) switchScene(target, viewParams);
   };
 
   // Set up autorotate, if enabled.
@@ -234,9 +247,9 @@
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
   }
 
-  function switchScene(scene) {
+  function switchScene(scene, viewParams) {
     stopAutorotate();
-    scene.view.setParameters(scene.data.initialViewParameters);
+    scene.view.setParameters(viewParams || scene.data.initialViewParameters);
     scene.scene.switchTo();
     startAutorotate();
     updateSceneName(scene);
@@ -269,15 +282,56 @@
   function updateProgressBar(scene) {
     if (progressBar) {
       visitedScenes.add(scene.data.id);
-      var percentage = (visitedScenes.size / scenes.length) * 100;
+
+      // Only count visits to non-networking scenes towards the bar.
+      var visitedCountable = 0;
+      visitedScenes.forEach(function(id) {
+        var sceneData = findSceneDataById(id);
+        if (sceneData && !sceneData.excludeFromProgress) visitedCountable++;
+      });
+      var percentage = (visitedCountable / countableScenes.length) * 100;
       progressBar.style.width = percentage + '%';
 
-      // Networking recommendation hook: fires the moment the visitor steps
-      // into either networking station (rather than waiting for 100% tour
-      // completion). Defined in js/networking.js; guarded so this file
-      // still works standalone if that script isn't loaded.
-      if (scene.data.id === '13-Networking1' || scene.data.id === '14-Networking2') {
-        if (typeof window.showNetworkingRecommendation === 'function') {
+      // The moment the main LITES tour hits 100%, unlock + reveal the
+      // right nav arrow and auto-jump into the networking segment with a
+      // one-time completion message. Guarded by tourCompleted so this only
+      // ever fires once per session, however many times 100% is re-touched
+      // (e.g. bouncing back into the tour from networking later).
+      var isNetworkingScene = (scene.data.id === '13-Networking1' || scene.data.id === '14-Networking2');
+
+      if (percentage >= 100 && !tourCompleted) {
+        tourCompleted = true;
+        if (navArrowRightTour) navArrowRightTour.classList.add('visible');
+
+        if (!isNetworkingScene) {
+          var networkingScene = findSceneById('13-Networking1');
+          if (networkingScene) {
+            // Not there yet — jump in, and flag that the *next* time we
+            // land on a networking scene it should show the one-time
+            // completion message rather than the regular recurring card.
+            // Small delay so the progress bar's own fill animation has a
+            // beat to register before the jump.
+            pendingCompletionAnnouncement = true;
+            setTimeout(function() { switchScene(networkingScene); }, 400);
+          }
+        } else if (typeof window.onTourCompleted === 'function') {
+          // Already standing in a networking scene when 100% was reached —
+          // show the completion message immediately, and skip the regular
+          // recommendation call below for this same invocation.
+          window.onTourCompleted(scene.data.id);
+          isNetworkingScene = false;
+        }
+      }
+
+      // Networking recommendation hook: fires every time the visitor steps
+      // into either networking station. Defined in js/networking.js;
+      // guarded so this file still works standalone if that script isn't
+      // loaded.
+      if (isNetworkingScene) {
+        if (pendingCompletionAnnouncement && typeof window.onTourCompleted === 'function') {
+          pendingCompletionAnnouncement = false;
+          window.onTourCompleted(scene.data.id);
+        } else if (typeof window.showNetworkingRecommendation === 'function') {
           window.showNetworkingRecommendation(scene.data.id);
         }
       } else if (typeof window.closeNetworkingOverlay === 'function') {
@@ -393,7 +447,7 @@
 
     iconWrapper.addEventListener('click', function(event) {
       event.stopPropagation();
-      if (typeof window.openVideoModal === 'function' && hotspot.video) {
+      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.text)) {
         window.openVideoModal(hotspot.title, hotspot.video, hotspot.text);
       }
     });
@@ -428,6 +482,25 @@
       }
     }
     return {};
+  }
+
+  // ---- Left/right nav arrows (main tour view) ----
+  // Left: always available, reopens the registration form.
+  // Right: hidden until tourCompleted flips it to .visible (see
+  // updateProgressBar above); jumps straight into the networking segment.
+  if (navArrowLeftTour) {
+    navArrowLeftTour.addEventListener('click', function() {
+      var overlay = document.getElementById('welcome-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.classList.remove('fade-out');
+      }
+    });
+  }
+  if (navArrowRightTour) {
+    navArrowRightTour.addEventListener('click', function() {
+      window.switchScene('13-Networking1');
+    });
   }
 
   // Display the initial scene.
