@@ -349,16 +349,12 @@
         if (navArrowRightTour) navArrowRightTour.classList.add('visible');
 
         if (!isNetworkingScene) {
-          var networkingScene = findSceneById('13-Networking1');
-          if (networkingScene) {
-            // Not there yet — jump in, and flag that the *next* time we
-            // land on a networking scene it should show the one-time
-            // completion message rather than the regular recurring card.
-            // Small delay so the progress bar's own fill animation has a
-            // beat to register before the jump.
-            pendingCompletionAnnouncement = true;
-            setTimeout(function() { switchScene(networkingScene); }, 400);
-          }
+          // Do NOT auto-navigate — let the visitor finish looking at
+          // whatever station just took them to 100%. The right arrow is
+          // now unlocked/visible; when they click it themselves (or
+          // otherwise reach a networking scene), show the one-time
+          // completion message instead of the regular recurring card.
+          pendingCompletionAnnouncement = true;
         } else if (typeof window.onTourCompleted === 'function') {
           // Already standing in a networking scene when 100% was reached —
           // show the completion message immediately, and skip the regular
