@@ -205,8 +205,10 @@ var APP_DATA = {
       "file": "12-Nexus.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
       "linkHotspots": [
-        { "yaw": -1.7935945155371655, "pitch": 0.3085524271103104, "rotation": 0, "target": "11-IoT" }
-        // ✅ Removed: ->13-Networking1 hotspot (per request)
+        { "yaw": -1.7935945155371655, "pitch": 0.3085524271103104, "rotation": 0, "target": "11-IoT" },
+        // 🆕 Manual forward path into the networking segment (also reached
+        // automatically once the progress bar hits 100% — see index.js).
+        { "yaw": 1.9, "pitch": 0.22, "rotation": 0, "target": "13-Networking1" }
       ],
       "infoHotspots": [
         {
@@ -217,8 +219,74 @@ var APP_DATA = {
           "video": "OYbPOhK0wPo"
         }
       ]
+    },
+    {
+      // 🆕 Networking segment, scene 1 of 2. Reached automatically when the
+      // main LITES tour progress bar hits 100% (see updateProgressBar in
+      // index.js), or manually via the 12-Nexus link hotspot above.
+      // Excluded from the progress-bar denominator (see excludeFromProgress)
+      // so finishing the tour itself — not the networking segment — is what
+      // drives the bar to 100%.
+      "id": "13-Networking1",
+      "name": "13. Networking",
+      "file": "13-Networking1.jpg",
+      "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
+      "excludeFromProgress": true,
+      "linkHotspots": [
+        { "yaw": -2.5, "pitch": 0.2, "rotation": 0, "target": "12-Nexus" },
+        { "yaw": 1.15, "pitch": 0.15, "rotation": 0, "target": "14-Networking2" }
+      ],
+      "infoHotspots": [
+        {
+          "boothId": "sustainability",
+          "title": "Sustainability",
+          "text": "Explore how sustainable practices — energy efficiency, waste reduction, and greener material flows — are being built into modern supply chains.",
+          "yaw": -1.8,
+          "pitch": 0.05
+        },
+        {
+          "boothId": "optimisation",
+          "title": "Optimisation",
+          "text": "See how data-driven optimisation improves routing, scheduling, and resource allocation across warehouse and logistics operations.",
+          "yaw": -0.3,
+          "pitch": 0.05
+        },
+        {
+          "boothId": "workplace-learning",
+          "title": "Workplace Learning",
+          "text": "Discover tools and programmes that upskill teams on the floor, from digital onboarding to hands-on training with new automation systems.",
+          "yaw": 1.35,
+          "pitch": 0.05
+        }
+      ]
+    },
+    {
+      // 🆕 Networking segment, scene 2 of 2.
+      "id": "14-Networking2",
+      "name": "14. Networking",
+      "file": "14-Networking.jpg",
+      "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
+      "excludeFromProgress": true,
+      "linkHotspots": [
+        { "yaw": -1.9, "pitch": 0.15, "rotation": 0, "target": "13-Networking1" }
+      ],
+      "infoHotspots": [
+        {
+          "boothId": "supply-chain-ai",
+          "title": "Supply Chain AI",
+          "text": "Learn how AI-driven forecasting and anomaly detection help teams anticipate disruptions and make faster, more confident supply chain decisions.",
+          "yaw": -1.0,
+          "pitch": 0.05
+        },
+        {
+          "boothId": "digitalisation",
+          "title": "Digitalisation",
+          "text": "See how paper-based processes are being replaced with connected digital workflows, giving teams real-time visibility from floor to office.",
+          "yaw": 0.8,
+          "pitch": 0.05
+        }
+      ]
     }
-    // ✅ Removed: "13-Networking1" and "14-Networking2" scenes (per request, for now)
   ],
   "name": "Project Title",
   "settings": {
