@@ -15,11 +15,53 @@
  */
 'use strict';
 
-(function() {
+(async function() {
   var Marzipano = window.Marzipano;
   var bowser = window.bowser;
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
+
+  // ==========================================================================
+  // SUPABASE INTEGRATION
+  // Requires the supabase-js CDN script to be included in index.html BEFORE
+  // this file, e.g.:
+  //   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  //   <script src="js/app.js"></script>
+  // ==========================================================================
+  var SUPABASE_URL = 'https://azgpwljluznkxceorzlm.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_r_twGsvckTKfA1O3XaPHEg_-FDfWeWi';
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Fetches station content from Supabase and merges it into the local
+  // `data.scenes` array (same object window.APP_DATA points to) BEFORE any
+  // Marzipano scenes/hotspots are built below. Falls back silently to the
+  // hardcoded data.js values for any station not found in the DB, or if the
+  // fetch fails entirely — so a Supabase outage doesn't take the whole tour
+  // down, it just serves stale content.
+  async function loadStationsFromSupabase() {
+    const { data: stations, error } = await supabase.from('stations').select('*');
+
+    if (error) {
+      console.error("Error fetching stations from Supabase, falling back to data.js:", error);
+      return;
+    }
+
+    stations.forEach(function(station) {
+      var scene = data.scenes.find(function(s) { return s.id === station.key; });
+
+      if (scene && scene.infoHotspots && scene.infoHotspots.length > 0) {
+        scene.infoHotspots[0].title = station.name;
+        scene.infoHotspots[0].text = station.text;
+        scene.infoHotspots[0].video = station.video;
+      }
+    });
+
+    console.log("Stations loaded dynamically from Supabase.");
+  }
+
+  // Wait for DB content before building anything — this is what guarantees
+  // guests never see a flash of the old hardcoded station text.
+  await loadStationsFromSupabase();
 
   // Track visited scenes to update the progress bar.
   // Scenes flagged excludeFromProgress (the two networking scenes) don't
