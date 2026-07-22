@@ -420,6 +420,25 @@
       sessionStorage.setItem("lites_registration", JSON.stringify(window.registrationData));
     } catch (e) { /* sessionStorage unavailable — non-fatal */ }
 
+  // ADD THIS SUPABASE INSERT BLOCK HERE:
+    if (typeof supabase !== 'undefined') {
+      supabase
+        .from('user_sessions')
+        .insert([{
+          user_name: window.registrationData.name,
+          company: window.registrationData.company,
+          designation: window.registrationData.designation,
+          section_name: 'Registration / Start'
+        }])
+        .then(function(response) {
+          if (response.error) {
+            console.error('Error saving user session:', response.error);
+          } else {
+            console.log('User session saved to Supabase!');
+          }
+        });
+    }
+
     const overlay = document.getElementById("welcome-overlay");
     if (overlay) {
         overlay.classList.add("fade-out");
