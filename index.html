@@ -366,7 +366,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script src="js/chatbot-integration.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/analytics.js"></script>
 <script src="index.js"></script>
 <script src="js/networking.js"></script>
 
@@ -404,40 +404,36 @@
   }
 
   /* Form Registration Handler */
-  function handleFormSubmit(event) {
-    event.preventDefault();
+  async function handleFormSubmit(event) {
+  event.preventDefault();
 
-    // Capture registration data so js/networking.js can build a
-    // recommendation from it when the visitor reaches 13-Networking1 /
-    // 14-Networking2. Kept on window (simple, no framework here) and
-    // mirrored to sessionStorage so it survives an accidental page reload.
-    window.registrationData = {
-      name: document.getElementById("guest-name").value.trim(),
-      company: document.getElementById("guest-org").value.trim(),
-      designation: document.getElementById("guest-designation").value.trim()
-    };
-    try {
-      sessionStorage.setItem("lites_registration", JSON.stringify(window.registrationData));
-    } catch (e) { /* sessionStorage unavailable — non-fatal */ }
+  var registrationData = {
+    name: document.getElementById("guest-name").value.trim(),
+    company: document.getElementById("guest-org").value.trim(),
+    designation: document.getElementById("guest-designation").value.trim()
+  };
 
-  // ADD THIS SUPABASE INSERT BLOCK HERE:
-    if (typeof supabase !== 'undefined') {
-      supabase
-        .from('user_sessions')
-        .insert([{
-          user_name: window.registrationData.name,
-          company: window.registrationData.company,
-          designation: window.registrationData.designation,
-          section_name: 'Registration / Start'
-        }])
-        .then(function(response) {
-          if (response.error) {
-            console.error('Error saving user session:', response.error);
-          } else {
-            console.log('User session saved to Supabase!');
-          }
-        });
-    }
+  window.registrationData = registrationData;
+  sessionStorage.setItem("lites_registration", JSON.stringify(registrationData));
+
+  var response = await window.analyticsSupabase
+    .from('user_sessions')
+    .insert([registrationData])
+    .select()
+    .single();
+
+  if (response.error) {
+    console.error('Error saving session:', response.error);
+  } else {
+    sessionStorage.setItem('lites_session_id', response.data.id);
+  }
+
+  const overlay = document.getElementById("welcome-overlay");
+  if (overlay) {
+    overlay.classList.add("fade-out");
+    setTimeout(() => overlay.style.display = "none", 600);
+  }
+}
 
     const overlay = document.getElementById("welcome-overlay");
     if (overlay) {
