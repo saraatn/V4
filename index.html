@@ -365,7 +365,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
-<script src="js/chatbot-integration.js"></script>
 <script src="js/analytics.js"></script>
 <script src="index.js"></script>
 <script src="js/networking.js"></script>
@@ -405,40 +404,33 @@
 
   /* Form Registration Handler */
   async function handleFormSubmit(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  var registrationData = {
-    name: document.getElementById("guest-name").value.trim(),
-    company: document.getElementById("guest-org").value.trim(),
-    designation: document.getElementById("guest-designation").value.trim()
-  };
+    var registrationData = {
+      name: document.getElementById("guest-name").value.trim(),
+      company: document.getElementById("guest-org").value.trim(),
+      designation: document.getElementById("guest-designation").value.trim()
+    };
 
-  window.registrationData = registrationData;
-  sessionStorage.setItem("lites_registration", JSON.stringify(registrationData));
+    window.registrationData = registrationData;
+    sessionStorage.setItem("lites_registration", JSON.stringify(registrationData));
 
-  var response = await window.analyticsSupabase
-    .from('user_sessions')
-    .insert([registrationData])
-    .select()
-    .single();
+    var response = await window.analyticsSupabase
+      .from('user_sessions')
+      .insert([registrationData])
+      .select()
+      .single();
 
-  if (response.error) {
-    console.error('Error saving session:', response.error);
-  } else {
-    sessionStorage.setItem('lites_session_id', response.data.id);
-  }
-
-  const overlay = document.getElementById("welcome-overlay");
-  if (overlay) {
-    overlay.classList.add("fade-out");
-    setTimeout(() => overlay.style.display = "none", 600);
-  }
-}
+    if (response.error) {
+      console.error('Error saving session:', response.error);
+    } else {
+      sessionStorage.setItem('lites_session_id', response.data.id);
+    }
 
     const overlay = document.getElementById("welcome-overlay");
     if (overlay) {
-        overlay.classList.add("fade-out");
-        setTimeout(() => overlay.style.display = "none", 600);
+      overlay.classList.add("fade-out");
+      setTimeout(() => overlay.style.display = "none", 600);
     }
   }
 
