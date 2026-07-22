@@ -19,7 +19,7 @@
 'use strict';
 
 (function() {
-  var SUPABASE_URL = 'https://azgpwljluznkxceorzlm.supabase.co';
+  var SUPABASE_URL = 'https://azgpwjluznxkceorzolm.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_r_twGsvckTKfA1O3XaPHEg_-FDfWeWi';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
