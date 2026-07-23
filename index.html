@@ -214,24 +214,8 @@
   .video-frame-container {
     position: relative; width: 100%; padding-bottom: 56.25%; height: 0; background: #000;
   }
-  .video-frame-container iframe,
-  .video-frame-container img,
-  .video-frame-container a {
+  .video-frame-container iframe {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
-  }
-  .video-frame-container img {
-    object-fit: contain;
-    background: #000;
-  }
-  .video-frame-container a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #39ff14;
-    font-family: sans-serif;
-    font-size: 18px;
-    text-decoration: none;
-    background: #0f172a;
   }
   .video-modal-text {
     padding: 16px 20px;
@@ -253,9 +237,15 @@
   }
 
   /* Feedback survey button — sits below the recommendation card in the
-     networking segment, opens the Microsoft Forms survey in a new tab. */
+     networking segment, opens the Microsoft Forms survey in a new tab.
+     pointer-events + z-index set explicitly since the networking-content
+     wrapper it lives in has pointer-events:none by default (only specific
+     children, like .recommendation-card, re-enable it). */
   .feedback-survey-btn {
     display: block;
+    position: relative;
+    z-index: 20;
+    pointer-events: auto;
     margin: 16px auto 0;
     width: fit-content;
     padding: 10px 20px;
@@ -272,6 +262,7 @@
     text-align: center;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
     transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
   }
   .feedback-survey-btn:hover {
     background: rgba(18, 178, 91, 0.9);
@@ -313,7 +304,9 @@
       <h3 id="video-modal-title">Station Feature Video</h3>
       <button class="video-close-btn" onclick="closeVideoModal()">&times;</button>
     </div>
-    <div class="video-frame-container" id="video-frame-container"></div>
+    <div class="video-frame-container">
+      <iframe id="modal-video-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
     <div class="video-modal-text" id="video-modal-text"></div>
   </div>
 </div>
@@ -397,7 +390,7 @@
 
     <a id="feedback-survey-btn"
        class="feedback-survey-btn"
-       href="https://forms.office.com/Pages/ResponsePage.aspx?id=0LCI9vB5pECGRDX83unQ88oPLeWProdLtLw8h7SXrY1UNEhSWTI4RkhFWjM5UVJNWEtFVjZZNzRRMi4u"
+       href="https://forms.office.com/YOUR_FORM_LINK_HERE"
        target="_blank"
        rel="noopener noreferrer">
       📝 Enjoyed the tour? Give us your feedback
@@ -484,52 +477,28 @@
 
   /* Video Feature Panel Visibility Engine Toggles.
      Called directly by the info hotspots created in index.js. */
-  function openVideoModal(title, videoId, text, mediaUrl, mediaType) {
+  function openVideoModal(title, videoId, text) {
     const modal = document.getElementById('video-modal-overlay');
-    const frameContainer = document.getElementById('video-frame-container');
+    const iframe = document.getElementById('modal-video-iframe');
     const titleEl = document.getElementById('video-modal-title');
     const textEl = document.getElementById('video-modal-text');
 
-    if (!modal || !frameContainer) return;
-
-    titleEl.innerText = title || "Station Feature";
-    if (textEl) textEl.innerHTML = text || "";
-
-    frameContainer.innerHTML = "";
-
-    if (videoId) {
-      var iframe = document.createElement('iframe');
-      iframe.id = 'modal-video-iframe';
+    if(modal && iframe) {
+      titleEl.innerText = title || "Station Feature Video";
+      if (textEl) textEl.innerHTML = text || "";
       iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      iframe.allow = "autoplay; encrypted-media";
-      iframe.allowFullscreen = true;
-      frameContainer.appendChild(iframe);
-    } else if (mediaType === 'image' && mediaUrl) {
-      var img = document.createElement('img');
-      img.src = mediaUrl;
-      frameContainer.appendChild(img);
-    } else if (mediaType === 'pdf' && mediaUrl) {
-      var iframePdf = document.createElement('iframe');
-      iframePdf.src = mediaUrl;
-      frameContainer.appendChild(iframePdf);
-    } else if (mediaUrl) {
-      var link = document.createElement('a');
-      link.href = mediaUrl;
-      link.target = '_blank';
-      link.rel = 'noopener';
-      link.innerText = 'Open file';
-      frameContainer.appendChild(link);
+      modal.classList.add('open');
     }
-
-    modal.classList.add('open');
   }
   window.openVideoModal = openVideoModal;
 
   function closeVideoModal() {
     const modal = document.getElementById('video-modal-overlay');
-    const frameContainer = document.getElementById('video-frame-container');
-    if (modal) modal.classList.remove('open');
-    if (frameContainer) frameContainer.innerHTML = "";
+    const iframe = document.getElementById('modal-video-iframe');
+    if(modal && iframe) {
+      modal.classList.remove('open');
+      iframe.src = ''; 
+    }
   }
   window.closeVideoModal = closeVideoModal;
 
