@@ -51,13 +51,15 @@
   stations.forEach(function(station) {
     if (!station.scene_id) return; // skip rows not yet assigned to a scene
     if (!bySceneId[station.scene_id]) bySceneId[station.scene_id] = [];
-    bySceneId[station.scene_id].push({
-      title: station.name,
-      text: station.text,
-      video: station.video,
-      yaw: station.yaw,
-      pitch: station.pitch,
-      boothId: station.booth_id
+     bySceneId[station.scene_id].push({
+        title: station.name,
+        text: station.text,
+        video: station.video,
+        yaw: station.yaw,
+        pitch: station.pitch,
+        boothId: station.booth_id,
+        mediaUrl: station.media_url,
+        mediaType: station.media_type
     });
   });
 
@@ -550,8 +552,8 @@
 
     iconWrapper.addEventListener('click', function(event) {
       event.stopPropagation();
-      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.text)) {
-        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text);
+      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.mediaUrl || hotspot.text)) {
+        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text, hotspot.mediaUrl, hotspot.mediaType);
       }
     });
 
