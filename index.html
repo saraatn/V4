@@ -235,6 +235,32 @@
     from, to { border-color: transparent }
     50% { border-color: rgba(255,255,255,0.75); }
   }
+
+  /* Feedback survey button — sits below the recommendation card in the
+     networking segment, opens the Microsoft Forms survey in a new tab. */
+  .feedback-survey-btn {
+    display: block;
+    margin: 16px auto 0;
+    width: fit-content;
+    padding: 10px 20px;
+    background: rgba(28, 30, 39, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .feedback-survey-btn:hover {
+    background: rgba(18, 178, 91, 0.9);
+    transform: translateY(-2px);
+  }
 </style>
 </head>
 <body class="multiple-scenes">
@@ -354,6 +380,14 @@
       <p id="recommended-booth-reason" class="recommendation-booth-reason"></p>
       <button id="go-here-btn" class="go-here-btn" type="button">Take Me There</button>
     </div>
+
+    <a id="feedback-survey-btn"
+       class="feedback-survey-btn"
+       href="https://forms.office.com/YOUR_FORM_LINK_HERE"
+       target="_blank"
+       rel="noopener noreferrer">
+      📝 Enjoyed the tour? Give us your feedback
+    </a>
   </div>
 
   <div id="booth-toast" class="booth-toast"></div>
