@@ -390,7 +390,7 @@
 
     <a id="feedback-survey-btn"
        class="feedback-survey-btn"
-       href="https://forms.office.com/Pages/ResponsePage.aspx?id=0LCI9vB5pECGRDX83unQ88oPLeWProdLtLw8h7SXrY1UNEhSWTI4RkhFWjM5UVJNWEtFVjZZNzRRMi4u"
+       href="https://forms.office.com/YOUR_FORM_LINK_HERE"
        target="_blank"
        rel="noopener noreferrer">
       📝 Enjoyed the tour? Give us your feedback
@@ -476,8 +476,10 @@
   }
 
   /* Video Feature Panel Visibility Engine Toggles.
-     Called directly by the info hotspots created in index.js. */
-  function openVideoModal(title, videoId, text) {
+     Called directly by the info hotspots created in index.js.
+     Renders a PDF (via pdfUrl) if present, otherwise falls back to the
+     YouTube embed (via videoId) as before. */
+  function openVideoModal(title, videoId, text, mediaUrl, mediaType) {
     const modal = document.getElementById('video-modal-overlay');
     const iframe = document.getElementById('modal-video-iframe');
     const titleEl = document.getElementById('video-modal-title');
@@ -486,7 +488,18 @@
     if(modal && iframe) {
       titleEl.innerText = title || "Station Feature Video";
       if (textEl) textEl.innerHTML = text || "";
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+      if (mediaType === 'pdf' && mediaUrl) {
+        iframe.src = mediaUrl;
+      } else if (mediaType === 'video' && mediaUrl) {
+        iframe.src = `https://www.youtube.com/embed/${mediaUrl}?autoplay=1`;
+      } else if (videoId) {
+        // fallback for any hardcoded data.js stations still using the old video field
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      } else {
+        iframe.src = '';
+      }
+
       modal.classList.add('open');
     }
   }
