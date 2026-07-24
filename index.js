@@ -52,11 +52,15 @@
       if (scene && scene.infoHotspots && scene.infoHotspots.length > 0) {
         scene.infoHotspots[0].title = station.name;
         scene.infoHotspots[0].text = station.text;
-        // media_type currently only supports 'video' (a YouTube ID stored
-        // in media_url). Other types can branch here later without another
-        // schema change.
+        // media_type determines which field on the hotspot gets populated —
+        // openVideoModal() in index.html reads .video for YouTube embeds
+        // and .pdf for PDF embeds, and renders whichever is present.
+        scene.infoHotspots[0].video = null;
+        scene.infoHotspots[0].pdf = null;
         if (station.media_type === 'video') {
           scene.infoHotspots[0].video = station.media_url;
+        } else if (station.media_type === 'pdf') {
+          scene.infoHotspots[0].pdf = station.media_url;
         }
       }
     });
