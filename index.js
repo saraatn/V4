@@ -39,34 +39,40 @@
   // fetch fails entirely — so a Supabase outage doesn't take the whole tour
   // down, it just serves stale content.
   async function loadStationsFromSupabase() {
-    const { data: stations, error } = await supabase.from('stations').select('*');
+  const { data: stations, error } = await supabase.from('stations').select('*');
 
-    if (error) {
-      console.error("Error fetching stations from Supabase, falling back to data.js:", error);
-      return;
-    }
-
-    stations.forEach(function(station) {
-      var scene = data.scenes.find(function(s) { return s.id === station.key; });
-
-      if (scene && scene.infoHotspots && scene.infoHotspots.length > 0) {
-        scene.infoHotspots[0].title = station.name;
-        scene.infoHotspots[0].text = station.text;
-        // media_type determines which field on the hotspot gets populated —
-        // openVideoModal() in index.html reads .video for YouTube embeds
-        // and .pdf for PDF embeds, and renders whichever is present.
-        scene.infoHotspots[0].video = null;
-        scene.infoHotspots[0].pdf = null;
-        if (station.media_type === 'video') {
-          scene.infoHotspots[0].video = station.media_url;
-        } else if (station.media_type === 'pdf') {
-          scene.infoHotspots[0].pdf = station.media_url;
-        }
-      }
-    });
-
-    console.log("Stations loaded dynamically from Supabase.");
+  if (error) {
+    console.error("Error fetching stations from Supabase, falling back to data.js:", error);
+    return;
   }
+
+  // Group Supabase rows by scene_id
+  var bySceneId = {};
+  stations.forEach(function(station) {
+    if (!station.scene_id) return; // skip rows not yet assigned to a scene
+    if (!bySceneId[station.scene_id]) bySceneId[station.scene_id] = [];
+     bySceneId[station.scene_id].push({
+        title: station.name,
+        text: station.text,
+        video: station.video,
+        yaw: station.yaw,
+        pitch: station.pitch,
+        boothId: station.booth_id,
+        mediaUrl: station.media_url,
+        mediaType: station.media_type
+    });
+  });
+
+  // Replace each matching scene's infoHotspots with the Supabase rows
+  Object.keys(bySceneId).forEach(function(sceneId) {
+    var scene = data.scenes.find(function(s) { return s.id === sceneId; });
+    if (scene) {
+      scene.infoHotspots = bySceneId[sceneId];
+    }
+  });
+
+  console.log("Stations loaded dynamically from Supabase.");
+}
 
   // Wait for DB content before building anything — this is what guarantees
   // guests never see a flash of the old hardcoded station text.
@@ -546,8 +552,8 @@
 
     iconWrapper.addEventListener('click', function(event) {
       event.stopPropagation();
-      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.text || hotspot.pdf)) {
-        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text, hotspot.pdf);
+      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.mediaUrl || hotspot.text)) {
+        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text, hotspot.mediaUrl, hotspot.mediaType);
       }
     });
 
