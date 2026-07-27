@@ -429,6 +429,9 @@
           window.onTourCompleted(scene.data.id);
         } else if (scene.data.id === '13-Networking1' && tourCompleted && typeof window.showNetworkingRecommendation === 'function') {
           window.showNetworkingRecommendation(scene.data.id);
+          if (typeof window.resetNetworkingActionButtons === 'function') {
+            window.resetNetworkingActionButtons();
+          }
         } else if (scene.data.id === '14-Networking2' && typeof window.closeNetworkingOverlay === 'function') {
           window.closeNetworkingOverlay();
         }
