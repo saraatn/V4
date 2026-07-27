@@ -246,8 +246,23 @@
     right: 24px;
     z-index: 1600;
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     gap: 12px;
     pointer-events: auto;
+  }
+
+  /* Finish Tour starts hidden — only revealed once the feedback icon is
+     clicked, per the intended flow: recommendation card first, then the
+     feedback icon appears, and only after that click does Finish Tour
+     appear stacked below it. */
+  .networking-icon-btn.action-hidden {
+    opacity: 0;
+    transform: scale(0.7);
+    pointer-events: none;
+  }
+  .networking-icon-btn {
+    transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.3s ease;
   }
 
   .networking-icon-btn {
@@ -304,10 +319,12 @@
   }
 
   /* Hover tooltips for nav arrows — reads the existing data-tooltip
-     attribute already on #nav-arrow-left-tour / -right-tour / -networking */
-  .nav-arrow {
-    position: relative;
-  }
+     attribute already on #nav-arrow-left-tour / -right-tour / -networking.
+     No position rule needed here: style.css already sets .nav-arrow to
+     position:fixed, which establishes a positioning context for this
+     ::after tooltip on its own — redeclaring position here previously
+     silently overwrote that fixed positioning with "relative", which is
+     what was breaking the left/right symmetry. */
   .nav-arrow[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -518,7 +535,7 @@
        data-tooltip="Give feedback">
       📝
     </a>
-    <button id="finish-tour-btn" class="networking-icon-btn" type="button" aria-label="Finish tour" data-tooltip="Finish tour">
+    <button id="finish-tour-btn" class="networking-icon-btn action-hidden" type="button" aria-label="Finish tour" data-tooltip="Finish tour">
       🎉
     </button>
   </div>
@@ -711,18 +728,31 @@
   document.addEventListener("DOMContentLoaded", function() {
     var finishBtn = document.getElementById('finish-tour-btn');
     var feedbackBtn = document.getElementById('feedback-survey-btn');
-    if (finishBtn) {
-      finishBtn.addEventListener('click', function() {
-        // Open the feedback survey first, in a new tab, then show the
-        // thank-you page in this one — so the survey is always surfaced
-        // as part of finishing, rather than an easily-skipped separate button.
-        if (feedbackBtn && feedbackBtn.href) {
-          window.open(feedbackBtn.href, '_blank', 'noopener,noreferrer');
-        }
-        showThankYouOverlay();
+
+    if (feedbackBtn && finishBtn) {
+      // The <a> tag's own href+target handles opening the survey in a new
+      // tab natively — this listener just reveals Finish Tour afterward,
+      // it doesn't need to (and shouldn't) preventDefault.
+      feedbackBtn.addEventListener('click', function() {
+        finishBtn.classList.remove('action-hidden');
       });
     }
+
+    if (finishBtn) {
+      finishBtn.addEventListener('click', showThankYouOverlay);
+    }
   });
+
+  // Resets Finish Tour back to hidden — called from index.js each time the
+  // visitor freshly enters 13-Networking1, so the reveal sequence starts
+  // over on every visit rather than staying permanently unlocked.
+  function resetNetworkingActionButtons() {
+    var finishBtn = document.getElementById('finish-tour-btn');
+    if (finishBtn) {
+      finishBtn.classList.add('action-hidden');
+    }
+  }
+  window.resetNetworkingActionButtons = resetNetworkingActionButtons;
 
   document.addEventListener("DOMContentLoaded", function() {
       initiateTypewriter("Welcome to LITES");
