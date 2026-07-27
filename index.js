@@ -68,9 +68,34 @@
     console.log("Stations loaded dynamically from Supabase.");
   }
 
+  // Fetches station title overrides from the "Title" table and merges them
+  // into `data.scenes` (same object window.APP_DATA points to) BEFORE any
+  // scenes are built — same timing/fallback principle as
+  // loadStationsFromSupabase() above. Only scenes with a matching scene_id
+  // row get overridden; every other scene (including transition scenes)
+  // keeps whatever name is already in data.js.
+  async function loadTitlesFromSupabase() {
+    const { data: titles, error } = await supabase.from('Title').select('*');
+
+    if (error) {
+      console.error("Error fetching titles from Supabase, falling back to data.js:", error);
+      return;
+    }
+
+    titles.forEach(function(row) {
+      var scene = data.scenes.find(function(s) { return s.id === row.scene_id; });
+      if (scene) {
+        scene.name = row.station_title;
+      }
+    });
+
+    console.log("Titles loaded dynamically from Supabase.");
+  }
+
   // Wait for DB content before building anything — this is what guarantees
   // guests never see a flash of the old hardcoded station text.
   await loadStationsFromSupabase();
+  await loadTitlesFromSupabase();
 
   // Track visited scenes to update the progress bar.
   // Scenes flagged excludeFromProgress (the two networking scenes) don't
