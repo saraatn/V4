@@ -268,6 +268,106 @@
     background: rgba(18, 178, 91, 0.9);
     transform: translateY(-2px);
   }
+
+  /* Hover tooltips for nav arrows — reads the existing data-tooltip
+     attribute already on #nav-arrow-left-tour / -right-tour / -networking */
+  .nav-arrow {
+    position: relative;
+  }
+  .nav-arrow[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: rgba(15, 23, 42, 0.95);
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 30;
+  }
+  .nav-arrow[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  /* Thank-you / end-of-tour overlay */
+  #thankyou-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #0f172a url('img/RP_COI_background.png') no-repeat center center;
+    background-size: cover;
+    z-index: 9998;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  #thankyou-overlay.open {
+    display: flex;
+  }
+  #thankyou-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 1;
+  }
+  .thankyou-card {
+    position: relative;
+    z-index: 2;
+    background: rgba(28, 30, 39, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 40px 45px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  }
+  .thankyou-card h1 {
+    margin: 0 0 12px;
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .thankyou-card p {
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 8px;
+  }
+  .thankyou-next-date {
+    color: #39ff14;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 16px 0 24px;
+  }
+  .thankyou-close-btn {
+    width: 100%;
+    padding: 14px;
+    background: #12b25b;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .thankyou-close-btn:hover {
+    background: #0f984d;
+  }
 </style>
 </head>
 <body class="multiple-scenes">
@@ -395,9 +495,23 @@
        rel="noopener noreferrer">
       📝 Enjoyed the tour? Give us your feedback
     </a>
+
+    <button id="finish-tour-btn" class="feedback-survey-btn" type="button" style="margin-top:10px;">
+      🎉 Finish Tour
+    </button>
   </div>
 
   <div id="booth-toast" class="booth-toast"></div>
+</div>
+
+<div id="thankyou-overlay">
+  <div class="thankyou-card">
+    <h1>Thank You! 🎉</h1>
+    <p>We hope you enjoyed exploring the LITES Supply Chain Lab experience.</p>
+    <p>We'd love to see you again in person — LITES happens every month!</p>
+    <div class="thankyou-next-date" id="next-lites-date"></div>
+    <button class="thankyou-close-btn" type="button" onclick="closeThankYouOverlay()">Close</button>
+  </div>
 </div>
 
 <script src="vendor/screenfull.min.js"></script>
@@ -514,6 +628,64 @@
     }
   }
   window.closeVideoModal = closeVideoModal;
+
+  /* Ending / Thank You page — shows the next LITES date (third Wednesday
+     of the month, rolling to next month if this month's has already
+     passed) and is triggered by the "Finish Tour" button in the
+     networking segment. */
+  function getThirdWednesday(year, month) {
+    // month is 0-indexed (0 = January)
+    var date = new Date(year, month, 1);
+    var wednesdayCount = 0;
+    while (true) {
+      if (date.getDay() === 3) { // 0=Sun ... 3=Wed
+        wednesdayCount++;
+        if (wednesdayCount === 3) return date;
+      }
+      date.setDate(date.getDate() + 1);
+    }
+  }
+
+  function getNextLitesDate() {
+    var now = new Date();
+    var candidate = getThirdWednesday(now.getFullYear(), now.getMonth());
+    if (candidate < now) {
+      // this month's third Wednesday has passed — roll to next month
+      candidate = getThirdWednesday(now.getFullYear(), now.getMonth() + 1);
+    }
+    return candidate;
+  }
+
+  function formatLitesDate(date) {
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-SG', options);
+  }
+
+  function showThankYouOverlay() {
+    var overlay = document.getElementById('thankyou-overlay');
+    var dateEl = document.getElementById('next-lites-date');
+    if (dateEl) {
+      dateEl.textContent = 'Next LITES: ' + formatLitesDate(getNextLitesDate());
+    }
+    if (overlay) {
+      overlay.classList.add('open');
+    }
+  }
+
+  function closeThankYouOverlay() {
+    var overlay = document.getElementById('thankyou-overlay');
+    if (overlay) {
+      overlay.classList.remove('open');
+    }
+  }
+  window.closeThankYouOverlay = closeThankYouOverlay;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var finishBtn = document.getElementById('finish-tour-btn');
+    if (finishBtn) {
+      finishBtn.addEventListener('click', showThankYouOverlay);
+    }
+  });
 
   document.addEventListener("DOMContentLoaded", function() {
       initiateTypewriter("Welcome to LITES");
