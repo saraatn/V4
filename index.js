@@ -432,8 +432,12 @@
           if (typeof window.resetNetworkingActionButtons === 'function') {
             window.resetNetworkingActionButtons();
           }
-        } else if (scene.data.id === '14-Networking2' && typeof window.closeNetworkingOverlay === 'function') {
-          window.closeNetworkingOverlay();
+        } else if (scene.data.id === '14-Networking2' && typeof window.dismissRecommendationCard === 'function') {
+          // Only hides the recommendation card itself — the networking
+          // overlay (and everything else living inside it, like the
+          // feedback/finish buttons) stays open for the whole networking
+          // segment, not just 13-Networking1.
+          window.dismissRecommendationCard();
         }
       } else if (typeof window.closeNetworkingOverlay === 'function') {
         // Leaving the networking stations closes the recommendation card
