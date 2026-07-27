@@ -252,6 +252,17 @@
     });
   }
 
+  // Exposed so index.js can dismiss just the recommendation card (e.g. when
+// moving from 13-Networking1 to 14-Networking2) without closing the whole
+// networking overlay.
+function dismissRecommendationCard() {
+  if (recommendationCardEl) {
+    recommendationCardEl.classList.add('dismissed');
+  }
+  clearBackgroundTint();
+}
+window.dismissRecommendationCard = dismissRecommendationCard;
+  
   // "Take Me There" jumps the main tour straight to the recommended
   // station using index.js's exposed window.switchScene().
   if (goHereBtn) {
