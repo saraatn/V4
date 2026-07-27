@@ -510,7 +510,6 @@
     <p>We hope you enjoyed exploring the LITES Supply Chain Lab experience.</p>
     <p>We'd love to see you again in person — LITES happens every month!</p>
     <div class="thankyou-next-date" id="next-lites-date"></div>
-    <button class="thankyou-close-btn" type="button" onclick="closeThankYouOverlay()">Close</button>
   </div>
 </div>
 
@@ -672,18 +671,19 @@
     }
   }
 
-  function closeThankYouOverlay() {
-    var overlay = document.getElementById('thankyou-overlay');
-    if (overlay) {
-      overlay.classList.remove('open');
-    }
-  }
-  window.closeThankYouOverlay = closeThankYouOverlay;
-
   document.addEventListener("DOMContentLoaded", function() {
     var finishBtn = document.getElementById('finish-tour-btn');
+    var feedbackBtn = document.getElementById('feedback-survey-btn');
     if (finishBtn) {
-      finishBtn.addEventListener('click', showThankYouOverlay);
+      finishBtn.addEventListener('click', function() {
+        // Open the feedback survey first, in a new tab, then show the
+        // thank-you page in this one — so the survey is always surfaced
+        // as part of finishing, rather than an easily-skipped separate button.
+        if (feedbackBtn && feedbackBtn.href) {
+          window.open(feedbackBtn.href, '_blank', 'noopener,noreferrer');
+        }
+        showThankYouOverlay();
+      });
     }
   });
 
