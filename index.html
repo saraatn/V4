@@ -242,7 +242,7 @@
      arrows do (opt back into pointer-events, hidden otherwise). */
   .networking-top-actions {
     position: fixed;
-    top: 24px;
+    top: 40px; /* clears #progress-bar-container (6px tall) with visible breathing room */
     right: 24px;
     z-index: 1600;
     display: flex;
@@ -263,6 +263,22 @@
   }
   .networking-icon-btn {
     transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.3s ease;
+  }
+
+  /* Pulsing ring, reusing style.css's existing @keyframes hotspot-pulse.
+     Toggled on/off via JS: feedback button pulses until clicked, then
+     Finish Tour picks up the pulse once it's revealed. */
+  .networking-icon-btn.pulse-active::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 2px solid rgba(57, 255, 20, 0.75);
+    border-radius: 50%;
+    animation: hotspot-pulse 2s infinite ease-out;
+    pointer-events: none;
   }
 
   .networking-icon-btn {
@@ -527,7 +543,7 @@
 
   <div class="networking-top-actions">
     <a id="feedback-survey-btn"
-       class="networking-icon-btn"
+       class="networking-icon-btn pulse-active"
        href="https://forms.office.com/YOUR_FORM_LINK_HERE"
        target="_blank"
        rel="noopener noreferrer"
@@ -559,6 +575,7 @@
 </div>
 
 <div id="thankyou-overlay">
+  <button id="nav-arrow-left-thankyou" class="nav-arrow nav-arrow-left" type="button" aria-label="Back to networking" data-tooltip="Back to networking">&#8592;</button>
   <div class="thankyou-card">
     <h1>Thank You! 🎉</h1>
     <p>We hope you enjoyed exploring the LITES Supply Chain Lab experience.</p>
@@ -726,6 +743,19 @@
   }
 
   document.addEventListener("DOMContentLoaded", function() {
+    var backBtn = document.getElementById('nav-arrow-left-thankyou');
+    if (backBtn) {
+      backBtn.addEventListener('click', function() {
+        // The networking scene is still rendered underneath this overlay
+        // the whole time — going "back" just means closing this overlay,
+        // no scene switch needed.
+        var overlay = document.getElementById('thankyou-overlay');
+        if (overlay) overlay.classList.remove('open');
+      });
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
     var finishBtn = document.getElementById('finish-tour-btn');
     var feedbackBtn = document.getElementById('feedback-survey-btn');
 
@@ -734,22 +764,33 @@
       // tab natively — this listener just reveals Finish Tour afterward,
       // it doesn't need to (and shouldn't) preventDefault.
       feedbackBtn.addEventListener('click', function() {
+        feedbackBtn.classList.remove('pulse-active');
         finishBtn.classList.remove('action-hidden');
+        finishBtn.classList.add('pulse-active');
       });
     }
 
     if (finishBtn) {
-      finishBtn.addEventListener('click', showThankYouOverlay);
+      finishBtn.addEventListener('click', function() {
+        finishBtn.classList.remove('pulse-active');
+        showThankYouOverlay();
+      });
     }
   });
 
-  // Resets Finish Tour back to hidden — called from index.js each time the
-  // visitor freshly enters 13-Networking1, so the reveal sequence starts
-  // over on every visit rather than staying permanently unlocked.
+  // Resets both the reveal sequence AND the pulse back to the feedback
+  // button — called from index.js each time the visitor freshly enters
+  // 13-Networking1, so the whole flow (including which icon is pulsing)
+  // starts over on every visit rather than staying permanently unlocked.
   function resetNetworkingActionButtons() {
     var finishBtn = document.getElementById('finish-tour-btn');
+    var feedbackBtn = document.getElementById('feedback-survey-btn');
     if (finishBtn) {
       finishBtn.classList.add('action-hidden');
+      finishBtn.classList.remove('pulse-active');
+    }
+    if (feedbackBtn) {
+      feedbackBtn.classList.add('pulse-active');
     }
   }
   window.resetNetworkingActionButtons = resetNetworkingActionButtons;
