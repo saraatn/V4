@@ -39,40 +39,34 @@
   // fetch fails entirely — so a Supabase outage doesn't take the whole tour
   // down, it just serves stale content.
   async function loadStationsFromSupabase() {
-  const { data: stations, error } = await supabase.from('stations').select('*');
+    const { data: stations, error } = await supabase.from('stations').select('*');
 
-  if (error) {
-    console.error("Error fetching stations from Supabase, falling back to data.js:", error);
-    return;
-  }
-
-  // Group Supabase rows by scene_id
-  var bySceneId = {};
-  stations.forEach(function(station) {
-    if (!station.scene_id) return; // skip rows not yet assigned to a scene
-    if (!bySceneId[station.scene_id]) bySceneId[station.scene_id] = [];
-     bySceneId[station.scene_id].push({
-        title: station.name,
-        text: station.text,
-        video: station.video,
-        yaw: station.yaw,
-        pitch: station.pitch,
-        boothId: station.booth_id,
-        mediaUrl: station.media_url,
-        mediaType: station.media_type
-    });
-  });
-
-  // Replace each matching scene's infoHotspots with the Supabase rows
-  Object.keys(bySceneId).forEach(function(sceneId) {
-    var scene = data.scenes.find(function(s) { return s.id === sceneId; });
-    if (scene) {
-      scene.infoHotspots = bySceneId[sceneId];
+    if (error) {
+      console.error("Error fetching stations from Supabase, falling back to data.js:", error);
+      return;
     }
-  });
 
-  console.log("Stations loaded dynamically from Supabase.");
-}
+    stations.forEach(function(station) {
+      var scene = data.scenes.find(function(s) { return s.id === station.key; });
+
+      if (scene && scene.infoHotspots && scene.infoHotspots.length > 0) {
+        scene.infoHotspots[0].title = station.name;
+        scene.infoHotspots[0].text = station.text;
+        // media_type determines which field on the hotspot gets populated —
+        // openVideoModal() in index.html reads .video for YouTube embeds
+        // and .pdf for PDF embeds, and renders whichever is present.
+        scene.infoHotspots[0].video = null;
+        scene.infoHotspots[0].pdf = null;
+        if (station.media_type === 'video') {
+          scene.infoHotspots[0].video = station.media_url;
+        } else if (station.media_type === 'pdf') {
+          scene.infoHotspots[0].pdf = station.media_url;
+        }
+      }
+    });
+
+    console.log("Stations loaded dynamically from Supabase.");
+  }
 
   // Wait for DB content before building anything — this is what guarantees
   // guests never see a flash of the old hardcoded station text.
@@ -422,15 +416,21 @@
       }
 
       // Networking recommendation hook: fires when the visitor steps into
-      // either networking station, but ONLY once the main tour is fully
-      // complete — this is what stops the recommendation card from ever
-      // appearing early / at the start of the tour.
+      // 13-Networking1 specifically (the entry scene of the networking
+      // segment), but ONLY once the main tour is fully complete — this is
+      // what stops the recommendation card from ever appearing early / at
+      // the start of the tour. It intentionally does NOT re-show on
+      // 14-Networking2, since the card is meant as a one-time "here's
+      // where to head first" prompt rather than something that follows
+      // the visitor around every networking scene.
       if (isNetworkingScene) {
         if (pendingCompletionAnnouncement && typeof window.onTourCompleted === 'function') {
           pendingCompletionAnnouncement = false;
           window.onTourCompleted(scene.data.id);
-        } else if (tourCompleted && typeof window.showNetworkingRecommendation === 'function') {
+        } else if (scene.data.id === '13-Networking1' && tourCompleted && typeof window.showNetworkingRecommendation === 'function') {
           window.showNetworkingRecommendation(scene.data.id);
+        } else if (scene.data.id === '14-Networking2' && typeof window.closeNetworkingOverlay === 'function') {
+          window.closeNetworkingOverlay();
         }
       } else if (typeof window.closeNetworkingOverlay === 'function') {
         // Leaving the networking stations closes the recommendation card
@@ -552,8 +552,8 @@
 
     iconWrapper.addEventListener('click', function(event) {
       event.stopPropagation();
-      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.mediaUrl || hotspot.text)) {
-        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text, hotspot.mediaUrl, hotspot.mediaType);
+      if (typeof window.openVideoModal === 'function' && (hotspot.video || hotspot.text || hotspot.pdf)) {
+        window.openVideoModal(hotspot.title, hotspot.video, hotspot.text, hotspot.pdf);
       }
     });
 
