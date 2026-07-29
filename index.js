@@ -113,7 +113,7 @@
     }
 
     titles.forEach(function(row) {
-      var scene = data.scenes.find(function(s) { return s.key === row.scene_id; });
+      var scene = data.scenes.find(function(s) { return s.id === row.scene_id; });
       if (scene) {
         scene.name = row.station_title;
       }
