@@ -655,9 +655,20 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script src="js/analytics.js"></script>
+
+<!-- Chatbase embed script — this is your real snippet, moved here from
+     where it was accidentally nested inside the other inline <script>
+     block further down. It needs to be its own separate script tag, and
+     it needs to load BEFORE chatbot-integration.js so window.chatbase
+     already exists when that file's onStationChanged hook runs. -->
+<script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+
+<script src="js/chatbot-integration.js"></script>
 <script src="index.js"></script>
 <script src="js/networking.js"></script>
-  
+
 <script type="text/javascript">
   /* Typewriter Implementation */
   function initiateTypewriter(text) {
