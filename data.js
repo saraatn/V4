@@ -2,6 +2,7 @@ var APP_DATA = {
   "scenes": [
     {
       "id": "1-Seats",
+      "key": "presentation",
       "name": "1. Seats",
       "file": "1-Seats.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
@@ -35,6 +36,7 @@ var APP_DATA = {
     },
     {
       "id": "3-AppSheet",
+      "key": "AppSheet",
       "name": "3. AppSheet",
       "file": "3-AppSheet.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
@@ -67,6 +69,7 @@ var APP_DATA = {
     },
     {
       "id": "5-LEAN",
+      "key": "lean",
       "name": "5. LEAN",
       "file": "5-LEAN.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
@@ -88,6 +91,7 @@ var APP_DATA = {
     },
     {
       "id": "6-4-Way-Shuttle",
+      "key": "4-way-shuttle",
       "name": "6. 4-Way Shuttle",
       "file": "6-4-Way Shuttle.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
@@ -109,6 +113,7 @@ var APP_DATA = {
     },
     {
       "id": "7-Linde",
+      "key": "linde-reach-truck",
       "name": "7. Linde",
       "file": "7-Linde.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
@@ -141,6 +146,7 @@ var APP_DATA = {
     },
     {
       "id": "9-LiBiao",
+      "key": "libiao-sorting",
       "name": "9. LiBiao",
       "file": "9-LiBiao.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.2446250333351525 },
@@ -180,6 +186,7 @@ var APP_DATA = {
     },
     {
       "id": "11-IoT",
+      "key": "iot",
       "name": "11. IoT",
       "file": "11-IoT.jpg",
       // Initial view now faces the IoT infoHotspot directly (same yaw/pitch as that hotspot below)
@@ -201,6 +208,7 @@ var APP_DATA = {
     },
     {
       "id": "12-Nexus",
+      "key": "nexus",
       "name": "12. Nexus",
       "file": "12-Nexus.jpg",
       "initialViewParameters": { "yaw": 0, "pitch": 0, "fov": 1.4469324312346197 },
