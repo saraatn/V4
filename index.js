@@ -62,7 +62,7 @@
   // renumbered/reordered). Networking-booth rows aren't top-level scenes —
   // they're nested infoHotspots (matched by boothId) inside 13-Networking1 /
   // 14-Networking2 — so those are matched separately below.
-  async function loadStationsFromSupabase() {
+ async function loadStationsFromSupabase() {
   const { data: stations, error } = await supabase.from('stations').select('*');
 
   if (error) {
@@ -116,20 +116,6 @@
 
   console.log("Stations loaded dynamically from Supabase.");
 }
-
-      // Networking booths: matched by boothId nested in any scene's
-      // infoHotspots (currently 13-Networking1 / 14-Networking2).
-      data.scenes.forEach(function(s) {
-        (s.infoHotspots || []).forEach(function(hotspot) {
-          if (hotspot.boothId === station.key) {
-            applyStationContent(hotspot, station);
-          }
-        });
-      });
-    });
-
-    console.log("Stations loaded dynamically from Supabase.");
-  }
 
   // Fetches station title overrides from the "Title" table and merges them
   // into `data.scenes` (same object window.APP_DATA points to) BEFORE any
