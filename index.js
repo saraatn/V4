@@ -62,35 +62,60 @@
   // renumbered/reordered). Networking-booth rows aren't top-level scenes —
   // they're nested infoHotspots (matched by boothId) inside 13-Networking1 /
   // 14-Networking2 — so those are matched separately below.
-  async function loadStationsFromSupabase() {
-    const { data: stations, error } = await supabase.from('stations').select('*');
+ async function loadStationsFromSupabase() {
+  const { data: stations, error } = await supabase.from('stations').select('*');
 
-    if (error) {
-      console.error("Error fetching stations from Supabase, falling back to data.js:", error);
+  if (error) {
+    console.error("Error fetching stations, falling back to data.js:", error);
+    return; // keeps hardcoded hotspots on failure
+  }
+  // Safety net: if the fetch comes back empty (e.g. RLS blocked it), do NOT
+  // wipe every hotspot — fall back to data.js instead.
+  if (!stations || stations.length === 0) {
+    console.warn("No station rows returned; keeping data.js hotspots.");
+    return;
+  }
+
+  // Step 1: strip every DB-managed station hotspot. These are the info
+  // hotspots WITHOUT a boothId. Booth hotspots (networking scenes) are
+  // kept — they stay defined in data.js and are content-only. Stripping
+  // first is what makes DELETE work: a removed row is simply never re-added.
+  data.scenes.forEach(function(scene) {
+    scene.infoHotspots = (scene.infoHotspots || []).filter(function(h) {
+      return !!h.boothId;
+    });
+  });
+
+  // Step 2: (re)build station hotspots entirely from Supabase. A row becomes
+  // a hotspot only if it says which scene and where (scene_id + yaw + pitch).
+  stations.forEach(function(station) {
+    if (station.active === false) return; // optional soft-delete column
+    if (station.scene_id == null || station.yaw == null || station.pitch == null) return;
+
+    var scene = data.scenes.find(function(s) { return s.id === station.scene_id; });
+    if (!scene) {
+      console.warn("Row references unknown scene_id:", station.scene_id);
       return;
     }
 
-    stations.forEach(function(station) {
-      // Main-tour scenes: matched by the stable `key` field.
-      var scene = data.scenes.find(function(s) { return s.key === station.key; });
-      if (scene && scene.infoHotspots && scene.infoHotspots.length > 0) {
-        applyStationContent(scene.infoHotspots[0], station);
-        return;
-      }
+    var hotspot = { yaw: Number(station.yaw), pitch: Number(station.pitch) };
+    applyStationContent(hotspot, station);
+    scene.infoHotspots.push(hotspot);
+  });
 
-      // Networking booths: matched by boothId nested in any scene's
-      // infoHotspots (currently 13-Networking1 / 14-Networking2).
-      data.scenes.forEach(function(s) {
-        (s.infoHotspots || []).forEach(function(hotspot) {
-          if (hotspot.boothId === station.key) {
-            applyStationContent(hotspot, station);
-          }
-        });
+  // Step 3: booth content (networking scenes) — unchanged, matched by boothId.
+  stations.forEach(function(station) {
+    data.scenes.forEach(function(scene) {
+      (scene.infoHotspots || []).forEach(function(hotspot) {
+        if (hotspot.boothId && hotspot.boothId === station.key) {
+          applyStationContent(hotspot, station);
+        }
       });
     });
+  });
 
-    console.log("Stations loaded dynamically from Supabase.");
-  }
+  console.log("Stations loaded dynamically from Supabase.");
+}
 
   // Fetches station title overrides from the "Title" table and merges them
   // into `data.scenes` (same object window.APP_DATA points to) BEFORE any
