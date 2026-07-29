@@ -205,6 +205,37 @@
     pointer-events: auto;
   }
 
+  /* Fixed-height flex layout (unlike the 16:9 padding-bottom trick used
+     for the video modal) — this keeps the header/close button always
+     pinned and visible regardless of how tall the form content is, since
+     the iframe itself scrolls internally instead of growing the card. */
+  .feedback-modal-card {
+    background: #1e293b;
+    width: 90%;
+    max-width: 480px;
+    height: 65vh;
+    max-height: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feedback-frame-container {
+    position: relative;
+    flex: 1;
+    min-height: 0; /* allows flex child to shrink below content size instead of overflowing the card */
+    background: #fff;
+  }
+  .feedback-frame-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+
   .video-modal-card {
     background: #1e293b;
     width: 90%;
@@ -497,13 +528,13 @@
 </div>
 
 <div id="feedback-modal-overlay">
-  <div class="video-modal-card">
+  <div class="feedback-modal-card">
     <div class="video-modal-header">
       <h3>Give Us Your Feedback</h3>
       <button class="video-close-btn" onclick="closeFeedbackModal()">&times;</button>
     </div>
-    <div class="video-frame-container" style="padding-bottom: 100%; max-height: 70vh;">
-      <iframe id="feedback-modal-iframe" src="" allowfullscreen></iframe>
+    <div class="feedback-frame-container">
+      <iframe id="feedback-modal-iframe" src=""></iframe>
     </div>
     <div class="video-modal-text">
       Form not loading?
