@@ -187,6 +187,24 @@
     opacity: 1;
     pointer-events: auto;
   }
+
+  #feedback-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #feedback-modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .video-modal-card {
     background: #1e293b;
     width: 90%;
@@ -478,6 +496,22 @@
   </div>
 </div>
 
+<div id="feedback-modal-overlay">
+  <div class="video-modal-card">
+    <div class="video-modal-header">
+      <h3>Give Us Your Feedback</h3>
+      <button class="video-close-btn" onclick="closeFeedbackModal()">&times;</button>
+    </div>
+    <div class="video-frame-container" style="padding-bottom: 100%; max-height: 70vh;">
+      <iframe id="feedback-modal-iframe" src="" allowfullscreen></iframe>
+    </div>
+    <div class="video-modal-text">
+      Form not loading?
+      <a id="feedback-fallback-link" href="#" target="_blank" rel="noopener noreferrer">Open it in a new tab instead</a>.
+    </div>
+  </div>
+</div>
+
 <div id="progress-bar-container">
   <div id="progress-bar"></div>
 </div>
@@ -544,9 +578,8 @@
   <div class="networking-top-actions">
     <a id="feedback-survey-btn"
        class="networking-icon-btn pulse-active"
-       href="https://forms.office.com/Pages/ResponsePage.aspx?id=0LCI9vB5pECGRDX83unQ88oPLeWProdLtLw8h7SXrY1UNEhSWTI4RkhFWjM5UVJNWEtFVjZZNzRRMi4u"
-       target="_blank"
-       rel="noopener noreferrer"
+       href="javascript:void(0)"
+       data-form-url="https://forms.office.com/Pages/ResponsePage.aspx?id=0LCI9vB5pECGRDX83unQ88oPLeWProdLtLw8h7SXrY1UNEhSWTI4RkhFWjM5UVJNWEtFVjZZNzRRMi4u"
        aria-label="Give feedback"
        data-tooltip="Give feedback">
       📝
@@ -594,8 +627,20 @@
 <script src="index.js"></script>
 <script src="js/networking.js"></script>
 
-<script>
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="A-Wbdgljl8KNv2ve0I9YW";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+<script type="text/javascript">
+  (function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '6a58ece41e584f97bf65d759' },
+          url: 'https://general-runtime.voiceflow.com',
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          }
+        });
+      }
+      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+  })(document, 'script');
 </script>
 
 <script type="text/javascript">
@@ -687,6 +732,37 @@
   }
   window.closeVideoModal = closeVideoModal;
 
+  /* Feedback form modal — embeds the Microsoft Forms survey via iframe.
+     NOTE: some Microsoft Forms tenants (particularly org/school accounts)
+     block being framed on external sites via X-Frame-Options/CSP. If the
+     iframe comes up blank, that's what's happening — the fallback link
+     below the iframe covers that case by opening the same form in a new
+     tab instead. */
+  function openFeedbackModal() {
+    var modal = document.getElementById('feedback-modal-overlay');
+    var iframe = document.getElementById('feedback-modal-iframe');
+    var fallbackLink = document.getElementById('feedback-fallback-link');
+    var feedbackBtn = document.getElementById('feedback-survey-btn');
+    var formUrl = feedbackBtn ? feedbackBtn.getAttribute('data-form-url') : '';
+
+    if (modal && iframe) {
+      iframe.src = formUrl;
+      if (fallbackLink) fallbackLink.href = formUrl;
+      modal.classList.add('open');
+    }
+  }
+  window.openFeedbackModal = openFeedbackModal;
+
+  function closeFeedbackModal() {
+    var modal = document.getElementById('feedback-modal-overlay');
+    var iframe = document.getElementById('feedback-modal-iframe');
+    if (modal && iframe) {
+      modal.classList.remove('open');
+      iframe.src = '';
+    }
+  }
+  window.closeFeedbackModal = closeFeedbackModal;
+
   /* Ending / Thank You page — shows the next LITES date (third Wednesday
      of the month, rolling to next month if this month's has already
      passed) and is triggered by the "Finish Tour" button in the
@@ -748,10 +824,9 @@
     var feedbackBtn = document.getElementById('feedback-survey-btn');
 
     if (feedbackBtn && finishBtn) {
-      // The <a> tag's own href+target handles opening the survey in a new
-      // tab natively — this listener just reveals Finish Tour afterward,
-      // it doesn't need to (and shouldn't) preventDefault.
-      feedbackBtn.addEventListener('click', function() {
+      feedbackBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        openFeedbackModal();
         feedbackBtn.classList.remove('pulse-active');
         finishBtn.classList.remove('action-hidden');
         finishBtn.classList.add('pulse-active');
