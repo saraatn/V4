@@ -32,103 +32,71 @@
   var SUPABASE_KEY = 'sb_publishable_r_twGsvckTKfA1O3XaPHEg_-FDfWeWi';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Copies a Supabase station row onto a hotspot object. Shared by both the
-  // main-tour scene path and the networking-booth path below so the two
-  // stay in sync.
-  function applyStationContent(hotspot, station) {
-    hotspot.title = station.name;
-    hotspot.text = station.text;
-    // media_type determines which field on the hotspot gets populated —
-    // openVideoModal() in index.html reads .video for YouTube embeds
-    // and .pdf for PDF embeds, and renders whichever is present.
-    hotspot.video = null;
-    hotspot.pdf = null;
-    if (station.media_type === 'video') {
-      hotspot.video = station.media_url;
-    } else if (station.media_type === 'pdf') {
-      hotspot.pdf = station.media_url;
-    }
-  }
-
   // Fetches station content from Supabase and merges it into the local
   // `data.scenes` array (same object window.APP_DATA points to) BEFORE any
   // Marzipano scenes/hotspots are built below. Falls back silently to the
   // hardcoded data.js values for any station not found in the DB, or if the
   // fetch fails entirely — so a Supabase outage doesn't take the whole tour
   // down, it just serves stale content.
-  //
-  // Matching is done on the stable `key` field added to each scene in
-  // data.js (NOT the scene `id`, which changes whenever scenes are
-  // renumbered/reordered). Networking-booth rows aren't top-level scenes —
-  // they're nested infoHotspots (matched by boothId) inside 13-Networking1 /
-  // 14-Networking2 — so those are matched separately below.
- async function loadStationsFromSupabase() {
-  const { data: stations, error } = await supabase.from('stations').select('*');
+  async function loadStationsFromSupabase() {
+    const { data: stations, error } = await supabase.from('stations').select('*');
 
-  if (error) {
-    console.error("Error fetching stations, falling back to data.js:", error);
-    return; // keeps hardcoded hotspots on failure
-  }
-  // Safety net: if the fetch comes back empty (e.g. RLS blocked it), do NOT
-  // wipe every hotspot — fall back to data.js instead.
-  if (!stations || stations.length === 0) {
-    console.warn("No station rows returned; keeping data.js hotspots.");
-    return;
-  }
-
-  // Step 1: strip every DB-managed station hotspot. These are the info
-  // hotspots WITHOUT a boothId. Booth hotspots (networking scenes) are
-  // kept — they stay defined in data.js and are content-only. Stripping
-  // first is what makes DELETE work: a removed row is simply never re-added.
-  data.scenes.forEach(function(scene) {
-    scene.infoHotspots = (scene.infoHotspots || []).filter(function(h) {
-      return !!h.boothId;
-    });
-  });
-
-  // Step 2: (re)build station hotspots entirely from Supabase. A row becomes
-  // a hotspot only if it says which scene and where (scene_id + yaw + pitch).
-  stations.forEach(function(station) {
-    if (station.active === false) return; // optional soft-delete column
-    if (station.scene_id == null || station.yaw == null || station.pitch == null) return;
-
-    var scene = data.scenes.find(function(s) { return s.id === station.scene_id; });
-    if (!scene) {
-      console.warn("Row references unknown scene_id:", station.scene_id);
+    if (error) {
+      console.error("Error fetching stations from Supabase, falling back to data.js:", error);
       return;
     }
 
-    var hotspot = { yaw: Number(station.yaw), pitch: Number(station.pitch) };
-    applyStationContent(hotspot, station);
-    scene.infoHotspots.push(hotspot);
-  });
+    // Group Supabase rows by scene_id so MULTIPLE stations can share the
+    // same scene — adding a new row with an existing scene_id creates an
+    // additional info hotspot on that scene, rather than only being able
+    // to edit whichever one hotspot was already hardcoded in data.js.
+    var bySceneId = {};
+    stations.forEach(function(station) {
+      if (!station.scene_id) return; // skip rows not yet assigned to a scene
 
-  // Step 3: booth content (networking scenes) — unchanged, matched by boothId.
-  stations.forEach(function(station) {
-    data.scenes.forEach(function(scene) {
-      (scene.infoHotspots || []).forEach(function(hotspot) {
-        if (hotspot.boothId && hotspot.boothId === station.key) {
-          applyStationContent(hotspot, station);
-        }
-      });
+      if (!bySceneId[station.scene_id]) bySceneId[station.scene_id] = [];
+
+      var hotspot = {
+        title: station.name,
+        text: station.text,
+        yaw: station.yaw,
+        pitch: station.pitch,
+        boothId: station.booth_id,
+        video: null,
+        pdf: null
+      };
+
+      // media_type determines which field gets populated — openVideoModal()
+      // in index.html reads .video for YouTube embeds and .pdf for PDF
+      // embeds, and renders whichever is present.
+      if (station.media_type === 'video') {
+        hotspot.video = station.media_url;
+      } else if (station.media_type === 'pdf') {
+        hotspot.pdf = station.media_url;
+      }
+
+      bySceneId[station.scene_id].push(hotspot);
     });
-  });
 
-  console.log("Stations loaded dynamically from Supabase.");
-}
+    // Replace each matching scene's infoHotspots entirely with the grouped
+    // Supabase rows for that scene_id. Scenes with no matching rows keep
+    // whatever hardcoded infoHotspots they already had in data.js.
+    Object.keys(bySceneId).forEach(function(sceneId) {
+      var scene = data.scenes.find(function(s) { return s.id === sceneId; });
+      if (scene) {
+        scene.infoHotspots = bySceneId[sceneId];
+      }
+    });
+
+    console.log("Stations loaded dynamically from Supabase.");
+  }
 
   // Fetches station title overrides from the "Title" table and merges them
   // into `data.scenes` (same object window.APP_DATA points to) BEFORE any
   // scenes are built — same timing/fallback principle as
-  // loadStationsFromSupabase() above. Only scenes with a matching key get
-  // overridden; every other scene (including transition scenes) keeps
-  // whatever name is already in data.js.
-  //
-  // NOTE: this matches on scene `key`, same as loadStationsFromSupabase, so
-  // it also survives future scene id renumbering. If your Title table's
-  // scene_id column still contains raw ids (e.g. "3-AppSheet") rather than
-  // keys (e.g. "AppSheet"), update the column values to match the key
-  // scheme in data.js.
+  // loadStationsFromSupabase() above. Only scenes with a matching scene_id
+  // row get overridden; every other scene (including transition scenes)
+  // keeps whatever name is already in data.js.
   async function loadTitlesFromSupabase() {
     const { data: titles, error } = await supabase.from('Title').select('*');
 
